@@ -88,7 +88,7 @@ export default function Home() {
             SYSTEM LIVE // EDICIÓN 001
           </div>
           
-          {/* LOGO INTERACTIVO VECTORIAL RESTAURADO */}
+          {/* LOGO INTERACTIVO VECTORIAL */}
           <div className="py-6 group cursor-crosshair relative z-20">
             <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform transition-transform duration-700 group-hover:rotate-180">
               <path d="M10 20L50 85L90 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-white opacity-90" />
@@ -102,7 +102,7 @@ export default function Home() {
           </p>
         </div>
 
-        {/* INTERFAZ DEL CONTADOR AUTOMATIZADO CON SEGUNDOS */}
+        {/* INTERFAZ DEL CONTADOR AUTOMATIZADO CON SEGUNDOS BLINDADOS */}
         <div className="mt-16 border border-vantum-white/10 bg-vantum-black/60 backdrop-blur-md p-8 md:p-12 w-full max-w-3xl mx-auto relative group hover:border-vantum-white/20 transition-colors">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-vantum-black px-3 font-mono text-[9px] tracking-widest text-vantum-gray/60 uppercase">
             // TERMINAL TIME COUNTER
@@ -128,7 +128,7 @@ export default function Home() {
               <div className="text-[9px] text-vantum-gray/40 tracking-[0.2em] uppercase mt-2">Minutos</div>
             </div>
             <div>
-              <div className="text-4xl md:text-6xl font-extralight tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-vantum-white to-vantum-white/40 tabular-nums">
+              <div className="text-4xl md:text-6xl font-extralight tracking-tight text-vantum-white tabular-nums opacity-90">
                 {isMounted ? timeLeft.seconds : "00"}
               </div>
               <div className="text-[9px] text-vantum-gray/40 tracking-[0.2em] uppercase mt-2">Segundos</div>
@@ -153,7 +153,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS (Lógica de Automatización Inteligente) */}
+      {/* 4. SECCIÓN MODELOS (Lógica de Automatización Inteligente + Tu WhatsApp Inyectado) */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-20 flex flex-col md:flex-row md:items-end md:justify-between border-b border-vantum-white/10 pb-6">
           <div>
@@ -194,7 +194,7 @@ export default function Home() {
             <div className="mt-8 flex justify-between items-center border-t border-vantum-white/[0.06] pt-4 text-[11px] font-mono">
               <span className="text-vantum-gray/40">PREMIUM FLAT VISOR</span>
               {isMounted && isDropActive ? (
-                <a href="https://wa.me/5492617616121" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
+                <a href="https://wa.me/5492617616121?text=Hola!%20Quiero%20solicitar%20la%20Vantum%20Olive%20Khaki" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
@@ -230,7 +230,7 @@ export default function Home() {
             <div className="mt-8 flex justify-between items-center border-t border-vantum-white/[0.06] pt-4 text-[11px] font-mono">
               <span className="text-vantum-gray/40">PREMIUM FLAT VISOR</span>
               {isMounted && isDropActive ? (
-                <a href="https://wa.me/5492617616121" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
+                <a href="https://wa.me/5492617616121?text=Hola!%20Quiero%20solicitar%20la%20Vantum%20Crimson%20Stealth" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
@@ -266,7 +266,7 @@ export default function Home() {
             <div className="mt-8 flex justify-between items-center border-t border-vantum-white/[0.06] pt-4 text-[11px] font-mono">
               <span className="text-vantum-gray/40">PREMIUM FLAT VISOR</span>
               {isMounted && isDropActive ? (
-                <a href="https://wa.me/5492617616121" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
+                <a href="https://wa.me/5492617616121?text=Hola!%20Quiero%20solicitar%20la%20Vantum%20Onyx%20Gold" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
@@ -280,7 +280,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. SECCIÓN ESPECIFICACIONES TÉCNICAS REINTEGRADA CON TABLA */}
+      {/* 5. SECCIÓN ESPECIFICACIONES TÉCNICAS CON TABLA DE TOLERANCIAS */}
       <section id="especificaciones" className="py-32 bg-vantum-black relative z-10 px-6 border-t border-vantum-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
@@ -300,7 +300,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* TABLA DE TOLERANCIAS INDUSTRIALES DE VANTUM RECUPERADA */}
+            {/* TABLA DE TOLERANCIAS INDUSTRIALES */}
             <div className="border border-vantum-white/10 bg-vantum-black/40 p-6 flex flex-col justify-between">
               <div className="text-[9px] text-vantum-white/40 mb-4 tracking-[0.2em] uppercase">// METRIC SYSTEM & TOLERANCE</div>
               <table className="w-full text-left text-[11px] leading-relaxed">
@@ -339,7 +339,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. PIE DE PÁGINA / REGISTRO DE DISTRIBUCIÓN CON WHATSAPP */}
+      {/* 6. PIE DE PÁGINA */}
       <footer id="contacto" className="py-20 border-t border-vantum-white/5 bg-vantum-black relative z-10 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 font-mono text-[10px] tracking-widest text-vantum-gray">
           <div>
