@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+/* DIRECTIVAS DE ARQUITECTURA GLOBAL VANTUM */
+html {
+  scroll-behavior: smooth;
+  background-color: #050505;
+  color: #f5f5f5;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: #050505;
+  color: #f5f5f5;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #262626;
+}
+
+img {
+  text-indent: -10000px;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
