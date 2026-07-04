@@ -18,6 +18,7 @@ export default function Home() {
   });
   const [isMounted, setIsMounted] = useState(false);
   const [isDropActive, setIsDropActive] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     setIsMounted(true);
@@ -51,7 +52,20 @@ export default function Home() {
 
     updateTimer();
     const interval = setInterval(updateTimer, 1000);
-    return () => clearInterval(interval);
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const { innerWidth, innerHeight } = window;
+      const x = (e.clientX - innerWidth / 2) / 40;
+      const y = (e.clientY - innerHeight / 2) / 40;
+      setMousePos({ x, y });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
   }, []);
 
   return (
@@ -63,7 +77,7 @@ export default function Home() {
       {/* REVOLUCIÓN DE LUZ SUPERIOR */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-gradient-to-b from-vantum-white/[0.02] to-transparent blur-[120px] pointer-events-none z-0" />
 
-      {/* 1. NAVEGACIÓN COMPACTA (Limpia sin miniatura) */}
+      {/* 1. NAVEGACIÓN COMPACTA */}
       <nav className="border-b border-vantum-white/5 backdrop-blur-md bg-vantum-black/40 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
           <a href="#" className="text-xl font-light tracking-[0.4em] uppercase text-vantum-white hover:opacity-80 transition-opacity">
@@ -95,13 +109,16 @@ export default function Home() {
             {isMounted && isDropActive ? "SYSTEM STATUS // LIVE" : "SYSTEM HOLDING // EDICIÓN 001"}
           </div>
           
-          {/* LOGO CENTRAL VECTORIAL ORIGINAL RESTAURADO */}
-          <div className="py-6 group cursor-crosshair relative z-20">
-            <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform transition-transform duration-700 group-hover:rotate-180">
-              <path d="M10 20L50 85L90 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-white opacity-90" />
-              <path d="M22 25L50 70L78 25" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-gray opacity-40" />
-              <path d="M34 30L50 55L66 30" stroke="currentColor" strokeWidth="0.75" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-white opacity-20" />
-            </svg>
+          {/* TU LOGO ORIGINAL INTERACTIVO SUBIDO COMO IMAGEN (logo-vantum.png) */}
+          <div 
+            className="py-8 cursor-crosshair relative z-20 transition-transform duration-300 ease-out flex items-center justify-center"
+            style={{ transform: `translate(${mousePos.x}px, ${mousePos.y}px)` }}
+          >
+            <img 
+              src="/logo-vantum.png" 
+              alt="Vantum Brand Logo" 
+              className="w-24 h-24 object-contain animate-[spin_40s_linear_infinite] select-none pointer-events-none filter brightness-95" 
+            />
           </div>
 
           <p className="font-mono text-xs md:text-sm text-vantum-gray tracking-[0.18em] max-w-2xl mx-auto uppercase leading-relaxed">
@@ -109,7 +126,7 @@ export default function Home() {
           </p>
         </div>
 
-        {/* INTERFAZ DEL CONTADOR CON SEGUNDERO CARMESÍ CON GLOW COPIADO DE ARRIBA */}
+        {/* INTERFAZ DEL CONTADOR CON SEGUNDERO GLOW */}
         <div className="mt-16 border border-vantum-white/10 bg-vantum-black/60 backdrop-blur-md p-8 md:p-12 w-full max-w-3xl mx-auto relative group hover:border-vantum-white/20 transition-colors">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-vantum-black px-3 font-mono text-[9px] tracking-widest text-vantum-gray/60 uppercase">
             // TERMINAL TIME COUNTER
@@ -136,8 +153,8 @@ export default function Home() {
             </div>
             <div>
               <div 
-                className="text-4xl md:text-6xl font-extralight tracking-tight text-red-500/90 tabular-nums relative"
-                style={{ textShadow: "0 0 15px rgba(239, 68, 68, 0.7), 0 0 4px rgba(239, 68, 68, 0.5)" }}
+                className="text-4xl md:text-6xl font-extralight tracking-tight text-red-500 tabular-nums relative"
+                style={{ textShadow: "0 0 14px rgba(239, 68, 68, 0.85), 0 0 4px rgba(239, 68, 68, 0.5)" }}
               >
                 {isMounted ? timeLeft.seconds : "00"}
               </div>
@@ -163,7 +180,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS (Encriptación de Producto Inteligente) */}
+      {/* 4. SECCIÓN MODELOS (Optimización de Silueta + Lote de 30) */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-20 flex flex-col md:flex-row md:items-end md:justify-between border-b border-vantum-white/10 pb-6">
           <div>
@@ -171,7 +188,7 @@ export default function Home() {
             <h2 className="text-4xl font-extralight tracking-widest uppercase text-transparent bg-clip-text bg-gradient-to-r from-vantum-white to-vantum-gray">Edición de Barrio</h2>
           </div>
           <div className="font-mono text-[11px] text-vantum-gray/60 flex items-center gap-4 mt-4 md:mt-0">
-            <span>BATCH SIZE: 500 UNITS</span>
+            <span>BATCH SIZE: 30 UNITS</span>
             <span className="text-vantum-white/20">|</span>
             <span>STATUS: {isMounted && isDropActive ? "LIVE" : "HOLDING"}</span>
           </div>
@@ -183,19 +200,18 @@ export default function Home() {
           <div className="relative border border-vantum-white/[0.06] bg-vantum-black/40 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-vantum-white/20 group">
             <div className="overflow-hidden bg-vantum-black relative aspect-square flex items-center justify-center border border-vantum-white/[0.04]">
               
-              {/* CAPA DE INTERFERENCIA ANÁLOGA SI EL DROP NO ESTÁ ACTIVO */}
               {isMounted && !isDropActive && (
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_4px,3px_100%] pointer-events-none z-20 opacity-70" />
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.15)_50%)] pointer-events-none z-20 opacity-50" />
               )}
               
               <div className="absolute w-full h-[2px] bg-vantum-white/30 top-0 left-0 opacity-0 group-hover:opacity-100 group-hover:animate-[bounce_2s_infinite] pointer-events-none z-20 shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
               
-              {/* Imagen Dinámica: Si está congelado el drop, aplica un desenfoque y escala de grises agresiva */}
+              {/* Calibrado Fino: Desenfoque bajo y más opacidad para recortar la silueta de la gorra */}
               <img 
                 src="/gorra-oliva.png" 
                 alt="Vantum Olive Khaki" 
                 className={`w-[85%] h-[85%] object-contain scale-95 transition-all duration-750 ease-out select-none pointer-events-none
-                  ${isMounted && !isDropActive ? "blur-md grayscale opacity-40 contrast-125" : "group-hover:scale-100"}`} 
+                  ${isMounted && !isDropActive ? "blur-[3px] grayscale opacity-75 contrast-110" : "group-hover:scale-100"}`} 
               />
             </div>
             <div className="mt-8">
@@ -233,7 +249,7 @@ export default function Home() {
             <div className="overflow-hidden bg-vantum-black relative aspect-square flex items-center justify-center border border-vantum-white/[0.04]">
               
               {isMounted && !isDropActive && (
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_4px,3px_100%] pointer-events-none z-20 opacity-70" />
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.15)_50%)] pointer-events-none z-20 opacity-50" />
               )}
               
               <div className="absolute w-full h-[2px] bg-vantum-white/30 top-0 left-0 opacity-0 group-hover:opacity-100 group-hover:animate-[bounce_2s_infinite] pointer-events-none z-20 shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
@@ -242,7 +258,7 @@ export default function Home() {
                 src="/gorra-roja.png" 
                 alt="Vantum Crimson Stealth" 
                 className={`w-[85%] h-[85%] object-contain scale-95 transition-all duration-750 ease-out select-none pointer-events-none
-                  ${isMounted && !isDropActive ? "blur-md grayscale opacity-40 contrast-125" : "group-hover:scale-100"}`} 
+                  ${isMounted && !isDropActive ? "blur-[3px] grayscale opacity-75 contrast-110" : "group-hover:scale-100"}`} 
               />
             </div>
             <div className="mt-8">
@@ -280,7 +296,7 @@ export default function Home() {
             <div className="overflow-hidden bg-vantum-black relative aspect-square flex items-center justify-center border border-vantum-white/[0.04]">
               
               {isMounted && !isDropActive && (
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_4px,3px_100%] pointer-events-none z-20 opacity-70" />
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.15)_50%)] pointer-events-none z-20 opacity-50" />
               )}
               
               <div className="absolute w-full h-[2px] bg-vantum-white/30 top-0 left-0 opacity-0 group-hover:opacity-100 group-hover:animate-[bounce_2s_infinite] pointer-events-none z-20 shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
@@ -289,7 +305,7 @@ export default function Home() {
                 src="/gorra-oro.png" 
                 alt="Vantum Onyx Gold" 
                 className={`w-[85%] h-[85%] object-contain scale-95 transition-all duration-750 ease-out select-none pointer-events-none
-                  ${isMounted && !isDropActive ? "blur-md grayscale opacity-40 contrast-125" : "group-hover:scale-100"}`} 
+                  ${isMounted && !isDropActive ? "blur-[3px] grayscale opacity-75 contrast-110" : "group-hover:scale-100"}`} 
               />
             </div>
             <div className="mt-8">
@@ -324,12 +340,12 @@ export default function Home() {
 
         </div>
 
-        {/* INDICADOR DE STOCK EN VIVO EXCLUSIVO POST-DROP */}
+        {/* INDICADOR DE STOCK EN VIVO AJUSTADO A 30 UNIDADES */}
         {isMounted && isDropActive && (
-          <div className="mt-16 max-w-xl mx-auto border border-green-500/20 bg-green-500/5 p-4 font-mono text-[10px] tracking-widest text-center text-green-400 animate-fade-in">
+          <div className="mt-16 max-w-xl mx-auto border border-green-500/20 bg-green-500/5 p-4 font-mono text-[10px] tracking-widest text-center text-green-400">
             <div className="flex justify-between mb-2">
               <span>// BATCH LOTE 001 STATUS</span>
-              <span>500 / 500 UNITS RESERVED</span>
+              <span>30 / 30 UNITS RESERVED</span>
             </div>
             <div className="w-full bg-green-950 h-1 border border-green-500/30 overflow-hidden">
               <div className="bg-green-400 h-full w-[100%] transition-all duration-1000" />
