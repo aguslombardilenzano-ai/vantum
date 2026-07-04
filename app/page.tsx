@@ -64,7 +64,7 @@ export default function Home() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-gradient-to-b from-vantum-white/[0.02] to-transparent blur-[120px] pointer-events-none z-0" />
 
       {/* 1. NAVEGACIÓN COMPACTA */}
-      <nav className="border-b border-vantum-white/5 backdrop-blur-md bg-vantum-black/40 sticky top-0 z-50 transition-all duration-300">
+      <nav className="border-b border-vantum-white/5 backdrop-blur-md bg-vantum-black/40 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
           <a href="#" className="text-xl font-light tracking-[0.4em] uppercase text-vantum-white hover:opacity-80 transition-opacity">
             VANTUM
@@ -75,23 +75,26 @@ export default function Home() {
             <a href="#especificaciones" className="hover:text-vantum-white transition-colors">// ESPECIFICACIONES</a>
           </div>
           <a href="#contacto" className="border border-vantum-white/20 bg-vantum-white/5 px-5 py-2.5 text-[9px] font-mono tracking-[0.25em] uppercase text-vantum-white hover:bg-vantum-white hover:text-vantum-black transition-all duration-300">
-            CONTACTO
+            DISTRIBUCIÓN
           </a>
         </div>
       </nav>
 
-      {/* 2. HERO SECTOR (Narrativa Cruda + Reloj) */}
+      {/* 2. HERO SECTOR (Narrativa Cruda + Reloj + Logo SVG) */}
       <header className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-12 pb-20">
-        <div className="space-y-4 max-w-4xl mx-auto">
+        <div className="space-y-4 max-w-4xl mx-auto flex flex-col items-center">
           <div className="inline-flex items-center gap-2 border border-red-500/20 bg-red-500/5 px-4 py-1.5 rounded-full font-mono text-[9px] tracking-[0.25em] text-red-400 uppercase animate-pulse">
             <span className="w-1.5 h-1.5 bg-red-500 rounded-full" />
             SYSTEM LIVE // EDICIÓN 001
           </div>
           
-          <div className="py-8 select-none">
-            <h1 className="text-7xl md:text-9xl font-extralight tracking-[0.2em] uppercase text-transparent bg-clip-text bg-gradient-to-b from-vantum-white via-vantum-white to-vantum-white/20 leading-none">
-              VANTUM
-            </h1>
+          {/* LOGO INTERACTIVO VECTORIAL RESTAURADO */}
+          <div className="py-6 group cursor-crosshair relative z-20">
+            <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform transition-transform duration-700 group-hover:rotate-180">
+              <path d="M10 20L50 85L90 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-white opacity-90" />
+              <path d="M22 25L50 70L78 25" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-gray opacity-40" />
+              <path d="M34 30L50 55L66 30" stroke="currentColor" strokeWidth="0.75" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-white opacity-20" />
+            </svg>
           </div>
 
           <p className="font-mono text-xs md:text-sm text-vantum-gray tracking-[0.18em] max-w-2xl mx-auto uppercase leading-relaxed">
@@ -99,8 +102,8 @@ export default function Home() {
           </p>
         </div>
 
-        {/* INTERFAZ DEL CONTADOR AUTOMATIZADO */}
-        <div className="mt-20 border border-vantum-white/10 bg-vantum-black/60 backdrop-blur-md p-8 md:p-12 w-full max-w-3xl mx-auto relative group hover:border-vantum-white/20 transition-colors">
+        {/* INTERFAZ DEL CONTADOR AUTOMATIZADO CON SEGUNDOS */}
+        <div className="mt-16 border border-vantum-white/10 bg-vantum-black/60 backdrop-blur-md p-8 md:p-12 w-full max-w-3xl mx-auto relative group hover:border-vantum-white/20 transition-colors">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-vantum-black px-3 font-mono text-[9px] tracking-widest text-vantum-gray/60 uppercase">
             // TERMINAL TIME COUNTER
           </div>
@@ -125,7 +128,7 @@ export default function Home() {
               <div className="text-[9px] text-vantum-gray/40 tracking-[0.2em] uppercase mt-2">Minutos</div>
             </div>
             <div>
-              <div className="text-4xl md:text-6xl font-extralight tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-vantum-white to-vantum-white/40 tabular-nums min-w-[2ch]">
+              <div className="text-4xl md:text-6xl font-extralight tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-vantum-white to-vantum-white/40 tabular-nums">
                 {isMounted ? timeLeft.seconds : "00"}
               </div>
               <div className="text-[9px] text-vantum-gray/40 tracking-[0.2em] uppercase mt-2">Segundos</div>
@@ -191,7 +194,7 @@ export default function Home() {
             <div className="mt-8 flex justify-between items-center border-t border-vantum-white/[0.06] pt-4 text-[11px] font-mono">
               <span className="text-vantum-gray/40">PREMIUM FLAT VISOR</span>
               {isMounted && isDropActive ? (
-                <a href="https://wa.me/549261XXXXXXXX" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
+                <a href="https://wa.me/5492617616121" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
@@ -227,7 +230,7 @@ export default function Home() {
             <div className="mt-8 flex justify-between items-center border-t border-vantum-white/[0.06] pt-4 text-[11px] font-mono">
               <span className="text-vantum-gray/40">PREMIUM FLAT VISOR</span>
               {isMounted && isDropActive ? (
-                <a href="https://wa.me/549261XXXXXXXX" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
+                <a href="https://wa.me/5492617616121" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
@@ -263,7 +266,7 @@ export default function Home() {
             <div className="mt-8 flex justify-between items-center border-t border-vantum-white/[0.06] pt-4 text-[11px] font-mono">
               <span className="text-vantum-gray/40">PREMIUM FLAT VISOR</span>
               {isMounted && isDropActive ? (
-                <a href="https://wa.me/549261XXXXXXXX" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
+                <a href="https://wa.me/5492617616121" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
@@ -277,33 +280,75 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. SECCIÓN ESPECIFICACIONES TÉCNICAS */}
+      {/* 5. SECCIÓN ESPECIFICACIONES TÉCNICAS REINTEGRADA CON TABLA */}
       <section id="especificaciones" className="py-32 bg-vantum-black relative z-10 px-6 border-t border-vantum-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
             <p className="text-[10px] text-vantum-gray font-mono tracking-[0.25em] uppercase mb-2">// TECHNICAL CORE</p>
             <h2 className="text-4xl font-extralight tracking-widest uppercase text-vantum-white">Geometría de Precisión</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 font-mono text-xs text-vantum-gray">
-            <div className="border-l-2 border-vantum-white/20 pl-6 space-y-3">
-              <p className="text-vantum-white font-medium tracking-wider">// COMPOSICIÓN MATERIAL</p>
-              <p>Gabardina pesada de 8 onzas con tramado de alta torsión estructural. Resistencia garantizada a la abrasión urbana y pérdida de color por exposición UV prolongada.</p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 font-mono text-xs text-vantum-gray">
+            <div className="space-y-8">
+              <div className="border-l-2 border-vantum-white/20 pl-6 space-y-3">
+                <p className="text-vantum-white font-medium tracking-wider">// COMPOSICIÓN MATERIAL</p>
+                <p>Gabardina pesada de 8 onzas con tramado de alta torsión estructural. Resistencia garantizada a la abrasión urbana y pérdida de color por exposición UV prolongada.</p>
+              </div>
+              <div className="border-l-2 border-vantum-white/20 pl-6 space-y-3">
+                <p className="text-vantum-white font-medium tracking-wider">// ARQUITECTURA DEL CONTORNO</p>
+                <p>Paneles reforzados internamente con entretela termo-fusionada alemana. Visera plana con memoria elástica perimetral y costuras de alta tensión simétricas.</p>
+              </div>
             </div>
-            <div className="border-l-2 border-vantum-white/20 pl-6 space-y-3">
-              <p className="text-vantum-white font-medium tracking-wider">// ARQUITECTURA DEL CONTORNO</p>
-              <p>Paneles reforzados internamente con entretela termo-fusionada alemana. Visera plana con memoria elástica perimetral y costuras de alta tensión simétricas.</p>
+
+            {/* TABLA DE TOLERANCIAS INDUSTRIALES DE VANTUM RECUPERADA */}
+            <div className="border border-vantum-white/10 bg-vantum-black/40 p-6 flex flex-col justify-between">
+              <div className="text-[9px] text-vantum-white/40 mb-4 tracking-[0.2em] uppercase">// METRIC SYSTEM & TOLERANCE</div>
+              <table className="w-full text-left text-[11px] leading-relaxed">
+                <thead>
+                  <tr className="border-b border-vantum-white/10 text-vantum-white">
+                    <th className="pb-2 font-light tracking-wider">COMPONENTE</th>
+                    <th className="pb-2 font-light tracking-wider text-right">DIMENSIÓN</th>
+                    <th className="pb-2 font-light tracking-wider text-right">TOLERANCIA</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-vantum-white/[0.04]">
+                  <tr>
+                    <td className="py-2 text-vantum-white/80">Altura de Corona</td>
+                    <td className="py-2 text-right text-vantum-white">11.5 cm</td>
+                    <td className="py-2 text-right text-red-400">± 0.05 mm</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 text-vantum-white/80">Ancho de Visera</td>
+                    <td className="py-2 text-right text-vantum-white">18.0 cm</td>
+                    <td className="py-2 text-right text-red-400">± 0.02 mm</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 text-vantum-white/80">Ángulo de Inyección</td>
+                    <td className="py-2 text-right text-vantum-white">180°C</td>
+                    <td className="py-2 text-right text-red-400">Fixed</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 text-vantum-white/80">Densidad de Costura</td>
+                    <td className="py-2 text-right text-vantum-white">12 SPI</td>
+                    <td className="py-2 text-right text-red-400">Nominal</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 6. PIE DE PÁGINA / CONTACTO */}
+      {/* 6. PIE DE PÁGINA / REGISTRO DE DISTRIBUCIÓN CON WHATSAPP */}
       <footer id="contacto" className="py-20 border-t border-vantum-white/5 bg-vantum-black relative z-10 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 font-mono text-[10px] tracking-widest text-vantum-gray">
-          <p>© 2026 VANTUM CORE LAB. ALL RIGHTS RESERVED.</p>
+          <div>
+            <p className="text-vantum-white mb-1">VANTUM CORE LAB // OPERATIONAL GATEWAY</p>
+            <p>© 2026 DISTRIBUTION & LOGISTICS. ALL RIGHTS RESERVED.</p>
+          </div>
           <div className="flex gap-8">
-            <a href="https://instagram.com" className="hover:text-vantum-white transition-colors">INSTAGRAM</a>
-            <a href="https://tiktok.com" className="hover:text-vantum-white transition-colors">TIKTOK</a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-vantum-white transition-colors">INSTAGRAM</a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="hover:text-vantum-white transition-colors">TIKTOK</a>
             <a href="mailto:vantum553@gmail.com" className="hover:text-vantum-white transition-colors">GMAIL</a>
           </div>
         </div>
