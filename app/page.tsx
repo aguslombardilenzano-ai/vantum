@@ -18,7 +18,6 @@ export default function Home() {
   });
   const [isMounted, setIsMounted] = useState(false);
   const [isDropActive, setIsDropActive] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     setIsMounted(true);
@@ -52,20 +51,7 @@ export default function Home() {
 
     updateTimer();
     const interval = setInterval(updateTimer, 1000);
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const { innerWidth, innerHeight } = window;
-      const x = (e.clientX - innerWidth / 2) / 35;
-      const y = (e.clientY - innerHeight / 2) / 35;
-      setMousePos({ x, y });
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -77,16 +63,12 @@ export default function Home() {
       {/* REVOLUCIÓN DE LUZ SUPERIOR */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-gradient-to-b from-vantum-white/[0.02] to-transparent blur-[120px] pointer-events-none z-0" />
 
-      {/* 1. NAVEGACIÓN COMPACTA CON MINIATURA .PNG CONFIGURADA */}
+      {/* 1. NAVEGACIÓN COMPACTA (Limpia sin miniatura) */}
       <nav className="border-b border-vantum-white/5 backdrop-blur-md bg-vantum-black/40 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {/* Asegurá que el archivo en public coincida con este nombre exacto */}
-            <img src="/logo-vantum.png" alt="Vantum Isotype" className="w-6 h-6 object-cover border border-vantum-white/10" />
-            <a href="#" className="text-xl font-light tracking-[0.4em] uppercase text-vantum-white hover:opacity-80 transition-opacity">
-              VANTUM
-            </a>
-          </div>
+          <a href="#" className="text-xl font-light tracking-[0.4em] uppercase text-vantum-white hover:opacity-80 transition-opacity">
+            VANTUM
+          </a>
           <div className="hidden md:flex items-center gap-12 text-[10px] font-mono tracking-[0.3em] uppercase text-vantum-gray">
             <a href="#manifiesto" className="hover:text-vantum-white transition-colors">// MANIFIESTO</a>
             <a href="#modelos" className="hover:text-vantum-white transition-colors">// MODELOS</a>
@@ -113,23 +95,12 @@ export default function Home() {
             {isMounted && isDropActive ? "SYSTEM STATUS // LIVE" : "SYSTEM HOLDING // EDICIÓN 001"}
           </div>
           
-          {/* LOGO CENTRAL INTERACTIVO MODIFICADO: ÁNGULO CERRADO + ROTACIÓN CONTINUA + TRÁCKING */}
-          <div 
-            className="py-6 cursor-crosshair relative z-20 transition-transform duration-300 ease-out"
-            style={{ transform: `translate(${mousePos.x}px, ${mousePos.y}px)` }}
-          >
-            <svg 
-              width="90" 
-              height="90" 
-              viewBox="0 0 100 100" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg" 
-              className="animate-[spin_25s_linear_infinite]"
-            >
-              {/* Estructura con angulación heráldica cerrada idéntica al diseño físico */}
-              <path d="M20 15L50 85L80 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-white opacity-95" />
-              <path d="M28 21L50 72L72 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-gray opacity-50" />
-              <path d="M36 27L50 59L64 27" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-white opacity-20" />
+          {/* LOGO CENTRAL VECTORIAL ORIGINAL RESTAURADO */}
+          <div className="py-6 group cursor-crosshair relative z-20">
+            <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform transition-transform duration-700 group-hover:rotate-180">
+              <path d="M10 20L50 85L90 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-white opacity-90" />
+              <path d="M22 25L50 70L78 25" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-gray opacity-40" />
+              <path d="M34 30L50 55L66 30" stroke="currentColor" strokeWidth="0.75" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-white opacity-20" />
             </svg>
           </div>
 
@@ -138,7 +109,7 @@ export default function Home() {
           </p>
         </div>
 
-        {/* INTERFAZ DEL CONTADOR CON SEGUNDERO GLOW */}
+        {/* INTERFAZ DEL CONTADOR CON SEGUNDERO CARMESÍ CON GLOW COPIADO DE ARRIBA */}
         <div className="mt-16 border border-vantum-white/10 bg-vantum-black/60 backdrop-blur-md p-8 md:p-12 w-full max-w-3xl mx-auto relative group hover:border-vantum-white/20 transition-colors">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-vantum-black px-3 font-mono text-[9px] tracking-widest text-vantum-gray/60 uppercase">
             // TERMINAL TIME COUNTER
@@ -165,8 +136,8 @@ export default function Home() {
             </div>
             <div>
               <div 
-                className="text-4xl md:text-6xl font-extralight tracking-tight text-red-500 tabular-nums relative"
-                style={{ textShadow: "0 0 14px rgba(239, 68, 68, 0.85), 0 0 4px rgba(239, 68, 68, 0.5)" }}
+                className="text-4xl md:text-6xl font-extralight tracking-tight text-red-500/90 tabular-nums relative"
+                style={{ textShadow: "0 0 15px rgba(239, 68, 68, 0.7), 0 0 4px rgba(239, 68, 68, 0.5)" }}
               >
                 {isMounted ? timeLeft.seconds : "00"}
               </div>
@@ -192,7 +163,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS */}
+      {/* 4. SECCIÓN MODELOS (Encriptación de Producto Inteligente) */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-20 flex flex-col md:flex-row md:items-end md:justify-between border-b border-vantum-white/10 pb-6">
           <div>
@@ -209,10 +180,23 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
           
           {/* MODELO 01: OLIVE KHAKI */}
-          <div className="relative border border-vantum-white/[0.06] bg-vantum-black/40 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-vantum-white/30 group hover:shadow-[0_0_30px_rgba(255,255,255,0.02)]">
+          <div className="relative border border-vantum-white/[0.06] bg-vantum-black/40 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-vantum-white/20 group">
             <div className="overflow-hidden bg-vantum-black relative aspect-square flex items-center justify-center border border-vantum-white/[0.04]">
+              
+              {/* CAPA DE INTERFERENCIA ANÁLOGA SI EL DROP NO ESTÁ ACTIVO */}
+              {isMounted && !isDropActive && (
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_4px,3px_100%] pointer-events-none z-20 opacity-70" />
+              )}
+              
               <div className="absolute w-full h-[2px] bg-vantum-white/30 top-0 left-0 opacity-0 group-hover:opacity-100 group-hover:animate-[bounce_2s_infinite] pointer-events-none z-20 shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
-              <img src="/gorra-oliva.png" alt="Vantum Olive Khaki" className="w-[85%] h-[85%] object-contain scale-95 group-hover:scale-100 transition-all duration-700 ease-out" />
+              
+              {/* Imagen Dinámica: Si está congelado el drop, aplica un desenfoque y escala de grises agresiva */}
+              <img 
+                src="/gorra-oliva.png" 
+                alt="Vantum Olive Khaki" 
+                className={`w-[85%] h-[85%] object-contain scale-95 transition-all duration-750 ease-out select-none pointer-events-none
+                  ${isMounted && !isDropActive ? "blur-md grayscale opacity-40 contrast-125" : "group-hover:scale-100"}`} 
+              />
             </div>
             <div className="mt-8">
               <div className="flex items-center justify-between font-mono text-[10px] text-vantum-gray tracking-wider">
@@ -220,10 +204,10 @@ export default function Home() {
                 {isMounted && isDropActive ? (
                   <span className="text-green-400 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/20 tracking-widest text-[9px]">// SYSTEM LIVE</span>
                 ) : (
-                  <span className="text-amber-500/80 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">// LOCKED // AWAITING BATCH</span>
+                  <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">// FILE ENCRYPTED</span>
                 )}
               </div>
-              <h3 className="text-2xl font-light tracking-widest uppercase mt-3 text-vantum-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-vantum-white group-hover:to-vantum-gray transition-all duration-300">
+              <h3 className="text-2xl font-light tracking-widest uppercase mt-3 text-vantum-white">
                 Olive Khaki
               </h3>
               <p className="text-xs text-vantum-gray/80 mt-4 leading-relaxed font-light">
@@ -237,18 +221,29 @@ export default function Home() {
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
-                <span className="uppercase tracking-widest text-amber-500/40 cursor-not-allowed select-none animate-pulse">
-                  SOLO ESPERA...
+                <span className="uppercase tracking-widest text-vantum-gray/40 select-none border border-vantum-white/5 bg-vantum-white/[0.02] px-3 py-1 font-mono text-[9px]">
+                  [ LOCKED DATA ]
                 </span>
               )}
             </div>
           </div>
 
           {/* MODELO 02: CRIMSON STEALTH */}
-          <div className="relative border border-vantum-white/[0.06] bg-vantum-black/40 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-vantum-white/30 group hover:shadow-[0_0_30px_rgba(255,255,255,0.02)]">
+          <div className="relative border border-vantum-white/[0.06] bg-vantum-black/40 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-vantum-white/20 group">
             <div className="overflow-hidden bg-vantum-black relative aspect-square flex items-center justify-center border border-vantum-white/[0.04]">
+              
+              {isMounted && !isDropActive && (
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_4px,3px_100%] pointer-events-none z-20 opacity-70" />
+              )}
+              
               <div className="absolute w-full h-[2px] bg-vantum-white/30 top-0 left-0 opacity-0 group-hover:opacity-100 group-hover:animate-[bounce_2s_infinite] pointer-events-none z-20 shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
-              <img src="/gorra-roja.png" alt="Vantum Crimson Stealth" className="w-[85%] h-[85%] object-contain scale-95 group-hover:scale-100 transition-all duration-700 ease-out" />
+              
+              <img 
+                src="/gorra-roja.png" 
+                alt="Vantum Crimson Stealth" 
+                className={`w-[85%] h-[85%] object-contain scale-95 transition-all duration-750 ease-out select-none pointer-events-none
+                  ${isMounted && !isDropActive ? "blur-md grayscale opacity-40 contrast-125" : "group-hover:scale-100"}`} 
+              />
             </div>
             <div className="mt-8">
               <div className="flex items-center justify-between font-mono text-[10px] text-vantum-gray tracking-wider">
@@ -256,10 +251,10 @@ export default function Home() {
                 {isMounted && isDropActive ? (
                   <span className="text-green-400 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/20 tracking-widest text-[9px]">// SYSTEM LIVE</span>
                 ) : (
-                  <span className="text-amber-500/80 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">// LOCKED // AWAITING BATCH</span>
+                  <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">// FILE ENCRYPTED</span>
                 )}
               </div>
-              <h3 className="text-2xl font-light tracking-widest uppercase mt-3 text-vantum-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-vantum-white group-hover:to-vantum-gray transition-all duration-300">
+              <h3 className="text-2xl font-light tracking-widest uppercase mt-3 text-vantum-white">
                 Crimson Stealth
               </h3>
               <p className="text-xs text-vantum-gray/80 mt-4 leading-relaxed font-light">
@@ -273,18 +268,29 @@ export default function Home() {
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
-                <span className="uppercase tracking-widest text-amber-500/40 cursor-not-allowed select-none animate-pulse">
-                  SOLO ESPERA...
+                <span className="uppercase tracking-widest text-vantum-gray/40 select-none border border-vantum-white/5 bg-vantum-white/[0.02] px-3 py-1 font-mono text-[9px]">
+                  [ LOCKED DATA ]
                 </span>
               )}
             </div>
           </div>
 
           {/* MODELO 03: ONYX GOLD */}
-          <div className="relative border border-vantum-white/[0.06] bg-vantum-black/40 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-vantum-white/30 group hover:shadow-[0_0_30px_rgba(255,255,255,0.02)]">
+          <div className="relative border border-vantum-white/[0.06] bg-vantum-black/40 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-vantum-white/20 group">
             <div className="overflow-hidden bg-vantum-black relative aspect-square flex items-center justify-center border border-vantum-white/[0.04]">
+              
+              {isMounted && !isDropActive && (
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_4px,3px_100%] pointer-events-none z-20 opacity-70" />
+              )}
+              
               <div className="absolute w-full h-[2px] bg-vantum-white/30 top-0 left-0 opacity-0 group-hover:opacity-100 group-hover:animate-[bounce_2s_infinite] pointer-events-none z-20 shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
-              <img src="/gorra-oro.png" alt="Vantum Onyx Gold" className="w-[85%] h-[85%] object-contain scale-95 group-hover:scale-100 transition-all duration-700 ease-out" />
+              
+              <img 
+                src="/gorra-oro.png" 
+                alt="Vantum Onyx Gold" 
+                className={`w-[85%] h-[85%] object-contain scale-95 transition-all duration-750 ease-out select-none pointer-events-none
+                  ${isMounted && !isDropActive ? "blur-md grayscale opacity-40 contrast-125" : "group-hover:scale-100"}`} 
+              />
             </div>
             <div className="mt-8">
               <div className="flex items-center justify-between font-mono text-[10px] text-vantum-gray tracking-wider">
@@ -292,10 +298,10 @@ export default function Home() {
                 {isMounted && isDropActive ? (
                   <span className="text-green-400 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/20 tracking-widest text-[9px]">// SYSTEM LIVE</span>
                 ) : (
-                  <span className="text-amber-500/80 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">// LOCKED // AWAITING BATCH</span>
+                  <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">// FILE ENCRYPTED</span>
                 )}
               </div>
-              <h3 className="text-2xl font-light tracking-widest uppercase mt-3 text-vantum-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-vantum-white group-hover:to-vantum-gray transition-all duration-300">
+              <h3 className="text-2xl font-light tracking-widest uppercase mt-3 text-vantum-white">
                 Onyx Gold
               </h3>
               <p className="text-xs text-vantum-gray/80 mt-4 leading-relaxed font-light">
@@ -309,8 +315,8 @@ export default function Home() {
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
-                <span className="uppercase tracking-widest text-amber-500/40 cursor-not-allowed select-none animate-pulse">
-                  SOLO ESPERA...
+                <span className="uppercase tracking-widest text-vantum-gray/40 select-none border border-vantum-white/5 bg-vantum-white/[0.02] px-3 py-1 font-mono text-[9px]">
+                  [ LOCKED DATA ]
                 </span>
               )}
             </div>
