@@ -18,11 +18,12 @@ export default function Home() {
   });
   const [isMounted, setIsMounted] = useState(false);
   const [isDropActive, setIsDropActive] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     setIsMounted(true);
     
-    // FECHA OBJETIVO: 25 de Julio de 2026 a las 00:00:00 Horas
+    // FECHA OBJETIVO: 25 de Julio de 2026
     const targetDate = new Date("2026-07-25T00:00:00").getTime();
 
     const updateTimer = () => {
@@ -51,7 +52,21 @@ export default function Home() {
 
     updateTimer();
     const interval = setInterval(updateTimer, 1000);
-    return () => clearInterval(interval);
+
+    // Rastreador del mouse para interactividad del logo central
+    const handleMouseMove = (e: MouseEvent) => {
+      const { innerWidth, innerHeight } = window;
+      const x = (e.clientX - innerWidth / 2) / 35;
+      const y = (e.clientY - innerHeight / 2) / 35;
+      setMousePos({ x, y });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
   }, []);
 
   return (
@@ -63,12 +78,16 @@ export default function Home() {
       {/* REVOLUCIÓN DE LUZ SUPERIOR */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-gradient-to-b from-vantum-white/[0.02] to-transparent blur-[120px] pointer-events-none z-0" />
 
-      {/* 1. NAVEGACIÓN COMPACTA */}
+      {/* 1. NAVEGACIÓN COMPACTA CON MINIATURA INCORPORADA */}
       <nav className="border-b border-vantum-white/5 backdrop-blur-md bg-vantum-black/40 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
-          <a href="#" className="text-xl font-light tracking-[0.4em] uppercase text-vantum-white hover:opacity-80 transition-opacity">
-            VANTUM
-          </a>
+          <div className="flex items-center gap-3">
+            {/* Acordate de guardar logo-vantum.jpg dentro de tu carpeta public */}
+            <img src="/logo-vantum.jpg" alt="Vantum Isotype" className="w-6 h-6 object-cover border border-vantum-white/10" />
+            <a href="#" className="text-xl font-light tracking-[0.4em] uppercase text-vantum-white hover:opacity-80 transition-opacity">
+              VANTUM
+            </a>
+          </div>
           <div className="hidden md:flex items-center gap-12 text-[10px] font-mono tracking-[0.3em] uppercase text-vantum-gray">
             <a href="#manifiesto" className="hover:text-vantum-white transition-colors">// MANIFIESTO</a>
             <a href="#modelos" className="hover:text-vantum-white transition-colors">// MODELOS</a>
@@ -87,7 +106,7 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* 2. HERO SECTOR (Narrativa Cruda + Reloj + Logo SVG) */}
+      {/* 2. HERO SECTOR */}
       <header className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-12 pb-20">
         <div className="space-y-4 max-w-4xl mx-auto flex flex-col items-center">
           <div className="inline-flex items-center gap-2 border border-red-500/20 bg-red-500/5 px-4 py-1.5 rounded-full font-mono text-[9px] tracking-[0.25em] text-red-400 uppercase animate-pulse">
@@ -95,12 +114,23 @@ export default function Home() {
             {isMounted && isDropActive ? "SYSTEM STATUS // LIVE" : "SYSTEM HOLDING // EDICIÓN 001"}
           </div>
           
-          {/* LOGO INTERACTIVO VECTORIAL */}
-          <div className="py-6 group cursor-crosshair relative z-20">
-            <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform transition-transform duration-700 group-hover:rotate-180">
-              <path d="M10 20L50 85L90 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-white opacity-90" />
-              <path d="M22 25L50 70L78 25" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-gray opacity-40" />
-              <path d="M34 30L50 55L66 30" stroke="currentColor" strokeWidth="0.75" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-white opacity-20" />
+          {/* LOGO CENTRAL INTERACTIVO RECONFIGURADO: ROTACIÓN 360 Y SEGUIMIENTO */}
+          <div 
+            className="py-6 cursor-crosshair relative z-20 transition-transform duration-300 ease-out"
+            style={{ transform: `translate(${mousePos.x}px, ${mousePos.y}px)` }}
+          >
+            <svg 
+              width="90" 
+              height="90" 
+              viewBox="0 0 100 100" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg" 
+              className="animate-[spin_20s_linear_infinite]"
+            >
+              {/* Angulación ajustada y líneas reforzadas imitando el bordado original */}
+              <path d="M15 15L50 88L85 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-white opacity-95" />
+              <path d="M25 22L50 74L75 22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-gray opacity-50" />
+              <path d="M35 29L50 60L65 29" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-vantum-white opacity-20" />
             </svg>
           </div>
 
@@ -109,7 +139,7 @@ export default function Home() {
           </p>
         </div>
 
-        {/* INTERFAZ DEL CONTADOR CON SEGUNDERO CARMESÍ CRÍTICO RESTAURADO */}
+        {/* INTERFAZ DEL CONTADOR CON SEGUNDERO ROJO CON GLOW SISTÉMICO */}
         <div className="mt-16 border border-vantum-white/10 bg-vantum-black/60 backdrop-blur-md p-8 md:p-12 w-full max-w-3xl mx-auto relative group hover:border-vantum-white/20 transition-colors">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-vantum-black px-3 font-mono text-[9px] tracking-widest text-vantum-gray/60 uppercase">
             // TERMINAL TIME COUNTER
@@ -135,8 +165,11 @@ export default function Home() {
               <div className="text-[9px] text-vantum-gray/40 tracking-[0.2em] uppercase mt-2">Minutos</div>
             </div>
             <div>
-              {/* Volvió el rojo sólido blindado para evitar fallas visuales */}
-              <div className="text-4xl md:text-6xl font-extralight tracking-tight text-red-500 tabular-nums">
+              {/* Segundero rojo con efecto difuminado e iluminación analógica */}
+              <div 
+                className="text-4xl md:text-6xl font-extralight tracking-tight text-red-500 tabular-nums relative"
+                style={{ textShadow: "0 0 12px rgba(239, 68, 68, 0.7), 0 0 4px rgba(239, 68, 68, 0.4)" }}
+              >
                 {isMounted ? timeLeft.seconds : "00"}
               </div>
               <div className="text-[9px] text-vantum-gray/40 tracking-[0.2em] uppercase mt-2">Segundos</div>
@@ -287,7 +320,7 @@ export default function Home() {
 
         </div>
 
-        {/* INDICADOR DE STOCK EN VIVO EXCLUSIVO POST-DROP */}
+        {/* INDICADOR DE STOCK EN VIVO POST-DROP */}
         {isMounted && isDropActive && (
           <div className="mt-16 max-w-xl mx-auto border border-green-500/20 bg-green-500/5 p-4 font-mono text-[10px] tracking-widest text-center text-green-400 animate-fade-in">
             <div className="flex justify-between mb-2">
