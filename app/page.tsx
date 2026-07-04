@@ -74,9 +74,16 @@ export default function Home() {
             <a href="#modelos" className="hover:text-vantum-white transition-colors">// MODELOS</a>
             <a href="#especificaciones" className="hover:text-vantum-white transition-colors">// ESPECIFICACIONES</a>
           </div>
-          <a href="#contacto" className="border border-vantum-white/20 bg-vantum-white/5 px-5 py-2.5 text-[9px] font-mono tracking-[0.25em] uppercase text-vantum-white hover:bg-vantum-white hover:text-vantum-black transition-all duration-300">
-            DISTRIBUCIÓN
-          </a>
+          
+          {isMounted && isDropActive ? (
+            <a href="https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20lote%20001" target="_blank" rel="noopener noreferrer" className="border border-green-500/30 bg-green-500/10 px-5 py-2.5 text-[9px] font-mono tracking-[0.25em] uppercase text-green-400 hover:bg-green-400 hover:text-vantum-black transition-all duration-300">
+              SOLICITAR ORDEN
+            </a>
+          ) : (
+            <div className="border border-vantum-white/10 bg-vantum-white/5 px-5 py-2.5 text-[9px] font-mono tracking-[0.25em] uppercase text-vantum-gray/40 select-none cursor-not-allowed">
+              GATEWAY LOCKED
+            </div>
+          )}
         </div>
       </nav>
 
@@ -85,7 +92,7 @@ export default function Home() {
         <div className="space-y-4 max-w-4xl mx-auto flex flex-col items-center">
           <div className="inline-flex items-center gap-2 border border-red-500/20 bg-red-500/5 px-4 py-1.5 rounded-full font-mono text-[9px] tracking-[0.25em] text-red-400 uppercase animate-pulse">
             <span className="w-1.5 h-1.5 bg-red-500 rounded-full" />
-            SYSTEM LIVE // EDICIÓN 001
+            {isMounted && isDropActive ? "SYSTEM STATUS // LIVE" : "SYSTEM HOLDING // EDICIÓN 001"}
           </div>
           
           {/* LOGO INTERACTIVO VECTORIAL */}
@@ -102,7 +109,7 @@ export default function Home() {
           </p>
         </div>
 
-        {/* INTERFAZ DEL CONTADOR AUTOMATIZADO CON SEGUNDOS BLINDADOS */}
+        {/* INTERFAZ DEL CONTADOR CON SEGUNDERO CARMESÍ CRÍTICO RESTAURADO */}
         <div className="mt-16 border border-vantum-white/10 bg-vantum-black/60 backdrop-blur-md p-8 md:p-12 w-full max-w-3xl mx-auto relative group hover:border-vantum-white/20 transition-colors">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-vantum-black px-3 font-mono text-[9px] tracking-widest text-vantum-gray/60 uppercase">
             // TERMINAL TIME COUNTER
@@ -128,7 +135,8 @@ export default function Home() {
               <div className="text-[9px] text-vantum-gray/40 tracking-[0.2em] uppercase mt-2">Minutos</div>
             </div>
             <div>
-              <div className="text-4xl md:text-6xl font-extralight tracking-tight text-vantum-white tabular-nums opacity-90">
+              {/* Volvió el rojo sólido blindado para evitar fallas visuales */}
+              <div className="text-4xl md:text-6xl font-extralight tracking-tight text-red-500 tabular-nums">
                 {isMounted ? timeLeft.seconds : "00"}
               </div>
               <div className="text-[9px] text-vantum-gray/40 tracking-[0.2em] uppercase mt-2">Segundos</div>
@@ -153,7 +161,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS (Lógica de Automatización Inteligente + Tu WhatsApp Inyectado) */}
+      {/* 4. SECCIÓN MODELOS */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-20 flex flex-col md:flex-row md:items-end md:justify-between border-b border-vantum-white/10 pb-6">
           <div>
@@ -194,7 +202,7 @@ export default function Home() {
             <div className="mt-8 flex justify-between items-center border-t border-vantum-white/[0.06] pt-4 text-[11px] font-mono">
               <span className="text-vantum-gray/40">PREMIUM FLAT VISOR</span>
               {isMounted && isDropActive ? (
-                <a href="https://wa.me/5492617616121?text=Hola!%20Quiero%20solicitar%20la%20Vantum%20Olive%20Khaki" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
+                <a href="https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20solicitar%20la%20pieza%20Vantum%20Olive%20Khaki%20(SPEC%20%2F%2F%2001.OLV-KHK)" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
@@ -230,7 +238,7 @@ export default function Home() {
             <div className="mt-8 flex justify-between items-center border-t border-vantum-white/[0.06] pt-4 text-[11px] font-mono">
               <span className="text-vantum-gray/40">PREMIUM FLAT VISOR</span>
               {isMounted && isDropActive ? (
-                <a href="https://wa.me/5492617616121?text=Hola!%20Quiero%20solicitar%20la%20Vantum%20Crimson%20Stealth" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
+                <a href="https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20solicitar%20la%20pieza%20Vantum%20Crimson%20Stealth%20(SPEC%20%2F%2F%2002.CRMS-STL)" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
@@ -266,7 +274,7 @@ export default function Home() {
             <div className="mt-8 flex justify-between items-center border-t border-vantum-white/[0.06] pt-4 text-[11px] font-mono">
               <span className="text-vantum-gray/40">PREMIUM FLAT VISOR</span>
               {isMounted && isDropActive ? (
-                <a href="https://wa.me/5492617616121?text=Hola!%20Quiero%20solicitar%20la%20Vantum%20Onyx%20Gold" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
+                <a href="https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20solicitar%20la%20pieza%20Vantum%20Onyx%20Gold%20(SPEC%20%2F%2F%2003.ONX-GLD)" target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 group/btn font-medium">
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
@@ -278,9 +286,22 @@ export default function Home() {
           </div>
 
         </div>
+
+        {/* INDICADOR DE STOCK EN VIVO EXCLUSIVO POST-DROP */}
+        {isMounted && isDropActive && (
+          <div className="mt-16 max-w-xl mx-auto border border-green-500/20 bg-green-500/5 p-4 font-mono text-[10px] tracking-widest text-center text-green-400 animate-fade-in">
+            <div className="flex justify-between mb-2">
+              <span>// BATCH LOTE 001 STATUS</span>
+              <span>500 / 500 UNITS RESERVED</span>
+            </div>
+            <div className="w-full bg-green-950 h-1 border border-green-500/30 overflow-hidden">
+              <div className="bg-green-400 h-full w-[100%] transition-all duration-1000" />
+            </div>
+          </div>
+        )}
       </section>
 
-      {/* 5. SECCIÓN ESPECIFICACIONES TÉCNICAS CON TABLA DE TOLERANCIAS */}
+      {/* 5. SECCIÓN ESPECIFICACIONES TÉCNICAS */}
       <section id="especificaciones" className="py-32 bg-vantum-black relative z-10 px-6 border-t border-vantum-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
@@ -318,7 +339,6 @@ export default function Home() {
                     <td className="py-2 text-right text-red-400">± 0.05 mm</td>
                   </tr>
                   <tr>
-                    <td className="py-2 text-vantum-white/80">Ancho de Visera</td>
                     <td className="py-2 text-right text-vantum-white">18.0 cm</td>
                     <td className="py-2 text-right text-red-400">± 0.02 mm</td>
                   </tr>
