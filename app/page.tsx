@@ -18,18 +18,28 @@ export default function Home() {
   });
   const [isMounted, setIsMounted] = useState(false);
   const [isDropActive, setIsDropActive] = useState(false);
+  const [isDescUnlocked, setIsDescUnlocked] = useState(false); // Control de visualización de descripción
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     setIsMounted(true);
     
-    // FECHA OBJETIVO: 25 de Julio de 2026
+    // FECHAS CRÍTICAS DEL SISTEMA
     const targetDate = new Date("2026-07-25T00:00:00").getTime();
+    const descUnlockDate = new Date("2026-07-23T00:00:00").getTime(); // 2 días antes
 
     const updateTimer = () => {
       const now = new Date().getTime();
       const difference = targetDate - now;
 
+      // 1. Verificar si las descripciones ya se tienen que desbloquear
+      if (now >= descUnlockDate) {
+        setIsDescUnlocked(true);
+      } else {
+        setIsDescUnlocked(false);
+      }
+
+      // 2. Verificar si el Drop ya está activo
       if (difference <= 0) {
         setTimeLeft({ days: "00", hours: "00", minutes: "00", seconds: "00" });
         setIsDropActive(true);
@@ -105,7 +115,6 @@ export default function Home() {
       <header className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-12 pb-20">
         <div className="space-y-4 max-w-4xl mx-auto flex flex-col items-center">
           
-          {/* OPTIMIZACIÓN 2: DOBLE COMPONENTE DE ESCASEZ EXTREMA EN HERO */}
           <div className="flex flex-wrap justify-center gap-2">
             <div className="inline-flex items-center gap-2 border border-red-500/20 bg-red-500/5 px-4 py-1.5 rounded-full font-mono text-[9px] tracking-[0.25em] text-red-400 uppercase animate-pulse">
               <span className="w-1.5 h-1.5 bg-red-500 rounded-full" />
@@ -116,7 +125,7 @@ export default function Home() {
             </div>
           </div>
           
-          {/* LOGO DE MARCA AUTÉNTICO CON RASTREO INTERACTIVO */}
+          {/* LOGO DE MARCA AUTÉNTICO */}
           <div 
             className="py-8 cursor-crosshair relative z-20 transition-transform duration-300 ease-out flex items-center justify-center"
             style={{ transform: `translate(${mousePos.x}px, ${mousePos.y}px)` }}
@@ -133,7 +142,7 @@ export default function Home() {
           </p>
         </div>
 
-        {/* INTERFAZ DEL CONTADOR CON SEGUNDERO GLOW */}
+        {/* INTERFAZ DEL CONTADOR */}
         <div className="mt-16 border border-vantum-white/10 bg-vantum-black/60 backdrop-blur-md p-8 md:p-12 w-full max-w-3xl mx-auto relative group hover:border-vantum-white/20 transition-colors">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-vantum-black px-3 font-mono text-[9px] tracking-widest text-vantum-gray/60 uppercase">
             // TERMINAL TIME COUNTER
@@ -187,7 +196,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS */}
+      {/* 4. SECCIÓN MODELOS (Encriptación de Imagen + Desbloqueo de Descripciones el 23/07) */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-20 flex flex-col md:flex-row md:items-end md:justify-between border-b border-vantum-white/10 pb-6">
           <div>
@@ -205,7 +214,6 @@ export default function Home() {
           
           {/* MODELO 01: OLIVE KHAKI */}
           <div className="relative border border-vantum-white/[0.06] bg-vantum-black/40 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-vantum-white/20 group">
-            {/* OPTIMIZACIÓN 3: Fondo sutil bg-white/[0.02] para recortar la silueta perfectamente en celulares */}
             <div className="overflow-hidden bg-vantum-black/90 relative aspect-square flex items-center justify-center border border-vantum-white/[0.04] rounded-sm shadow-inner bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_0%,transparent_70%)]">
               
               {isMounted && !isDropActive && (
@@ -214,6 +222,7 @@ export default function Home() {
               
               <div className="absolute w-full h-[2px] bg-vantum-white/30 top-0 left-0 opacity-0 group-hover:opacity-100 group-hover:animate-[bounce_2s_infinite] pointer-events-none z-20 shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
               
+              {/* LA IMAGEN SE MANTIENE OCULTA HASTA LAS 00:00 DEL 25 DE JULIO */}
               <img 
                 src="/gorra-oliva.png" 
                 alt="Vantum Olive Khaki" 
@@ -227,16 +236,30 @@ export default function Home() {
                 {isMounted && isDropActive ? (
                   <span className="text-green-400 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/20 tracking-widest text-[9px]">// SYSTEM LIVE</span>
                 ) : (
-                  <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">// RESERVATION OPEN</span>
+                  <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">
+                    {isDescUnlocked ? "// DESCRIPCIÓN DISPONIBLE" : "// DATA ENCRYPTED"}
+                  </span>
                 )}
               </div>
               <h3 className="text-2xl font-light tracking-widest uppercase mt-3 text-vantum-white">
                 Olive Khaki
               </h3>
-              <p className="text-xs text-vantum-gray/80 mt-4 leading-relaxed font-light">
-                Chasis estructural verde oliva profundo. Isotipo lineal en alto relieve beige desértico y vivo perimetral inferior a tono. Estética militarizada de alta precisión.
-              </p>
+              
+              {/* OPACIDAD DINÁMICA AUTOMATIZADA EN LA DESCRIPCIÓN */}
+              <div className="relative mt-4 min-h-[70px]">
+                <p className={`text-xs leading-relaxed font-light transition-all duration-1000 select-none
+                  ${isMounted && !isDescUnlocked ? "blur-[4px] opacity-15 grayscale contrast-50 pointer-events-none text-vantum-gray" : "text-vantum-gray/80"}`}
+                >
+                  Chasis estructural verde oliva profundo. Isotipo lineal en alto relieve beige desértico y vivo perimetral inferior a tono. Estética militarizada de alta precisión.
+                </p>
+                {isMounted && !isDescUnlocked && (
+                  <span className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-widest text-red-400/80 bg-black/10 text-center">
+                    [ DESCRIPTION ENCRYPTED // DEBLOCKED 23/07 ]
+                  </span>
+                )}
+              </div>
             </div>
+            
             <div className="mt-8 flex justify-between items-center border-t border-vantum-white/[0.06] pt-4 text-[11px] font-mono">
               <span className="text-vantum-gray/40">PREMIUM FLAT VISOR</span>
               {isMounted && isDropActive ? (
@@ -244,7 +267,6 @@ export default function Home() {
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
-                /* OPTIMIZACIÓN 1: Botón de captura de leads dinámico para destruir la tasa de rebote */
                 <a href="https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20anotarme%20en%20la%20lista%20de%20espera%20para%20la%20Vantum%20Olive%20Khaki." target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-red-400 hover:text-red-300 border border-red-500/20 bg-red-500/5 px-3 py-1 font-mono text-[9px] transition-colors rounded-sm">
                   [ NOTIFICARME POR WSP ]
                 </a>
@@ -275,15 +297,27 @@ export default function Home() {
                 {isMounted && isDropActive ? (
                   <span className="text-green-400 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/20 tracking-widest text-[9px]">// SYSTEM LIVE</span>
                 ) : (
-                  <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">// RESERVATION OPEN</span>
+                  <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">
+                    {isDescUnlocked ? "// DESCRIPCIÓN DISPONIBLE" : "// DATA ENCRYPTED"}
+                  </span>
                 )}
               </div>
               <h3 className="text-2xl font-light tracking-widest uppercase mt-3 text-vantum-white">
                 Crimson Stealth
               </h3>
-              <p className="text-xs text-vantum-gray/80 mt-4 leading-relaxed font-light">
-                Contraste crítico de alta hostilidad. Gabardina negra pura con isotipo frontal y vivos perimetrales inyectados en hilo carmesí. Diseñada para romper el entorno urbano.
-              </p>
+              
+              <div className="relative mt-4 min-h-[70px]">
+                <p className={`text-xs leading-relaxed font-light transition-all duration-1000 select-none
+                  ${isMounted && !isDescUnlocked ? "blur-[4px] opacity-15 grayscale contrast-50 pointer-events-none text-vantum-gray" : "text-vantum-gray/80"}`}
+                >
+                  Contraste crítico de alta hostilidad. Gabardina negra pura con isotipo frontal y vivos perimetrales inyectados en hilo carmesí. Diseñada para romper el entorno urbano.
+                </p>
+                {isMounted && !isDescUnlocked && (
+                  <span className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-widest text-red-400/80 bg-black/10 text-center">
+                    [ DESCRIPTION ENCRYPTED // DEBLOCKED 23/07 ]
+                  </span>
+                )}
+              </div>
             </div>
             <div className="mt-8 flex justify-between items-center border-t border-vantum-white/[0.06] pt-4 text-[11px] font-mono">
               <span className="text-vantum-gray/40">PREMIUM FLAT VISOR</span>
@@ -322,15 +356,27 @@ export default function Home() {
                 {isMounted && isDropActive ? (
                   <span className="text-green-400 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/20 tracking-widest text-[9px]">// SYSTEM LIVE</span>
                 ) : (
-                  <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">// RESERVATION OPEN</span>
+                  <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">
+                    {isDescUnlocked ? "// DESCRIPCIÓN DISPONIBLE" : "// DATA ENCRYPTED"}
+                  </span>
                 )}
               </div>
               <h3 className="text-2xl font-light tracking-widest uppercase mt-3 text-vantum-white">
                 Onyx Gold
               </h3>
-              <p className="text-xs text-vantum-gray/80 mt-4 leading-relaxed font-light">
-                Rigor clásico de ingeniería. Base monocromática negra con bordado lineal heráldico en hilo de oro seleccionado. Máxima simetría y sobriedad industrial.
-              </p>
+              
+              <div className="relative mt-4 min-h-[70px]">
+                <p className={`text-xs leading-relaxed font-light transition-all duration-1000 select-none
+                  ${isMounted && !isDescUnlocked ? "blur-[4px] opacity-15 grayscale contrast-50 pointer-events-none text-vantum-gray" : "text-vantum-gray/80"}`}
+                >
+                  Rigor clásico de ingeniería. Base monocromática negra con bordado lineal heráldico en hilo de oro seleccionado. Máxima simetría y sobriedad industrial.
+                </p>
+                {isMounted && !isDescUnlocked && (
+                  <span className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-widest text-red-400/80 bg-black/10 text-center">
+                    [ DESCRIPTION ENCRYPTED // DEBLOCKED 23/07 ]
+                  </span>
+                )}
+              </div>
             </div>
             <div className="mt-8 flex justify-between items-center border-t border-vantum-white/[0.06] pt-4 text-[11px] font-mono">
               <span className="text-vantum-gray/40">PREMIUM FLAT VISOR</span>
