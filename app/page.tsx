@@ -112,7 +112,7 @@ export default function Home() {
       };
     }, 1000);
 
-    // RE-CALIBRACIÓN DEL CRONÓMETRO DINÁMICO HACIA ATRÁS (DROP REAL 25 DE JULIO)
+    // CRONÓMETRO DINÁMICO RE-CALIBRADO (DROP REAL 25 DE JULIO)
     const targetDate = new Date("2026-07-25T00:00:00").getTime();
 
     const updateTimer = () => {
@@ -159,7 +159,7 @@ export default function Home() {
     };
   }, []);
 
-  // CONTROL DE ANIMACIONES CSS INYECTADAS
+  // ANIMACIONES INTERNAS INYECTADAS
   useEffect(() => {
     if (typeof window !== "undefined" && !document.getElementById("vantum-core-styles")) {
       const stylesheet = document.createElement("style");
@@ -209,6 +209,27 @@ export default function Home() {
     setTerminalInput("");
   };
 
+  const executeGeneralReserve = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (bioScanning || bioSuccess) return;
+
+    setBioScanning(true);
+    setBioText("ESCANEANDO CREDENCIAL...");
+
+    setTimeout(() => {
+      setBioText("VERIFICANDO STOCK BATCH 001...");
+      setTimeout(() => {
+        setBioText("CUPO CONFIRMADO");
+        setBioSuccess(true);
+        setTimeout(() => {
+          setBioScanning(false);
+          setBioSuccess(false);
+          window.open("https://wa.me/5492617616121?text=Solicito%20verificaci%C3%B3n%20de%20stock%20para%20el%20Batch%20001.%20C%C3%B3digo%20de%20sistema%3A%20VANTUM-CORE.", "_blank");
+        }, 500);
+      }, 600);
+    }, 700);
+  };
+
   const executeBiometricScan = (e: React.MouseEvent, modelText: string) => {
     e.preventDefault();
     if (bioScanning || bioSuccess) return;
@@ -217,21 +238,17 @@ export default function Home() {
     setBioText("ESCANEANDO CREDENCIAL...");
 
     setTimeout(() => {
-      setBioText("VERIFICANDO RESERVA...");
+      setBioText("VERIFICANDO EN NODO...");
       setTimeout(() => {
-        setBioText("CUPO COMPILADO");
+        setBioText("ACCESO OTORGADO");
         setBioSuccess(true);
         setTimeout(() => {
           setBioScanning(false);
           setBioSuccess(false);
-          window.open(`https://wa.me/5492617616121?text=SISTEMA%20CENTRAL%3A%20Solicito%20reserva%20de%20cupo%20para%20el%20Batch%20001%20%2F%20Pieza%20%5B${encodeTruncated(modelText)}%5D.%20ID%20de%20usuario%20verificado.`, "_blank");
+          window.open(`https://wa.me/5492617616121?text=SISTEMA%20CENTRAL%3A%20Solicito%20reserva%20de%20cupo%20para%20el%20Batch%20001%20%2F%20Pieza%20%5B${modelText.replace(/ /g, "%20")}%5D.%20ID%20de%20usuario%20verificado.`, "_blank");
         }, 500);
       }, 600);
     }, 700);
-  };
-
-  const encodeTruncated = (str: string) => {
-    return str.replace(/ /g, "%20");
   };
 
   // INTRO FASE 0: INITIAL LOADER
@@ -306,27 +323,26 @@ export default function Home() {
     );
   }
 
-  // FASE 3: ENTRADA WEB UNIFICADA (LA TIENDA COMPLETA)
+  // FASE 3: TIENDA RUNNING DESBLOQUEADA
   return (
     <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden font-sans relative antialiased animate-fade-in">
       
-      {/* CAPAS DE INMERSIÓN ATMOSFÉRICA */}
       <div className="cctv-scanline" />
       <div className="cctv-noise" />
 
-      {/* RE-CALIBRACIÓN CROMÁTICA REC SUTIL */}
+      {/* RE-CALIBRACIÓN CROMÁTICA REC */}
       <div className="fixed top-6 right-6 font-mono text-[9px] tracking-[0.25em] text-white/30 flex items-center gap-2 z-50 select-none">
         <span className="w-1 h-1 bg-red-600 rounded-full animate-pulse" />
         <span>REC {cctvTime}</span>
       </div>
 
-      {/* COORDENADAS FIJAS GLOBAL CORRE */}
+      {/* METADATOS COMPILADOS EN EL BORDE */}
       <div className="fixed bottom-6 left-6 font-mono text-[8px] tracking-[0.2em] text-white/20 flex flex-col gap-0.5 z-50 select-none uppercase hidden md:flex">
-        <span>BÚNKER DE CONFECCIÓN & DISEÑO: MENDOZA, ARG</span>
-        <span>LOGÍSTICA DE DISTRIBUCIÓN: ENVÍOS A TODO EL PAÍS</span>
+        <span>BÚNKER DE DISEÑO & DESARROLLO: MENDOZA, ARG</span>
+        <span>LOGÍSTICA DE DISTRIBUCIÓN: ENVÍOS GLOBALES ACTIVADOS</span>
       </div>
 
-      {/* 1. NAVEGACIÓN COMPACTA EN ESPAÑOL */}
+      {/* 1. NAV BAR */}
       <nav className="border-b border-white/5 backdrop-blur-md bg-black/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
           <a href="#" className="text-lg font-light tracking-[0.5em] uppercase text-white hover:opacity-70 transition-opacity">
@@ -335,12 +351,12 @@ export default function Home() {
           <div className="hidden md:flex items-center gap-12 text-[9px] font-mono tracking-[0.25em] uppercase text-white/40">
             <a href="#manifiesto" className="hover:text-white transition-colors">[ EL MANIFIESTO ]</a>
             <a href="#modelos" className="hover:text-white transition-colors">[ GORRAS DISPONIBLES ]</a>
-            <a href="#especificaciones" className="hover:text-white transition-colors">[ MEDIDAS EXACTAS ]</a>
+            <a href="#especificaciones" className="hover:text-white transition-colors">[ PLANO DE MEDIDAS ]</a>
           </div>
           
-          {/* ACCIÓN RE-ENRUTADA SUTILMENTE AL FORMULARIO DE ACCESO DEL BATCH */}
+          {/* CONTROL DE ENRUTAMIENTO UX DIRECTO AL ANCLA DE RESERVA */}
           <button 
-            onClick={() => document.getElementById("reloj-drop")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => document.getElementById("bloque-captura")?.scrollIntoView({ behavior: "smooth" })}
             className="border border-red-500/30 bg-red-500/5 px-4 py-2 text-[9px] font-mono tracking-[0.2em] uppercase text-red-400 rounded-sm hover:bg-red-500 hover:text-black transition-colors font-medium cursor-pointer"
           >
             [ ACCESO AL BATCH ]
@@ -358,7 +374,7 @@ export default function Home() {
               EDICIÓN DE BARRIO 001
             </div>
             <div className="inline-flex items-center border border-white/10 bg-white/[0.02] px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.2em] text-white/50 uppercase">
-              LOTE ÚNICO // 30 GORRAS
+              LOTE ÚNICO // 30 PIEZAS
             </div>
           </div>
           
@@ -377,17 +393,18 @@ export default function Home() {
             />
           </div>
 
-          <div className="space-y-4 max-w-2xl mx-auto">
-            {/* CORRECCIÓN PUNTO CIEGO 1: REDACCIÓN SÓLIDA PRECISADA */}
+          <div className="space-y-5 max-w-2xl mx-auto">
+            {/* CORRECCIÓN PUNTO CIEGO 1: TITULAR REDACTADO PERFECTO */}
             <h1 className="font-mono text-xs md:text-sm text-white tracking-[0.35em] uppercase font-bold">
               CONFECCIÓN URBANA PESADA DE ALTA DENSIDAD
             </h1>
+            {/* CORRECCIÓN PUNTO CIEGO 2: SE INTEGRA LA PALABRA GORRAS PARA EL FILTRO DE COMPRENSIÓN */}
             <p className="font-mono text-[11px] md:text-xs text-white/50 tracking-[0.22em] uppercase leading-relaxed text-center">
-              Armamos bloques de moldería rígida bajo un control estricto de simetría estructural. No hacemos ropa en masa; confinamos colecciones numeradas de <span className="text-white font-bold">30 piezas únicas por modelo</span> desarrolladas en gabardina de 8 onzas de máximo grosor. Estética de búnker ajustada a la calle.
+              Armamos bloques de moldería rígida bajo un control estricto de simetría estructural. No hacemos ropa en masa; confinamos colecciones numeradas de <span className="text-white font-bold">30 gorras exclusivas por modelo</span> desarrolladas en gabardina de 8 onzas de máximo grosor. Estética de búnker ajustada a la calle.
             </p>
           </div>
 
-          {/* LOGÍSTICA DE MATERIALES */}
+          {/* LOGÍSTICA INDEX DE MATERIALES */}
           <div className="pt-2 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-2xl font-mono text-[9px] tracking-widest uppercase text-white/30">
             <div className="p-2 border border-white/5 bg-[#030303]/20 rounded-sm">
               <span className="text-white/60 block mb-0.5">// TEXTIL REFORZADO</span>
@@ -408,7 +425,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* TIME COUNTER CON CORRECCIÓN EN ESPAÑOL DIRECTO */}
+        {/* TIME COUNTER SUTIL ESTILO image_44f613.jpg */}
         <div id="reloj-drop" className="mt-16 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-black px-2.5 font-mono text-[8px] tracking-[0.25em] text-red-500 uppercase font-medium animate-pulse">
             // [ SISTEMA EN ESPERA DE LANZAMIENTO GENERAL ]
@@ -439,11 +456,10 @@ export default function Home() {
           </div>
         </div>
 
-        {/* LOGS DE OPERADORES */}
+        {/* REGISTRO OPERACIONAL */}
         <div className="mt-8 font-mono text-[9px] tracking-[0.15em] text-white/30 uppercase select-none">
           ÚLTIMO REGISTRO DE CONEXIÓN: [{currentDateTime || "PROCESANDO..."}] vía Mendoza_Node_02
         </div>
-
         <div className="mt-2 font-mono text-[9px] tracking-[0.15em] text-red-500/40 uppercase select-none">
           [ ESTADO DEL SERVIDOR: {onlineUsers} OPERATORES ONLINE EN EL NODO ]
         </div>
@@ -463,12 +479,12 @@ export default function Home() {
             className="text-lg md:text-2xl tracking-wide leading-relaxed text-white transition-all duration-300 ease-out text-center"
             style={{ fontWeight: fontWeight }}
           >
-            No diseñamos accesorios. Construimos bloques estructurales de uso diario. Cada pieza responde a un control estricto de moldería urbana y simetría textil absoluta. VANTUM is the response to market saturation.
+            No diseñamos accesorios. Construimos bloques estructurales de uso diario. Cada pieza responde a un control estricto de moldería urbana y simetría textil absoluta. VANTUM es la respuesta técnica a la saturación del mercado.
           </p>
         </div>
       </section>
 
-      {/* 4. SECCIÓN GORRAS (CON CTA CONVERTIDOR DE RETENCIÓN AL WHATSAPP CENTRAL) */}
+      {/* 4. SECCIÓN MODELOS */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-24 flex flex-col md:flex-row md:items-end md:justify-between border-b border-white/5 pb-6">
           <div>
@@ -508,7 +524,6 @@ export default function Home() {
                 <span>VISERA PLANA PREMIUM</span>
                 <span>RESERVADO: {waitlistPercentage}%</span>
               </div>
-              {/* ACCIÓN CONVERTIDORA PARA DETENER LA PÉRDIDA DE TRÁFICO */}
               <button 
                 onClick={(e) => executeBiometricScan(e, "Olive Khaki")}
                 className="uppercase text-center py-2.5 text-[9px] font-medium tracking-widest transition-all duration-300 rounded-sm font-mono border border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500 hover:text-white"
@@ -587,7 +602,27 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. SECCIÓN MEDIDAS COMPLETAMENTE RE-CALIBRADA CON NOMENCLATURAS TÉCNICAS PREMIUM */}
+      {/* II. ADICIÓN OBLIGATORIA: BLOQUE CENTRAL DE CAPTURA PRE-DROP DE ALTA RETENCIÓN */}
+      <section id="bloque-captura" className="py-20 px-6 max-w-2xl mx-auto relative z-10 text-center animate-fade-in">
+        <div className="border border-red-500/20 bg-[#050505] p-8 space-y-4 rounded-sm">
+          <div className="font-mono text-[9px] text-white/30 uppercase tracking-[0.25em]">
+            // INICIAR PROTOCOLO DE RESERVA PRE-DROP
+          </div>
+          <p className="font-mono text-[10px] text-white/50 tracking-wider uppercase leading-relaxed">
+            REGISTRE SUS CREDENCIALES EN EL SERVIDOR CENTRAL PARA ASEGURAR CUOTA DE PRODUCCIÓN ANTES DEL CIERRE AUTOMÁTICO DEL SISTEMA.
+          </p>
+          <div className="pt-2">
+            <button 
+              onClick={executeGeneralReserve}
+              className={`w-full uppercase text-center py-3.5 text-[10px] font-bold tracking-[0.3em] transition-all duration-300 rounded-sm font-mono border ${bioScanning && !bioSuccess ? "border-red-500/50 bg-red-950/20 text-red-400 animate-pulse cursor-wait" : bioSuccess ? "border-green-500 bg-green-500/10 text-green-400" : "border-red-500 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-black"}`}
+            >
+              {bioScanning ? bioText : "[ SOLICITAR ASIGNACIÓN DE PIEZA - BATCH 001 ]"}
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. SECCIÓN MEDIDAS COMPILADA CON LAS CORRECCIONES FACHERAS SOLICITADAS */}
       <section id="especificaciones" className="py-32 bg-black relative z-10 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
@@ -609,7 +644,7 @@ export default function Home() {
 
             <div className="border border-white/5 bg-[#030303]/40 p-6 flex flex-col justify-between relative rounded-sm">
               <div className="text-[8px] text-white/30 mb-4 tracking-[0.2em] uppercase">// INDICE DE ESPECIFICACIONES TEXTILES</div>
-              {/* CORRECCIÓN PUNTO CIEGO 2: TABLA RE-DISEÑADA CON NOMBRES FACHEROS DE INGENIERÍA */}
+              {/* CORRECCIÓN PUNTO CIEGO 3: VOCABULARIO TÉCNICO ELEVADO Y COLUMNA CALIBRADA */}
               <table className="w-full text-left text-[11px] leading-relaxed">
                 <thead>
                   <tr className="border-b border-white/10 text-white/60">
@@ -632,12 +667,12 @@ export default function Home() {
                   <tr>
                     <td className="py-2 text-white/40">Regulador Trasero</td>
                     <td className="py-2 text-right text-white/70">Ajustable</td>
-                    <td className="py-2 text-right text-white/50">Hebilla de Presión Inyectada</td>
+                    <td className="py-2 text-right text-white/50">Cierre de Presión / Polímero de Alta Tensión</td>
                   </tr>
                   <tr>
                     <td className="py-2 text-white/40">Densidad de Costura</td>
                     <td className="py-2 text-right text-white/70">12 SPI</td>
-                    <td className="py-2 text-right text-white/50">Hilos de Tensión Reforzada</td>
+                    <td className="py-2 text-right text-white/50">Filamento de Alta Torsión Reforzado</td>
                   </tr>
                 </tbody>
               </table>
@@ -670,14 +705,15 @@ export default function Home() {
         </div>
       )}
 
-      {/* 6. PIE DE PÁGINA */}
+      {/* 6. PIE DE PÁGINA (PROFESIONALIZADO Y BLINDADO SEGÚN PARTE 4) */}
       <footer id="contacto" className="py-20 border-t border-white/5 bg-black relative z-10 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 font-mono text-[9px] tracking-widest text-white/30">
-          <div>
-            <p className="text-white/50 mb-1">VANTUM CORE LAB // OPERATIONAL GATEWAY</p>
-            <p>© 2026 DISTRIBUTION & LOGISTICS. ALL RIGHTS RESERVED.</p>
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 font-mono text-[9px] tracking-widest text-white/20 uppercase text-center md:text-left">
+          <div className="space-y-1">
+            <p className="text-white/40 font-medium">SOPORTE CENTRAL: VANTUM553@GMAIL.COM // CONTROL DE LOGÍSTICA & CONFECCIÓN</p>
+            <p className="text-red-500/40">SISTEMA DE PRODUCCIÓN CONFINADO. NINGUNA ESTRUCTURA SERÁ REEDITADA TRAS EL CIERRE DEL BATCH 001.</p>
+            <p className="text-white/15 block pt-2">© 2026 DISTRIBUTION & LOGISTICS. ALL RIGHTS RESERVED.</p>
           </div>
-          <div className="flex gap-8">
+          <div className="flex gap-8 text-white/30 font-medium">
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">INSTAGRAM</a>
             <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">TIKTOK</a>
             <a href="mailto:vantum553@gmail.com" className="hover:text-white transition-colors">GMAIL</a>
