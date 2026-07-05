@@ -6,6 +6,7 @@ interface TimeLeft {
   days: string;
   hours: string;
   minutes: string;
+  seconds: string;
 }
 
 export default function Home() {
@@ -328,7 +329,7 @@ export default function Home() {
             </div>
           </div>
           
-          {/* SECTOR ACTUALIZADO: ENRUTAMIENTO DIRECTO AL ARCHIVO LOCAL DESCARGADO DE CANVA */}
+          {/* LOGO ENRUTADO DIRECTO */}
           <div 
             onClick={handleLogoClick}
             className="py-8 cursor-crosshair relative z-20 transition-transform duration-500 ease-out flex items-center justify-center animate-fade-up delay-200"
