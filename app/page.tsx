@@ -6,7 +6,6 @@ interface TimeLeft {
   days: string;
   hours: string;
   minutes: string;
-  seconds: string;
 }
 
 export default function Home() {
@@ -329,34 +328,17 @@ export default function Home() {
             </div>
           </div>
           
-          {/* OPTIMIZACIÓN CLONACIÓN VECTORIAL ABSOLUTA DE FOTO 2 (`logo-vantum.png.jpeg hola_2.jpeg`) */}
+          {/* SECTOR ACTUALIZADO: ENRUTAMIENTO DIRECTO AL ARCHIVO LOCAL DESCARGADO DE CANVA */}
           <div 
             onClick={handleLogoClick}
             className="py-8 cursor-crosshair relative z-20 transition-transform duration-500 ease-out flex items-center justify-center animate-fade-up delay-200"
             style={{ transform: `translate(${mousePos.x}px, ${mousePos.y}px)` }}
           >
-            <svg 
-              className="w-24 h-24 text-white select-none pointer-events-none filter drop-shadow-[0_0_25px_rgba(255,255,255,0.08)]" 
-              viewBox="0 0 100 100" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {/* Contorno y Laberinto Central Completo con Trazado Continuo Exacto */}
-              <polyline points="17 26, 47 79, 53 79, 83 26" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter" />
-              <polyline points="22 26, 19 31, 47 81, 53 81, 81 31, 78 26" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter" />
-              
-              <polyline points="25.5 26, 45.5 61, 42.5 67, 31 46" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" strokeLinejoin="miter" />
-              <polyline points="74.5 26, 54.5 61, 57.5 67, 69 46" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" strokeLinejoin="miter" />
-              
-              <polyline points="33.5 26, 45 46, 39.5 56" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" strokeLinejoin="miter" />
-              <polyline points="66.5 26, 55 46, 60.5 56" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" strokeLinejoin="miter" />
-              
-              <line x1="45" y1="46" x2="55" y2="46" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" />
-              <line x1="39.5" y1="56" x2="60.5" y2="56" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" />
-              <line x1="42.5" y1="67" x2="57.5" y2="67" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" />
-              <line x1="17" y1="26" x2="35" y2="26" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" />
-              <line x1="65" y1="26" x2="83" y2="26" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" />
-            </svg>
+            <img 
+              src="/logo-real.png" 
+              alt="Vantum Logo Original" 
+              className="w-24 h-24 object-contain opacity-95 select-none pointer-events-none filter drop-shadow-[0_0_25px_rgba(255,255,255,0.08)]"
+            />
           </div>
 
           <p className="font-mono text-[11px] text-white/60 tracking-[0.25em] max-w-2xl mx-auto uppercase leading-relaxed animate-fade-up delay-300">
@@ -364,7 +346,7 @@ export default function Home() {
           </p>
         </div>
 
-        {/* TIME COUNTER CON CONTRASTE DE SEGUNDERO OPTIMIZADO APAGADO SEGÚN FOTO 1 */}
+        {/* TIME COUNTER */}
         <div className="mt-16 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm animate-fade-up delay-400">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-black px-2.5 font-mono text-[8px] tracking-[0.25em] text-white/40 uppercase">
             // TERMINAL TIME COUNTER
@@ -411,7 +393,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 3. SECCIÓN MANIFIESTO CON ANIMACIÓN DE TIPOGRAFÍA VARIABLE */}
+      {/* 3. SECCIÓN MANIFIESTO */}
       <section id="manifiesto" className="py-32 border-y border-white/5 relative z-10 px-6" ref={manifiestoRef}>
         <div className="max-w-3xl mx-auto text-center space-y-8">
           <p className="font-mono text-[9px] text-white/40 tracking-[0.3em] uppercase">// OPERATIONAL PHILOSOPHY</p>
@@ -494,7 +476,7 @@ export default function Home() {
                   Contraste crítico de alta hostilidad. Gabardina negra pura con isotipo frontal y vivos perimetrales inyectados en hilo carmesí. Diseñada para romper el entorno urbano.
                 </p>
                 {isMounted && !isDescUnlocked && (
-                  <span className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-[0.2em] text-white/40 bg-black/5 text-center font-medium">[ DATOS ENCRIPTADOS ]</span>
+                  <span className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-[0.2em] text-white/40 bg-black/5 text-center font-medium">[ DATOS ENCRYPTADOS ]</span>
                 )}
               </div>
             </div>
