@@ -94,9 +94,9 @@ export default function Home() {
               SOLICITAR ORDEN
             </a>
           ) : (
-            <div className="border border-vantum-white/10 bg-vantum-white/5 px-5 py-2.5 text-[9px] font-mono tracking-[0.25em] uppercase text-vantum-gray/40 select-none cursor-not-allowed">
-              GATEWAY LOCKED
-            </div>
+            <a href="https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20ingresar%20a%20la%20lista%20de%20prioridad%20para%20el%20Lote%20001." target="_blank" rel="noopener noreferrer" className="border border-red-500/30 bg-red-500/10 px-5 py-2.5 text-[9px] font-mono tracking-[0.25em] uppercase text-red-400 hover:bg-red-500 hover:text-vantum-white transition-all duration-300">
+              PRIORITY ACCESS
+            </a>
           )}
         </div>
       </nav>
@@ -104,12 +104,19 @@ export default function Home() {
       {/* 2. HERO SECTOR */}
       <header className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-12 pb-20">
         <div className="space-y-4 max-w-4xl mx-auto flex flex-col items-center">
-          <div className="inline-flex items-center gap-2 border border-red-500/20 bg-red-500/5 px-4 py-1.5 rounded-full font-mono text-[9px] tracking-[0.25em] text-red-400 uppercase animate-pulse">
-            <span className="w-1.5 h-1.5 bg-red-500 rounded-full" />
-            {isMounted && isDropActive ? "SYSTEM STATUS // LIVE" : "SYSTEM HOLDING // EDICIÓN 001"}
+          
+          {/* OPTIMIZACIÓN 2: DOBLE COMPONENTE DE ESCASEZ EXTREMA EN HERO */}
+          <div className="flex flex-wrap justify-center gap-2">
+            <div className="inline-flex items-center gap-2 border border-red-500/20 bg-red-500/5 px-4 py-1.5 rounded-full font-mono text-[9px] tracking-[0.25em] text-red-400 uppercase animate-pulse">
+              <span className="w-1.5 h-1.5 bg-red-500 rounded-full" />
+              {isMounted && isDropActive ? "SYSTEM STATUS // LIVE" : "SYSTEM HOLDING // EDICIÓN 001"}
+            </div>
+            <div className="inline-flex items-center border border-vantum-white/20 bg-vantum-white/5 px-4 py-1.5 rounded-full font-mono text-[9px] tracking-[0.25em] text-vantum-white uppercase">
+              TOTAL BATCH // 30 UNITS ONLY
+            </div>
           </div>
           
-          {/* TU LOGO ORIGINAL INTERACTIVO SUBIDO COMO IMAGEN (logo-vantum.png) */}
+          {/* LOGO DE MARCA AUTÉNTICO CON RASTREO INTERACTIVO */}
           <div 
             className="py-8 cursor-crosshair relative z-20 transition-transform duration-300 ease-out flex items-center justify-center"
             style={{ transform: `translate(${mousePos.x}px, ${mousePos.y}px)` }}
@@ -180,7 +187,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS (Optimización de Silueta + Lote de 30) */}
+      {/* 4. SECCIÓN MODELOS */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-20 flex flex-col md:flex-row md:items-end md:justify-between border-b border-vantum-white/10 pb-6">
           <div>
@@ -198,20 +205,20 @@ export default function Home() {
           
           {/* MODELO 01: OLIVE KHAKI */}
           <div className="relative border border-vantum-white/[0.06] bg-vantum-black/40 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-vantum-white/20 group">
-            <div className="overflow-hidden bg-vantum-black relative aspect-square flex items-center justify-center border border-vantum-white/[0.04]">
+            {/* OPTIMIZACIÓN 3: Fondo sutil bg-white/[0.02] para recortar la silueta perfectamente en celulares */}
+            <div className="overflow-hidden bg-vantum-black/90 relative aspect-square flex items-center justify-center border border-vantum-white/[0.04] rounded-sm shadow-inner bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_0%,transparent_70%)]">
               
               {isMounted && !isDropActive && (
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.15)_50%)] pointer-events-none z-20 opacity-50" />
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.15)_50%)] pointer-events-none z-20 opacity-40" />
               )}
               
               <div className="absolute w-full h-[2px] bg-vantum-white/30 top-0 left-0 opacity-0 group-hover:opacity-100 group-hover:animate-[bounce_2s_infinite] pointer-events-none z-20 shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
               
-              {/* Calibrado Fino: Desenfoque bajo y más opacidad para recortar la silueta de la gorra */}
               <img 
                 src="/gorra-oliva.png" 
                 alt="Vantum Olive Khaki" 
                 className={`w-[85%] h-[85%] object-contain scale-95 transition-all duration-750 ease-out select-none pointer-events-none
-                  ${isMounted && !isDropActive ? "blur-[3px] grayscale opacity-75 contrast-110" : "group-hover:scale-100"}`} 
+                  ${isMounted && !isDropActive ? "blur-[3px] grayscale opacity-75 contrast-115" : "group-hover:scale-100"}`} 
               />
             </div>
             <div className="mt-8">
@@ -220,7 +227,7 @@ export default function Home() {
                 {isMounted && isDropActive ? (
                   <span className="text-green-400 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/20 tracking-widest text-[9px]">// SYSTEM LIVE</span>
                 ) : (
-                  <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">// FILE ENCRYPTED</span>
+                  <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">// RESERVATION OPEN</span>
                 )}
               </div>
               <h3 className="text-2xl font-light tracking-widest uppercase mt-3 text-vantum-white">
@@ -237,16 +244,17 @@ export default function Home() {
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
-                <span className="uppercase tracking-widest text-vantum-gray/40 select-none border border-vantum-white/5 bg-vantum-white/[0.02] px-3 py-1 font-mono text-[9px]">
-                  [ LOCKED DATA ]
-                </span>
+                /* OPTIMIZACIÓN 1: Botón de captura de leads dinámico para destruir la tasa de rebote */
+                <a href="https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20anotarme%20en%20la%20lista%20de%20espera%20para%20la%20Vantum%20Olive%20Khaki." target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-red-400 hover:text-red-300 border border-red-500/20 bg-red-500/5 px-3 py-1 font-mono text-[9px] transition-colors rounded-sm">
+                  [ NOTIFICARME POR WSP ]
+                </a>
               )}
             </div>
           </div>
 
           {/* MODELO 02: CRIMSON STEALTH */}
           <div className="relative border border-vantum-white/[0.06] bg-vantum-black/40 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-vantum-white/20 group">
-            <div className="overflow-hidden bg-vantum-black relative aspect-square flex items-center justify-center border border-vantum-white/[0.04]">
+            <div className="overflow-hidden bg-vantum-black/90 relative aspect-square flex items-center justify-center border border-vantum-white/[0.04] rounded-sm shadow-inner bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_0%,transparent_70%)]">
               
               {isMounted && !isDropActive && (
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.15)_50%)] pointer-events-none z-20 opacity-50" />
@@ -258,7 +266,7 @@ export default function Home() {
                 src="/gorra-roja.png" 
                 alt="Vantum Crimson Stealth" 
                 className={`w-[85%] h-[85%] object-contain scale-95 transition-all duration-750 ease-out select-none pointer-events-none
-                  ${isMounted && !isDropActive ? "blur-[3px] grayscale opacity-75 contrast-110" : "group-hover:scale-100"}`} 
+                  ${isMounted && !isDropActive ? "blur-[3px] grayscale opacity-75 contrast-115" : "group-hover:scale-100"}`} 
               />
             </div>
             <div className="mt-8">
@@ -267,7 +275,7 @@ export default function Home() {
                 {isMounted && isDropActive ? (
                   <span className="text-green-400 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/20 tracking-widest text-[9px]">// SYSTEM LIVE</span>
                 ) : (
-                  <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">// FILE ENCRYPTED</span>
+                  <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">// RESERVATION OPEN</span>
                 )}
               </div>
               <h3 className="text-2xl font-light tracking-widest uppercase mt-3 text-vantum-white">
@@ -284,16 +292,16 @@ export default function Home() {
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
-                <span className="uppercase tracking-widest text-vantum-gray/40 select-none border border-vantum-white/5 bg-vantum-white/[0.02] px-3 py-1 font-mono text-[9px]">
-                  [ LOCKED DATA ]
-                </span>
+                <a href="https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20anotarme%20en%20la%20lista%20de%20espera%20para%20la%20Vantum%20Crimson%20Stealth." target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-red-400 hover:text-red-300 border border-red-500/20 bg-red-500/5 px-3 py-1 font-mono text-[9px] transition-colors rounded-sm">
+                  [ NOTIFICARME POR WSP ]
+                </a>
               )}
             </div>
           </div>
 
           {/* MODELO 03: ONYX GOLD */}
           <div className="relative border border-vantum-white/[0.06] bg-vantum-black/40 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-vantum-white/20 group">
-            <div className="overflow-hidden bg-vantum-black relative aspect-square flex items-center justify-center border border-vantum-white/[0.04]">
+            <div className="overflow-hidden bg-vantum-black/90 relative aspect-square flex items-center justify-center border border-vantum-white/[0.04] rounded-sm shadow-inner bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_0%,transparent_70%)]">
               
               {isMounted && !isDropActive && (
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.15)_50%)] pointer-events-none z-20 opacity-50" />
@@ -305,7 +313,7 @@ export default function Home() {
                 src="/gorra-oro.png" 
                 alt="Vantum Onyx Gold" 
                 className={`w-[85%] h-[85%] object-contain scale-95 transition-all duration-750 ease-out select-none pointer-events-none
-                  ${isMounted && !isDropActive ? "blur-[3px] grayscale opacity-75 contrast-110" : "group-hover:scale-100"}`} 
+                  ${isMounted && !isDropActive ? "blur-[3px] grayscale opacity-75 contrast-115" : "group-hover:scale-100"}`} 
               />
             </div>
             <div className="mt-8">
@@ -314,7 +322,7 @@ export default function Home() {
                 {isMounted && isDropActive ? (
                   <span className="text-green-400 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/20 tracking-widest text-[9px]">// SYSTEM LIVE</span>
                 ) : (
-                  <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">// FILE ENCRYPTED</span>
+                  <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">// RESERVATION OPEN</span>
                 )}
               </div>
               <h3 className="text-2xl font-light tracking-widest uppercase mt-3 text-vantum-white">
@@ -331,9 +339,9 @@ export default function Home() {
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
-                <span className="uppercase tracking-widest text-vantum-gray/40 select-none border border-vantum-white/5 bg-vantum-white/[0.02] px-3 py-1 font-mono text-[9px]">
-                  [ LOCKED DATA ]
-                </span>
+                <a href="https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20anotarme%20en%20la%20lista%20de%20espera%20para%20la%20Vantum%20Onyx%20Gold." target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-red-400 hover:text-red-300 border border-red-500/20 bg-red-500/5 px-3 py-1 font-mono text-[9px] transition-colors rounded-sm">
+                  [ NOTIFICARME POR WSP ]
+                </a>
               )}
             </div>
           </div>
