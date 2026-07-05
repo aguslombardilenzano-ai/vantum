@@ -62,13 +62,11 @@ export default function Home() {
       if (manifiestoRef.current) {
         const rect = manifiestoRef.current.getBoundingClientRect();
         const windowHeight = window.innerHeight;
-        // Cuando el elemento se acerca al centro de la pantalla, aumenta su peso
         const elementCenter = rect.top + rect.height / 2;
         const distanceToCenter = Math.abs(windowHeight / 2 - elementCenter);
         const maxDistance = windowHeight / 2 + rect.height / 2;
         const scrollRatio = Math.min(Math.max(1 - distanceToCenter / maxDistance, 0), 1);
         
-        // El peso oscila suavemente entre 100 (Thin) y 400 (Normal) o 600 (Medium)
         setFontWeight(Math.floor(100 + scrollRatio * 300));
       }
     };
@@ -299,7 +297,7 @@ export default function Home() {
         <span>NODO DE PRODUCCIÓN: MAIPÚ_CENTRAL_LAB</span>
       </div>
 
-      {/* 1. NAVEGACIÓN COMPACTA EN ESPAÑOL INUAL (FOTO 1 CALIBRACIÓN) */}
+      {/* 1. NAVEGACIÓN COMPACTA EN ESPAÑOL */}
       <nav className="border-b border-white/5 backdrop-blur-md bg-black/50 sticky top-0 z-50 animate-fade-in">
         <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
           <a href="#" className="text-lg font-light tracking-[0.5em] uppercase text-white hover:opacity-70 transition-opacity">
@@ -317,7 +315,7 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* 2. HERO SECTOR (SOPORTE DE LOGO REAL VECTORIAL CLONADO DE FOTO 2) */}
+      {/* 2. HERO SECTOR */}
       <header className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-12 pb-20">
         <div className="space-y-6 max-w-4xl mx-auto flex flex-col items-center">
           
@@ -331,23 +329,33 @@ export default function Home() {
             </div>
           </div>
           
-          {/* LOGO REAL VANTUM: CLONACIÓN VECTORIAL DE ALTA FIDELIDAD DE FOTO 2 (`logo-vantum.png.jpeg hola.jpeg`) */}
+          {/* OPTIMIZACIÓN CLONACIÓN VECTORIAL ABSOLUTA DE FOTO 2 (`logo-vantum.png.jpeg hola_2.jpeg`) */}
           <div 
             onClick={handleLogoClick}
             className="py-8 cursor-crosshair relative z-20 transition-transform duration-500 ease-out flex items-center justify-center animate-fade-up delay-200"
             style={{ transform: `translate(${mousePos.x}px, ${mousePos.y}px)` }}
           >
-            <svg className="w-24 h-24 text-white select-none pointer-events-none filter drop-shadow-[0_0_20px_rgba(255,255,255,0.08)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* Línea exterior izquierda */}
-              <path d="M12 25L44 81H50L18 25H12Z" fill="currentColor" />
-              {/* Línea exterior derecha */}
-              <path d="M88 25L56 81H50L82 25H88Z" fill="currentColor" />
-              {/* Línea intermedia izquierda */}
-              <path d="M23 25L47 67H53L29 25H23Z" fill="currentColor" />
-              {/* Línea intermedia derecha */}
-              <path d="M77 25L53 67H47L71 25H77Z" fill="currentColor" />
-              {/* Cierre y bucle interno del chasis del logo */}
-              <path d="M34 25L50 53L66 25H60L50 42L40 25H34Z" fill="currentColor" />
+            <svg 
+              className="w-24 h-24 text-white select-none pointer-events-none filter drop-shadow-[0_0_25px_rgba(255,255,255,0.08)]" 
+              viewBox="0 0 100 100" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {/* Contorno y Laberinto Central Completo con Trazado Continuo Exacto */}
+              <polyline points="17 26, 47 79, 53 79, 83 26" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter" />
+              <polyline points="22 26, 19 31, 47 81, 53 81, 81 31, 78 26" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter" />
+              
+              <polyline points="25.5 26, 45.5 61, 42.5 67, 31 46" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" strokeLinejoin="miter" />
+              <polyline points="74.5 26, 54.5 61, 57.5 67, 69 46" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" strokeLinejoin="miter" />
+              
+              <polyline points="33.5 26, 45 46, 39.5 56" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" strokeLinejoin="miter" />
+              <polyline points="66.5 26, 55 46, 60.5 56" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" strokeLinejoin="miter" />
+              
+              <line x1="45" y1="46" x2="55" y2="46" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" />
+              <line x1="39.5" y1="56" x2="60.5" y2="56" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" />
+              <line x1="42.5" y1="67" x2="57.5" y2="67" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" />
+              <line x1="17" y1="26" x2="35" y2="26" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" />
+              <line x1="65" y1="26" x2="83" y2="26" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" />
             </svg>
           </div>
 
@@ -376,7 +384,6 @@ export default function Home() {
               <div className="text-[8px] text-white/40 tracking-[0.2em] uppercase mt-1.5">Minutos</div>
             </div>
             <div>
-              {/* SEGUNDERO DIFUMINADO ROJO ÓXIDO SEGURO DE FOTO 1 */}
               <div 
                 className="text-3xl md:text-5xl font-normal tracking-tight text-[#c23232] tabular-nums relative"
                 style={{ textShadow: "0 0 12px rgba(194, 50, 50, 0.35)" }}
@@ -394,7 +401,7 @@ export default function Home() {
         </div>
 
         <div className="mt-2 font-mono text-[9px] tracking-[0.15em] text-red-500/40 uppercase select-none animate-fade-up delay-500">
-          [ ESTADO DEL SERVIDOR: {onlineUsers} OPERADORES ONLINE EN EL NODO ]
+          [ ESTADO DEL SERVIDOR: {onlineUsers} OPERATORES ONLINE EN EL NODO ]
         </div>
 
         <div className="mt-12 animate-fade-up delay-500">
@@ -404,7 +411,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 3. SECCIÓN MANIFIESTO CON ANIMACIÓN DE TIPOGRAFÍA VARIABLE SEGÚN SCROLL */}
+      {/* 3. SECCIÓN MANIFIESTO CON ANIMACIÓN DE TIPOGRAFÍA VARIABLE */}
       <section id="manifiesto" className="py-32 border-y border-white/5 relative z-10 px-6" ref={manifiestoRef}>
         <div className="max-w-3xl mx-auto text-center space-y-8">
           <p className="font-mono text-[9px] text-white/40 tracking-[0.3em] uppercase">// OPERATIONAL PHILOSOPHY</p>
@@ -417,7 +424,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS: ASIMETRÍA EN LÍNEA DE FUGA */}
+      {/* 4. SECCIÓN MODELOS */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-24 flex flex-col md:flex-row md:items-end md:justify-between border-b border-white/5 pb-6">
           <div>
@@ -460,7 +467,6 @@ export default function Home() {
                 <span>VISERA PLANA PREMIUM</span>
                 <span>CAPACIDAD: {waitlistPercentage}%</span>
               </div>
-              {/* TOQUE CARMESÍ INDUSTRIAL RECUPERADO EN EL BOTÓN */}
               <button 
                 onClick={(e) => executeBiometricScan(e, "Olive Khaki")}
                 className={`uppercase text-center py-2.5 text-[9px] font-medium tracking-widest transition-all duration-300 rounded-sm font-mono border ${bioScanning && !bioSuccess ? "border-red-500/50 bg-red-950/20 text-red-400 animate-pulse cursor-wait" : bioSuccess ? "border-green-500 bg-green-500/10 text-green-400" : "border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500 hover:text-white"}`}
@@ -488,7 +494,7 @@ export default function Home() {
                   Contraste crítico de alta hostilidad. Gabardina negra pura con isotipo frontal y vivos perimetrales inyectados en hilo carmesí. Diseñada para romper el entorno urbano.
                 </p>
                 {isMounted && !isDescUnlocked && (
-                  <span className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-[0.2em] text-white/40 bg-black/5 text-center font-medium">[ DATOS ENCRYPTADOS ]</span>
+                  <span className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-[0.2em] text-white/40 bg-black/5 text-center font-medium">[ DATOS ENCRIPTADOS ]</span>
                 )}
               </div>
             </div>
@@ -606,7 +612,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* EASTER EGG CONSERVADO */}
+      {/* EASTER EGG */}
       {showTerminalConsole && (
         <div className="fixed bottom-0 right-0 w-full md:w-[450px] h-[250px] bg-black border-t md:border-l border-white/10 text-white/60 font-mono text-[11px] flex flex-col p-4 z-50 shadow-2xl animate-fade-in">
           <div className="flex justify-between items-center border-b border-white/5 pb-1.5 mb-2 text-[9px]">
