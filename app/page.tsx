@@ -214,38 +214,17 @@ export default function Home() {
     if (bioScanning || bioSuccess) return;
 
     setBioScanning(true);
-    setBioText("ESCANEANDO CREDENCIAL...");
+    setBioText("INICIANDO PROTOCOLO CENTRAL...");
 
     setTimeout(() => {
-      setBioText("VERIFICANDO STOCK BATCH 001...");
+      setBioText("COMPILANDO ACCESO AL BATCH 001...");
       setTimeout(() => {
-        setBioText("CUPO CONFIRMADO");
+        setBioText("RESERVA COMPLETA");
         setBioSuccess(true);
         setTimeout(() => {
           setBioScanning(false);
           setBioSuccess(false);
           window.open("https://wa.me/5492617616121?text=Solicito%20verificaci%C3%B3n%20de%20stock%20para%20el%20Batch%20001.%20C%C3%B3digo%20de%20sistema%3A%20VANTUM-CORE.", "_blank");
-        }, 500);
-      }, 600);
-    }, 700);
-  };
-
-  const executeBiometricScan = (e: React.MouseEvent, modelText: string) => {
-    e.preventDefault();
-    if (bioScanning || bioSuccess) return;
-
-    setBioScanning(true);
-    setBioText("ESCANEANDO CREDENCIAL...");
-
-    setTimeout(() => {
-      setBioText("VERIFICANDO EN NODO...");
-      setTimeout(() => {
-        setBioText("ACCESO OTORGADO");
-        setBioSuccess(true);
-        setTimeout(() => {
-          setBioScanning(false);
-          setBioSuccess(false);
-          window.open(`https://wa.me/5492617616121?text=SISTEMA%20CENTRAL%3A%20Solicito%20reserva%20de%20cupo%20para%20el%20Batch%20001%20%2F%20Pieza%20%5B${modelText.replace(/ /g, "%20")}%5D.%20ID%20de%20usuario%20verificado.`, "_blank");
         }, 500);
       }, 600);
     }, 700);
@@ -354,7 +333,6 @@ export default function Home() {
             <a href="#especificaciones" className="hover:text-white transition-colors">[ PLANO DE MEDIDAS ]</a>
           </div>
           
-          {/* CONTROL DE ENRUTAMIENTO UX DIRECTO AL ANCLA DE RESERVA */}
           <button 
             onClick={() => document.getElementById("bloque-captura")?.scrollIntoView({ behavior: "smooth" })}
             className="border border-red-500/30 bg-red-500/5 px-4 py-2 text-[9px] font-mono tracking-[0.2em] uppercase text-red-400 rounded-sm hover:bg-red-500 hover:text-black transition-colors font-medium cursor-pointer"
@@ -394,11 +372,9 @@ export default function Home() {
           </div>
 
           <div className="space-y-5 max-w-2xl mx-auto">
-            {/* CORRECCIÓN PUNTO CIEGO 1: TITULAR REDACTADO PERFECTO */}
             <h1 className="font-mono text-xs md:text-sm text-white tracking-[0.35em] uppercase font-bold">
               CONFECCIÓN URBANA PESADA DE ALTA DENSIDAD
             </h1>
-            {/* CORRECCIÓN PUNTO CIEGO 2: SE INTEGRA LA PALABRA GORRAS PARA EL FILTRO DE COMPRENSIÓN */}
             <p className="font-mono text-[11px] md:text-xs text-white/50 tracking-[0.22em] uppercase leading-relaxed text-center">
               Armamos bloques de moldería rígida bajo un control estricto de simetría estructural. No hacemos ropa en masa; confinamos colecciones numeradas de <span className="text-white font-bold">30 gorras exclusivas por modelo</span> desarrolladas en gabardina de 8 onzas de máximo grosor. Estética de búnker ajustada a la calle.
             </p>
@@ -425,7 +401,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* TIME COUNTER SUTIL ESTILO image_44f613.jpg */}
+        {/* TIME COUNTER */}
         <div id="reloj-drop" className="mt-16 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-black px-2.5 font-mono text-[8px] tracking-[0.25em] text-red-500 uppercase font-medium animate-pulse">
             // [ SISTEMA EN ESPERA DE LANZAMIENTO GENERAL ]
@@ -479,12 +455,12 @@ export default function Home() {
             className="text-lg md:text-2xl tracking-wide leading-relaxed text-white transition-all duration-300 ease-out text-center"
             style={{ fontWeight: fontWeight }}
           >
-            No diseñamos accesorios. Construimos bloques estructurales de uso diario. Cada pieza responde a un control estricto de moldería urbana y simetría textil absoluta. VANTUM es la respuesta técnica a la saturación del mercado.
+            No diseñamos accesorios. Construimos bloques estructurales de uso diario. Cada pieza responde a un control estricto de moldería urbana y simetría textil absoluta. VANTUM is the response to market saturation.
           </p>
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS */}
+      {/* 4. SECCIÓN MODELOS (CON BOTONES REMOVIDOS PARA DETENER LA FRICCIÓN INTERNA) */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-24 flex flex-col md:flex-row md:items-end md:justify-between border-b border-white/5 pb-6">
           <div>
@@ -515,21 +491,9 @@ export default function Home() {
               <h3 className="text-xl font-light tracking-widest uppercase mt-2.5 text-white/90">Olive Khaki</h3>
               <div className="relative mt-4">
                 <p className="text-xs leading-relaxed font-light text-white/60 text-justify">
-                  Estructura rígida armada verde oliva profundo. Isotipo lineal frontal bordado en relieve desértico y vivo perimetral inferior a tono. Visera reforzada de alta resistencia.
+                  Estructura rígida armada verde oliva profundo. Isotipo lineal frontal bordado en relieve desértico y vivo perimetral inferior a tono. Visera de alta memoria elástica.
                 </p>
               </div>
-            </div>
-            <div className="mt-8 flex flex-col gap-3 border-t border-white/5 pt-4 font-mono">
-              <div className="flex justify-between items-center text-[8px] text-white/30 tracking-wider">
-                <span>VISERA PLANA PREMIUM</span>
-                <span>RESERVADO: {waitlistPercentage}%</span>
-              </div>
-              <button 
-                onClick={(e) => executeBiometricScan(e, "Olive Khaki")}
-                className="uppercase text-center py-2.5 text-[9px] font-medium tracking-widest transition-all duration-300 rounded-sm font-mono border border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500 hover:text-white"
-              >
-                [ SOLICITAR ACCESO AL BATCH ]
-              </button>
             </div>
           </div>
 
@@ -552,18 +516,6 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mt-8 flex flex-col gap-3 border-t border-white/5 pt-4 font-mono">
-              <div className="flex justify-between items-center text-[8px] text-white/30 tracking-wider">
-                <span>VISERA PLANA PREMIUM</span>
-                <span>RESERVADO: {waitlistPercentage}%</span>
-              </div>
-              <button 
-                onClick={(e) => executeBiometricScan(e, "Crimson Stealth")}
-                className="uppercase text-center py-2.5 text-[9px] font-medium tracking-widest transition-all duration-300 rounded-sm font-mono border border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500 hover:text-white"
-              >
-                [ SOLICITAR ACCESO AL BATCH ]
-              </button>
-            </div>
           </div>
 
           {/* MODELO 03: ONYX GOLD */}
@@ -585,44 +537,42 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mt-8 flex flex-col gap-3 border-t border-white/5 pt-4 font-mono">
-              <div className="flex justify-between items-center text-[8px] text-white/30 tracking-wider">
-                <span>VISERA PLANA PREMIUM</span>
-                <span>RESERVADO: {waitlistPercentage}%</span>
-              </div>
-              <button 
-                onClick={(e) => executeBiometricScan(e, "Onyx Gold")}
-                className="uppercase text-center py-2.5 text-[9px] font-medium tracking-widest transition-all duration-300 rounded-sm font-mono border border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500 hover:text-white"
-              >
-                [ SOLICITAR ACCESO AL BATCH ]
-              </button>
-            </div>
           </div>
 
         </div>
       </section>
 
-      {/* II. ADICIÓN OBLIGATORIA: BLOQUE CENTRAL DE CAPTURA PRE-DROP DE ALTA RETENCIÓN */}
-      <section id="bloque-captura" className="py-20 px-6 max-w-2xl mx-auto relative z-10 text-center animate-fade-in">
-        <div className="border border-red-500/20 bg-[#050505] p-8 space-y-4 rounded-sm">
-          <div className="font-mono text-[9px] text-white/30 uppercase tracking-[0.25em]">
-            // INICIAR PROTOCOLO DE RESERVA PRE-DROP
+      {/* II. PORTAL MONUMENTAL CENTRAL DE RESERVA (CORREGIDO: MÁS GRANDE, MÁS PRESENCIA, ATRAPA EL TRÁFICO) */}
+      <section id="bloque-captura" className="py-24 px-6 max-w-4xl mx-auto relative z-10 text-center">
+        {/* Contenedor ampliado y reforzado con una visual asfalto más pesada */}
+        <div className="border border-red-500/30 bg-[#050505] p-10 md:p-16 space-y-6 rounded-sm shadow-2xl relative overflow-hidden group">
+          
+          <div className="absolute inset-0 bg-radial-gradient from-red-950/5 via-transparent to-transparent pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(139,30,30,0.05) 0%, transparent 80%)" }} />
+
+          <div className="font-mono text-[10px] md:text-[11px] text-red-500 uppercase tracking-[0.3em] font-medium animate-pulse">
+            // INICIAR PROTOCOLO DE RESERVA CENTRAL
           </div>
-          <p className="font-mono text-[10px] text-white/50 tracking-wider uppercase leading-relaxed">
-            REGISTRE SUS CREDENCIALES EN EL SERVIDOR CENTRAL PARA ASEGURAR CUOTA DE PRODUCCIÓN ANTES DEL CIERRE AUTOMÁTICO DEL SISTEMA.
-          </p>
-          <div className="pt-2">
+          
+          <h2 className="text-xl md:text-2xl font-extralight tracking-widest text-white uppercase max-w-xl mx-auto leading-relaxed">
+            REGISTRE SUS CREDENCIALES EN EL SERVIDOR CENTRAL PARA ASEGURAR CUOTA DE PRODUCCIÓN ANTES DEL CIERRE AUTOMÁTICO
+          </h2>
+          
+          <div className="pt-4 max-w-xl mx-auto">
             <button 
               onClick={executeGeneralReserve}
-              className={`w-full uppercase text-center py-3.5 text-[10px] font-bold tracking-[0.3em] transition-all duration-300 rounded-sm font-mono border ${bioScanning && !bioSuccess ? "border-red-500/50 bg-red-950/20 text-red-400 animate-pulse cursor-wait" : bioSuccess ? "border-green-500 bg-green-500/10 text-green-400" : "border-red-500 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-black"}`}
+              className={`w-full uppercase text-center py-5 text-[11px] md:text-xs font-bold tracking-[0.35em] transition-all duration-300 rounded-sm font-mono border cursor-pointer ${bioScanning && !bioSuccess ? "border-red-500/50 bg-red-950/20 text-red-400 animate-pulse cursor-wait" : bioSuccess ? "border-green-500 bg-green-500/10 text-green-400" : "border-red-500 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-black shadow-[0_0_30px_rgba(239,68,68,0.05)]"}`}
             >
               {bioScanning ? bioText : "[ SOLICITAR ASIGNACIÓN DE PIEZA - BATCH 001 ]"}
             </button>
           </div>
+          
+          <div className="font-mono text-[8px] tracking-widest text-white/20 uppercase pt-2">
+            CUPO DEL LOTE DISPONIBLE: {100 - waitlistPercentage}% // ACCESO RESTRINGIDO
+          </div>
         </div>
       </section>
 
-      {/* 5. SECCIÓN MEDIDAS COMPILADA CON LAS CORRECCIONES FACHERAS SOLICITADAS */}
+      {/* 5. SECCIÓN MEDIDAS */}
       <section id="especificaciones" className="py-32 bg-black relative z-10 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
@@ -644,7 +594,6 @@ export default function Home() {
 
             <div className="border border-white/5 bg-[#030303]/40 p-6 flex flex-col justify-between relative rounded-sm">
               <div className="text-[8px] text-white/30 mb-4 tracking-[0.2em] uppercase">// INDICE DE ESPECIFICACIONES TEXTILES</div>
-              {/* CORRECCIÓN PUNTO CIEGO 3: VOCABULARIO TÉCNICO ELEVADO Y COLUMNA CALIBRADA */}
               <table className="w-full text-left text-[11px] leading-relaxed">
                 <thead>
                   <tr className="border-b border-white/10 text-white/60">
@@ -705,7 +654,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* 6. PIE DE PÁGINA (PROFESIONALIZADO Y BLINDADO SEGÚN PARTE 4) */}
+      {/* 6. PIE DE PÁGINA */}
       <footer id="contacto" className="py-20 border-t border-white/5 bg-black relative z-10 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 font-mono text-[9px] tracking-widest text-white/20 uppercase text-center md:text-left">
           <div className="space-y-1">
