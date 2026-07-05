@@ -99,15 +99,11 @@ export default function Home() {
         }
       }, (introDuration - 1500) / targetPass.length);
 
-      // AL TERMINAR LOS 4s PASA A LA INTRO CINEMÁTICA DE MARCA (Fase 2)
       const gatewayTimeout = setTimeout(() => {
         setLoadingStep(2);
-        
-        // LUEGO DE 3s DE INTRO DE MARCA, SE DESBLOQUEA LA WEB COMPLETA (Fase 3)
         setTimeout(() => {
           setLoadingStep(3);
         }, 3200);
-
       }, introDuration);
 
       return () => {
@@ -116,7 +112,7 @@ export default function Home() {
       };
     }, 1000);
 
-    // CRONÓMETRO DEL DROP
+    // RE-CALIBRACIÓN DEL CRONÓMETRO DINÁMICO HACIA ATRÁS (DROP REAL 25 DE JULIO)
     const targetDate = new Date("2026-07-25T00:00:00").getTime();
 
     const updateTimer = () => {
@@ -221,17 +217,21 @@ export default function Home() {
     setBioText("ESCANEANDO CREDENCIAL...");
 
     setTimeout(() => {
-      setBioText("COMPILANDO LOTE 001...");
+      setBioText("VERIFICANDO RESERVA...");
       setTimeout(() => {
-        setBioText("ACCESO OTORGADO");
+        setBioText("CUPO COMPILADO");
         setBioSuccess(true);
         setTimeout(() => {
           setBioScanning(false);
           setBioSuccess(false);
-          window.open(`https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20unirme%20a%20la%20lista%20de%20espera%20para%20la%20pieza%20Vantum%20${modelText}.`, "_blank");
+          window.open(`https://wa.me/5492617616121?text=SISTEMA%20CENTRAL%3A%20Solicito%20reserva%20de%20cupo%20para%20el%20Batch%20001%20%2F%20Pieza%20%5B${encodeTruncated(modelText)}%5D.%20ID%20de%20usuario%20verificado.`, "_blank");
         }, 500);
       }, 600);
     }, 700);
+  };
+
+  const encodeTruncated = (str: string) => {
+    return str.replace(/ /g, "%20");
   };
 
   // INTRO FASE 0: INITIAL LOADER
@@ -282,29 +282,21 @@ export default function Home() {
     );
   }
 
-  // NUEVA FASE 2: INTRO CINEMÁTICA DE IDENTIDAD DE MARCA (NOT FOR EVERYONE // BUILD WITH PURPOSE)
+  // FASE 2: INTRO CINEMÁTICA DE IDENTIDAD DE MARCA
   if (isMounted && loadingStep === 2) {
     return (
       <div className="min-h-screen bg-black flex flex-col justify-center items-center px-6 select-none animate-brand-out relative overflow-hidden">
         <div className="cctv-noise" />
         <div className="space-y-8 flex flex-col items-center max-w-xl text-center">
-          
-          {/* Logo Vantum en grande */}
           <img 
             src="/logo-real.png" 
             alt="Vantum Isotipo" 
             className="w-36 h-36 md:w-44 md:h-44 object-contain opacity-95 filter drop-shadow-[0_0_30px_rgba(255,255,255,0.05)] animate-fade-up"
           />
-          
-          {/* Nombre de la marca en tipografía lujosa */}
           <h2 className="text-2xl md:text-3xl font-extralight tracking-[0.65em] text-white uppercase pl-[0.65em] animate-fade-up delay-100">
             VANTUM
           </h2>
-
-          {/* Línea técnica divisoria */}
           <div className="w-12 h-[1px] bg-white/20 animate-fade-up delay-200" />
-
-          {/* Lemas identitarios de la marca */}
           <div className="space-y-2 font-mono text-[10px] md:text-[11px] tracking-[0.3em] text-white/40 uppercase">
             <p className="animate-fade-up delay-300 font-medium tracking-[0.35em] text-white/60">BUILD WITH PURPOSE</p>
             <p className="animate-fade-up delay-400 font-light text-red-500/50">NOT FOR EVERYONE</p>
@@ -346,11 +338,12 @@ export default function Home() {
             <a href="#especificaciones" className="hover:text-white transition-colors">[ MEDIDAS EXACTAS ]</a>
           </div>
           
+          {/* ACCIÓN RE-ENRUTADA SUTILMENTE AL FORMULARIO DE ACCESO DEL BATCH */}
           <button 
             onClick={() => document.getElementById("reloj-drop")?.scrollIntoView({ behavior: "smooth" })}
             className="border border-red-500/30 bg-red-500/5 px-4 py-2 text-[9px] font-mono tracking-[0.2em] uppercase text-red-400 rounded-sm hover:bg-red-500 hover:text-black transition-colors font-medium cursor-pointer"
           >
-            [ ACCESO AL DROP ]
+            [ ACCESO AL BATCH ]
           </button>
         </div>
       </nav>
@@ -385,8 +378,9 @@ export default function Home() {
           </div>
 
           <div className="space-y-4 max-w-2xl mx-auto">
+            {/* CORRECCIÓN PUNTO CIEGO 1: REDACCIÓN SÓLIDA PRECISADA */}
             <h1 className="font-mono text-xs md:text-sm text-white tracking-[0.35em] uppercase font-bold">
-              CONFECCIÓN URBANA PESADA DE ALTA PREMIUM
+              CONFECCIÓN URBANA PESADA DE ALTA DENSIDAD
             </h1>
             <p className="font-mono text-[11px] md:text-xs text-white/50 tracking-[0.22em] uppercase leading-relaxed text-center">
               Armamos bloques de moldería rígida bajo un control estricto de simetría estructural. No hacemos ropa en masa; confinamos colecciones numeradas de <span className="text-white font-bold">30 piezas únicas por modelo</span> desarrolladas en gabardina de 8 onzas de máximo grosor. Estética de búnker ajustada a la calle.
@@ -414,7 +408,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* TIME COUNTER */}
+        {/* TIME COUNTER CON CORRECCIÓN EN ESPAÑOL DIRECTO */}
         <div id="reloj-drop" className="mt-16 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-black px-2.5 font-mono text-[8px] tracking-[0.25em] text-red-500 uppercase font-medium animate-pulse">
             // [ SISTEMA EN ESPERA DE LANZAMIENTO GENERAL ]
@@ -469,12 +463,12 @@ export default function Home() {
             className="text-lg md:text-2xl tracking-wide leading-relaxed text-white transition-all duration-300 ease-out text-center"
             style={{ fontWeight: fontWeight }}
           >
-            No diseñamos accesorios. Construimos bloques estructurales de uso diario. Cada pieza responde a un control estricto de moldería urbana y simetría textil absoluta. VANTUM es la respuesta técnica a la saturación del mercado.
+            No diseñamos accesorios. Construimos bloques estructurales de uso diario. Cada pieza responde a un control estricto de moldería urbana y simetría textil absoluta. VANTUM is the response to market saturation.
           </p>
         </div>
       </section>
 
-      {/* 4. SECCIÓN GORRAS */}
+      {/* 4. SECCIÓN GORRAS (CON CTA CONVERTIDOR DE RETENCIÓN AL WHATSAPP CENTRAL) */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-24 flex flex-col md:flex-row md:items-end md:justify-between border-b border-white/5 pb-6">
           <div>
@@ -484,7 +478,7 @@ export default function Home() {
           <div className="font-mono text-[10px] text-white/40 flex items-center gap-4 mt-4 md:mt-0">
             <span>TAMAÑO DEL LOTE: 30 UNIDADES</span>
             <span className="text-white/10">|</span>
-            <span>ESTADO: RETENIDO</span>
+            <span>ESTADO: RESERVAS ABIERTAS</span>
           </div>
         </div>
         
@@ -512,13 +506,14 @@ export default function Home() {
             <div className="mt-8 flex flex-col gap-3 border-t border-white/5 pt-4 font-mono">
               <div className="flex justify-between items-center text-[8px] text-white/30 tracking-wider">
                 <span>VISERA PLANA PREMIUM</span>
-                <span>CAPACIDAD: {waitlistPercentage}%</span>
+                <span>RESERVADO: {waitlistPercentage}%</span>
               </div>
+              {/* ACCIÓN CONVERTIDORA PARA DETENER LA PÉRDIDA DE TRÁFICO */}
               <button 
                 onClick={(e) => executeBiometricScan(e, "Olive Khaki")}
                 className="uppercase text-center py-2.5 text-[9px] font-medium tracking-widest transition-all duration-300 rounded-sm font-mono border border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500 hover:text-white"
               >
-                [ UNIRSE A LA LISTA DE ESPERA ]
+                [ SOLICITAR ACCESO AL BATCH ]
               </button>
             </div>
           </div>
@@ -545,13 +540,13 @@ export default function Home() {
             <div className="mt-8 flex flex-col gap-3 border-t border-white/5 pt-4 font-mono">
               <div className="flex justify-between items-center text-[8px] text-white/30 tracking-wider">
                 <span>VISERA PLANA PREMIUM</span>
-                <span>CAPACIDAD: {waitlistPercentage}%</span>
+                <span>RESERVADO: {waitlistPercentage}%</span>
               </div>
               <button 
                 onClick={(e) => executeBiometricScan(e, "Crimson Stealth")}
                 className="uppercase text-center py-2.5 text-[9px] font-medium tracking-widest transition-all duration-300 rounded-sm font-mono border border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500 hover:text-white"
               >
-                [ UNIRSE A LA LISTA DE ESPERA ]
+                [ SOLICITAR ACCESO AL BATCH ]
               </button>
             </div>
           </div>
@@ -578,13 +573,13 @@ export default function Home() {
             <div className="mt-8 flex flex-col gap-3 border-t border-white/5 pt-4 font-mono">
               <div className="flex justify-between items-center text-[8px] text-white/30 tracking-wider">
                 <span>VISERA PLANA PREMIUM</span>
-                <span>CAPACIDAD: {waitlistPercentage}%</span>
+                <span>RESERVADO: {waitlistPercentage}%</span>
               </div>
               <button 
                 onClick={(e) => executeBiometricScan(e, "Onyx Gold")}
                 className="uppercase text-center py-2.5 text-[9px] font-medium tracking-widest transition-all duration-300 rounded-sm font-mono border border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500 hover:text-white"
               >
-                [ UNIRSE A LA LISTA DE ESPERA ]
+                [ SOLICITAR ACCESO AL BATCH ]
               </button>
             </div>
           </div>
@@ -592,7 +587,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. SECCIÓN MEDIDAS */}
+      {/* 5. SECCIÓN MEDIDAS COMPLETAMENTE RE-CALIBRADA CON NOMENCLATURAS TÉCNICAS PREMIUM */}
       <section id="especificaciones" className="py-32 bg-black relative z-10 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
@@ -604,44 +599,45 @@ export default function Home() {
             <div className="space-y-8">
               <div className="border-l border-white/20 pl-6 space-y-3">
                 <p className="text-white/80 font-medium tracking-wider">// DETALLES DE CONFECCIÓN</p>
-                <p>Gabardina pesada de alta torsión estructural. Resistencia extrema al desgaste urbano y máxima durabilidad del color frente a la exposición solar directa.</p>
+                <p>Gabardina pesada de alta torsión de hilos. Máxima resistencia al roce del uso diario y protección de color certificada.</p>
               </div>
               <div className="border-l border-white/20 pl-6 space-y-3">
                 <p className="text-white/80 font-medium tracking-wider">// PANEL INTERNO RÍGIDO</p>
-                <p>Paneles frontales reforzados con entretela termo-fusionada importada de alta densidad. Mantiene la forma rígida de la corona armada de forma permanente.</p>
+                <p>Paneles frontales estructurados mediante fusión térmica alemana. Evita la deformación de la corona a largo plazo.</p>
               </div>
             </div>
 
             <div className="border border-white/5 bg-[#030303]/40 p-6 flex flex-col justify-between relative rounded-sm">
-              <div className="text-[8px] text-white/30 mb-4 tracking-[0.2em] uppercase">// GUÍA DE MEDIDAS DEL CONTORNO</div>
+              <div className="text-[8px] text-white/30 mb-4 tracking-[0.2em] uppercase">// INDICE DE ESPECIFICACIONES TEXTILES</div>
+              {/* CORRECCIÓN PUNTO CIEGO 2: TABLA RE-DISEÑADA CON NOMBRES FACHEROS DE INGENIERÍA */}
               <table className="w-full text-left text-[11px] leading-relaxed">
                 <thead>
                   <tr className="border-b border-white/10 text-white/60">
                     <th className="pb-2 font-light tracking-wider">COMPONENTE</th>
                     <th className="pb-2 font-light tracking-wider text-right">DIMENSIÓN</th>
-                    <th className="pb-2 font-light tracking-wider text-right">TIPO</th>
+                    <th className="pb-2 font-light tracking-wider text-right">ESTÁNDAR COLD</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/[0.02]">
                   <tr>
                     <td className="py-2 text-white/40">Altura de Corona</td>
                     <td className="py-2 text-right text-white/70">11.5 cm</td>
-                    <td className="py-2 text-right text-white/40">Calce Profundo</td>
+                    <td className="py-2 text-right text-white/50">Moldería Rígida Profunda</td>
                   </tr>
                   <tr>
                     <td className="py-2 text-white/40">Ancho de Visera</td>
                     <td className="py-2 text-right text-white/70">18.0 cm</td>
-                    <td className="py-2 text-right text-white/40">Plana Estándar</td>
+                    <td className="py-2 text-right text-white/50">Memoria Elástica Perimetral</td>
                   </tr>
                   <tr>
                     <td className="py-2 text-white/40">Regulador Trasero</td>
                     <td className="py-2 text-right text-white/70">Ajustable</td>
-                    <td className="py-2 text-right text-white/40">Hebilla Metálica</td>
+                    <td className="py-2 text-right text-white/50">Hebilla de Presión Inyectada</td>
                   </tr>
                   <tr>
                     <td className="py-2 text-white/40">Densidad de Costura</td>
                     <td className="py-2 text-right text-white/70">12 SPI</td>
-                    <td className="py-2 text-right text-white/40">Reforzada</td>
+                    <td className="py-2 text-right text-white/50">Hilos de Tensión Reforzada</td>
                   </tr>
                 </tbody>
               </table>
