@@ -291,10 +291,10 @@ export default function Home() {
         <span>REC {cctvTime}</span>
       </div>
 
-      {/* COORDENADAS FIJAS MENDOZA CORRE */}
+      {/* COORDENADAS FIJAS GLOBAL CORRE (MENDOZA BÚNKER DE DESARROLLO) */}
       <div className="fixed bottom-6 left-6 font-mono text-[8px] tracking-[0.2em] text-white/20 flex flex-col gap-0.5 z-50 select-none uppercase hidden md:flex">
-        <span>LAT: 32.9796° S // LON: 68.7911° W</span>
-        <span>NODO DE PRODUCCIÓN: MAIPÚ_CENTRAL_LAB</span>
+        <span>BÚNKER DE DISEÑO & ARQUITECTURA: MENDOZA, ARG</span>
+        <span>LOGÍSTICA DE DISTRIBUCIÓN: ENVÍOS GLOBALES ACTIVADOS</span>
       </div>
 
       {/* 1. NAVEGACIÓN COMPACTA EN ESPAÑOL */}
@@ -309,34 +309,37 @@ export default function Home() {
             <a href="#especificaciones" className="hover:text-white transition-colors">[ PLANO TÉCNICO ]</a>
           </div>
           
-          <div className="border border-red-500/30 bg-red-500/5 px-4 py-2 text-[9px] font-mono tracking-[0.2em] uppercase text-red-400 rounded-sm select-none font-medium">
+          {/* BOTÓN CON ACCIÓN REDIRECT CORREGIDA: SQUEEZE EL SCROLL DIRECTO AL CONTADOR DE LA LISTA DE ESPERA */}
+          <button 
+            onClick={() => document.getElementById("reloj-drop")?.scrollIntoView({ behavior: "smooth" })}
+            className="border border-red-500/30 bg-red-500/5 px-4 py-2 text-[9px] font-mono tracking-[0.2em] uppercase text-red-400 rounded-sm hover:bg-red-500 hover:text-black transition-colors font-medium cursor-pointer"
+          >
             [ ACCESO RESTRINGIDO ]
-          </div>
+          </button>
         </div>
       </nav>
 
-      {/* 2. HERO SECTOR */}
+      {/* 2. HERO SECTOR: RECONSTRUCCIÓN CON IDENTIDAD TEXTIL DE CULTO IMPONENTE */}
       <header className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-16 pb-24">
         <div className="space-y-10 max-w-4xl mx-auto flex flex-col items-center relative w-full">
           
           <div className="flex flex-wrap justify-center gap-2 animate-fade-up delay-100">
             <div className="inline-flex items-center gap-1.5 border border-red-500/20 bg-red-500/5 px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.2em] text-red-400 uppercase">
               <span className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
-              EDICIÓN 001
+              EDICIÓN DE BARRIO 001
             </div>
             <div className="inline-flex items-center border border-white/10 bg-white/[0.02] px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.2em] text-white/50 uppercase">
-              TOTAL BATCH // 30 UNITS ONLY
+              LOTE LIMITADO // 30 PIEZAS
             </div>
           </div>
           
-          {/* SECTOR ACTUALIZADO: LOGO ESCALADO RESPONSIVO + FILTRO DE EFECTO RADIAL DETRÁS PARA ELIMINAR EL VACÍO */}
+          {/* LOGO MONUMENTAL RESPONSIVO */}
           <div 
             onClick={handleLogoClick}
-            className="py-12 cursor-crosshair relative z-20 transition-transform duration-500 ease-out flex items-center justify-center animate-fade-up delay-200 group"
+            className="py-6 cursor-crosshair relative z-20 transition-transform duration-500 ease-out flex items-center justify-center animate-fade-up delay-200 group"
             style={{ transform: `translate(${mousePos.x}px, ${mousePos.y}px)` }}
           >
-            {/* Resplandor radial de soporte para dar atmósfera en el centro */}
-            <div className="absolute w-[200px] h-[200px] md:w-[350px] md:h-[350px] bg-radial-gradient from-red-950/20 via-transparent to-transparent blur-[60px] pointer-events-none z-0 opacity-80" style={{ backgroundImage: "radial-gradient(circle, rgba(139,30,30,0.12) 0%, transparent 70%)" }} />
+            <div className="absolute w-[250px] h-[250px] md:w-[400px] md:h-[400px] bg-radial-gradient from-red-950/20 via-transparent to-transparent blur-[70px] pointer-events-none z-0 opacity-80" style={{ backgroundImage: "radial-gradient(circle, rgba(139,30,30,0.15) 0%, transparent 70%)" }} />
             
             <img 
               src="/logo-real.png" 
@@ -345,15 +348,21 @@ export default function Home() {
             />
           </div>
 
-          <p className="font-mono text-[11px] md:text-xs text-white/60 tracking-[0.28em] max-w-2xl mx-auto uppercase leading-relaxed animate-fade-up delay-300">
-            Estructuras de alta simetría. Estética urbana con rigor de ingeniería.
-          </p>
+          {/* BIENVENIDA MASIVA COMPLETADA: DESTRUYE LA CONFUSIÓN DE LA MARCA PARA CUALQUIER USUARIO */}
+          <div className="space-y-4 max-w-2xl mx-auto animate-fade-up delay-300">
+            <h1 className="font-mono text-xs md:text-sm text-white tracking-[0.35em] uppercase font-bold">
+              ESTUDIO DE ARQUITECTURA & INGENIERÍA TEXTIL COMPACTA
+            </h1>
+            <p className="font-mono text-[11px] md:text-xs text-white/50 tracking-[0.22em] uppercase leading-relaxed text-center">
+              Desarrollamos bloques estructurales de streetwear urbano de alta gama bajo un control estricto de geometría tridimensional. No diseñamos accesorios comerciales; confinamos colecciones numeradas de <span className="text-white font-bold">30 ejemplares únicos por lote</span>. Rigor de simetría simétrica en gabardina de 8 onzas pesada.
+            </p>
+          </div>
         </div>
 
-        {/* TIME COUNTER */}
-        <div className="mt-20 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm animate-fade-up delay-400">
-          <div className="absolute top-0 left-6 -translate-y-1/2 bg-black px-2.5 font-mono text-[8px] tracking-[0.25em] text-white/40 uppercase">
-            // TERMINAL TIME COUNTER
+        {/* TIME COUNTER CON CORRECCIÓN DE ESTADO CRÍTICO */}
+        <div id="reloj-drop" className="mt-20 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm animate-fade-up delay-400">
+          <div className="absolute top-0 left-6 -translate-y-1/2 bg-black px-2.5 font-mono text-[8px] tracking-[0.25em] text-red-500 uppercase font-medium animate-pulse">
+            // [ SISTEMA EN ESPAÑA DE ACTIVACIÓN CRONOLÓGICA ]
           </div>
           
           <div className="grid grid-cols-4 gap-2 md:gap-6 font-mono select-none">
@@ -392,7 +401,7 @@ export default function Home() {
 
         <div className="mt-12 animate-fade-up delay-500">
           <a href="#modelos" className="border border-white bg-white text-black px-8 h-11 flex items-center justify-center font-mono text-[9px] tracking-[0.25em] uppercase hover:bg-transparent hover:text-white transition-all duration-300 rounded-sm font-medium">
-            EXPLORAR CATÁLOGO
+            VER PIEZAS CONFIDENCIALES
           </a>
         </div>
       </header>
