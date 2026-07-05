@@ -19,7 +19,7 @@ export default function Home() {
   const [onlineUsers, setOnlineUsers] = useState(7);
   const [currentDateTime, setCurrentDateTime] = useState("");
 
-  // INTRO POR CONTRASEÑA (4 SEGUNDOS STRICT)
+  // INTRO POR CONTRASEÑA Y SECUENCIA DE MARCA (0: Loader, 1: Firewall, 2: Intro Cinemática, 3: Web Unlocked)
   const [loadingStep, setLoadingStep] = useState(0); 
   const [fakePassword, setFakePassword] = useState("");
   const [showFinalPhrase, setShowFinalPhrase] = useState(false);
@@ -99,8 +99,15 @@ export default function Home() {
         }
       }, (introDuration - 1500) / targetPass.length);
 
+      // AL TERMINAR LOS 4s PASA A LA INTRO CINEMÁTICA DE MARCA (Fase 2)
       const gatewayTimeout = setTimeout(() => {
         setLoadingStep(2);
+        
+        // LUEGO DE 3s DE INTRO DE MARCA, SE DESBLOQUEA LA WEB COMPLETA (Fase 3)
+        setTimeout(() => {
+          setLoadingStep(3);
+        }, 3200);
+
       }, introDuration);
 
       return () => {
@@ -156,7 +163,7 @@ export default function Home() {
     };
   }, []);
 
-  // ANIMACIONES NATIVAS
+  // CONTROL DE ANIMACIONES CSS INYECTADAS
   useEffect(() => {
     if (typeof window !== "undefined" && !document.getElementById("vantum-core-styles")) {
       const stylesheet = document.createElement("style");
@@ -165,9 +172,11 @@ export default function Home() {
         @keyframes loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(300%); } }
         @keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+        @keyframes brandOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.98); filter: blur(5px); } }
         @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100vh); } }
         .animate-fade-up { opacity: 0; animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .animate-fade-in { opacity: 0; animation: fadeIn 1.5s ease-out forwards; }
+        .animate-brand-out { animation: brandOut 0.6s cubic-bezier(0.16, 1, 0.3, 1) 2.6s forwards; }
         .delay-100 { animation-delay: 150ms; }
         .delay-200 { animation-delay: 300ms; }
         .delay-300 { animation-delay: 450ms; }
@@ -273,9 +282,41 @@ export default function Home() {
     );
   }
 
-  // FASE 2: ENTRADA WEB UNIFICADA
+  // NUEVA FASE 2: INTRO CINEMÁTICA DE IDENTIDAD DE MARCA (NOT FOR EVERYONE // BUILD WITH PURPOSE)
+  if (isMounted && loadingStep === 2) {
+    return (
+      <div className="min-h-screen bg-black flex flex-col justify-center items-center px-6 select-none animate-brand-out relative overflow-hidden">
+        <div className="cctv-noise" />
+        <div className="space-y-8 flex flex-col items-center max-w-xl text-center">
+          
+          {/* Logo Vantum en grande */}
+          <img 
+            src="/logo-real.png" 
+            alt="Vantum Isotipo" 
+            className="w-36 h-36 md:w-44 md:h-44 object-contain opacity-95 filter drop-shadow-[0_0_30px_rgba(255,255,255,0.05)] animate-fade-up"
+          />
+          
+          {/* Nombre de la marca en tipografía lujosa */}
+          <h2 className="text-2xl md:text-3xl font-extralight tracking-[0.65em] text-white uppercase pl-[0.65em] animate-fade-up delay-100">
+            VANTUM
+          </h2>
+
+          {/* Línea técnica divisoria */}
+          <div className="w-12 h-[1px] bg-white/20 animate-fade-up delay-200" />
+
+          {/* Lemas identitarios de la marca */}
+          <div className="space-y-2 font-mono text-[10px] md:text-[11px] tracking-[0.3em] text-white/40 uppercase">
+            <p className="animate-fade-up delay-300 font-medium tracking-[0.35em] text-white/60">BUILD WITH PURPOSE</p>
+            <p className="animate-fade-up delay-400 font-light text-red-500/50">NOT FOR EVERYONE</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // FASE 3: ENTRADA WEB UNIFICADA (LA TIENDA COMPLETA)
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden font-sans relative antialiased">
+    <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden font-sans relative antialiased animate-fade-in">
       
       {/* CAPAS DE INMERSIÓN ATMOSFÉRICA */}
       <div className="cctv-scanline" />
@@ -287,14 +328,14 @@ export default function Home() {
         <span>REC {cctvTime}</span>
       </div>
 
-      {/* COORDENADAS FIJAS GLOBAL CORRE (MENDOZA BÚNKER DE DESARROLLO) */}
+      {/* COORDENADAS FIJAS GLOBAL CORRE */}
       <div className="fixed bottom-6 left-6 font-mono text-[8px] tracking-[0.2em] text-white/20 flex flex-col gap-0.5 z-50 select-none uppercase hidden md:flex">
         <span>BÚNKER DE CONFECCIÓN & DISEÑO: MENDOZA, ARG</span>
         <span>LOGÍSTICA DE DISTRIBUCIÓN: ENVÍOS A TODO EL PAÍS</span>
       </div>
 
       {/* 1. NAVEGACIÓN COMPACTA EN ESPAÑOL */}
-      <nav className="border-b border-white/5 backdrop-blur-md bg-black/50 sticky top-0 z-50 animate-fade-in">
+      <nav className="border-b border-white/5 backdrop-blur-md bg-black/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
           <a href="#" className="text-lg font-light tracking-[0.5em] uppercase text-white hover:opacity-70 transition-opacity">
             VANTUM
@@ -318,7 +359,7 @@ export default function Home() {
       <header className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-16 pb-24">
         <div className="space-y-10 max-w-4xl mx-auto flex flex-col items-center relative w-full">
           
-          <div className="flex flex-wrap justify-center gap-2 animate-fade-up delay-100">
+          <div className="flex flex-wrap justify-center gap-2">
             <div className="inline-flex items-center gap-1.5 border border-red-500/20 bg-red-500/5 px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.2em] text-red-400 uppercase">
               <span className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
               EDICIÓN DE BARRIO 001
@@ -328,10 +369,10 @@ export default function Home() {
             </div>
           </div>
           
-          {/* LOGO MONUMENTAL RESPONSIVO */}
+          {/* LOGO HERO RESPONSIVO */}
           <div 
             onClick={handleLogoClick}
-            className="py-6 cursor-crosshair relative z-20 transition-transform duration-500 ease-out flex items-center justify-center animate-fade-up delay-200 group"
+            className="py-6 cursor-crosshair relative z-20 transition-transform duration-500 ease-out flex items-center justify-center group"
             style={{ transform: `translate(${mousePos.x}px, ${mousePos.y}px)` }}
           >
             <div className="absolute w-[250px] h-[250px] md:w-[400px] md:h-[400px] bg-radial-gradient from-red-950/20 via-transparent to-transparent blur-[70px] pointer-events-none z-0 opacity-80" style={{ backgroundImage: "radial-gradient(circle, rgba(139,30,30,0.15) 0%, transparent 70%)" }} />
@@ -343,8 +384,7 @@ export default function Home() {
             />
           </div>
 
-          {/* TRADUCCIÓN DEL MENSAJE COMERCIAL URBANO: ELIMINA EL HUMO INDUSTRIAL ACADÉMICO */}
-          <div className="space-y-4 max-w-2xl mx-auto animate-fade-up delay-300">
+          <div className="space-y-4 max-w-2xl mx-auto">
             <h1 className="font-mono text-xs md:text-sm text-white tracking-[0.35em] uppercase font-bold">
               CONFECCIÓN URBANA PESADA DE ALTA PREMIUM
             </h1>
@@ -353,8 +393,8 @@ export default function Home() {
             </p>
           </div>
 
-          {/* NUEVA IDEA RELLENO: LOGÍSTICA DE MATERIALES EN TIEMPO REAL */}
-          <div className="pt-2 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-2xl font-mono text-[9px] tracking-widest uppercase text-white/30 animate-fade-up delay-300">
+          {/* LOGÍSTICA DE MATERIALES */}
+          <div className="pt-2 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-2xl font-mono text-[9px] tracking-widest uppercase text-white/30">
             <div className="p-2 border border-white/5 bg-[#030303]/20 rounded-sm">
               <span className="text-white/60 block mb-0.5">// TEXTIL REFORZADO</span>
               GABARDINA 8OZ: 100%
@@ -374,8 +414,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* TIME COUNTER CON CONTROL CRÓNICO EN ESPAÑOL DIRECTO */}
-        <div id="reloj-drop" className="mt-16 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm animate-fade-up delay-400">
+        {/* TIME COUNTER */}
+        <div id="reloj-drop" className="mt-16 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-black px-2.5 font-mono text-[8px] tracking-[0.25em] text-red-500 uppercase font-medium animate-pulse">
             // [ SISTEMA EN ESPERA DE LANZAMIENTO GENERAL ]
           </div>
@@ -405,16 +445,16 @@ export default function Home() {
           </div>
         </div>
 
-        {/* LOGS DE OPERADORES Y CONEXIÓN */}
-        <div className="mt-8 font-mono text-[9px] tracking-[0.15em] text-white/30 uppercase select-none animate-fade-up delay-500">
+        {/* LOGS DE OPERADORES */}
+        <div className="mt-8 font-mono text-[9px] tracking-[0.15em] text-white/30 uppercase select-none">
           ÚLTIMO REGISTRO DE CONEXIÓN: [{currentDateTime || "PROCESANDO..."}] vía Mendoza_Node_02
         </div>
 
-        <div className="mt-2 font-mono text-[9px] tracking-[0.15em] text-red-500/40 uppercase select-none animate-fade-up delay-500">
+        <div className="mt-2 font-mono text-[9px] tracking-[0.15em] text-red-500/40 uppercase select-none">
           [ ESTADO DEL SERVIDOR: {onlineUsers} OPERATORES ONLINE EN EL NODO ]
         </div>
 
-        <div className="mt-12 animate-fade-up delay-500">
+        <div className="mt-12">
           <a href="#modelos" className="border border-white bg-white text-black px-8 h-11 flex items-center justify-center font-mono text-[9px] tracking-[0.25em] uppercase hover:bg-transparent hover:text-white transition-all duration-300 rounded-sm font-medium">
             VER PIEZAS DISPONIBLES
           </a>
@@ -434,7 +474,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS COMPLEMENTADA CON DESBLOQUEO TEXTUAL DE FICHA */}
+      {/* 4. SECCIÓN GORRAS */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-24 flex flex-col md:flex-row md:items-end md:justify-between border-b border-white/5 pb-6">
           <div>
@@ -464,7 +504,6 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-light tracking-widest uppercase mt-2.5 text-white/90">Olive Khaki</h3>
               <div className="relative mt-4">
-                {/* DESBLOQUEO TOTAL DE LA DESCRIPCIÓN PARA GENERAR DESEO PRE-DROP */}
                 <p className="text-xs leading-relaxed font-light text-white/60 text-justify">
                   Estructura rígida armada verde oliva profundo. Isotipo lineal frontal bordado en relieve desértico y vivo perimetral inferior a tono. Visera reforzada de alta resistencia.
                 </p>
@@ -553,7 +592,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. SECCIÓN ESPECIFICACIONES TÉCNICAS (TOTALMENTE DESBLOQUEADA) */}
+      {/* 5. SECCIÓN MEDIDAS */}
       <section id="especificaciones" className="py-32 bg-black relative z-10 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
@@ -613,7 +652,7 @@ export default function Home() {
 
       {/* EASTER EGG */}
       {showTerminalConsole && (
-        <div className="fixed bottom-0 right-0 w-full md:w-[450px] h-[250px] bg-black border-t md:border-l border-white/10 text-white/60 font-mono text-[11px] flex flex-col p-4 z-50 shadow-2xl animate-fade-in">
+        <div className="fixed bottom-0 right-0 w-full md:w-[450px] h-[250px] bg-black border-t md:border-l border-white/10 text-white/60 font-mono text-[11px] flex flex-col p-4 z-50 shadow-2xl">
           <div className="flex justify-between items-center border-b border-white/5 pb-1.5 mb-2 text-[9px]">
             <span>// CONSOLA DE ANULACIÓN DEL SISTEMA</span>
             <button onClick={() => setShowTerminalConsole(false)} className="text-white/30 hover:text-white uppercase">[ CERRAR ]</button>
