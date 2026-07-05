@@ -316,8 +316,8 @@ export default function Home() {
       </nav>
 
       {/* 2. HERO SECTOR */}
-      <header className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-12 pb-20">
-        <div className="space-y-6 max-w-4xl mx-auto flex flex-col items-center">
+      <header className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-16 pb-24">
+        <div className="space-y-10 max-w-4xl mx-auto flex flex-col items-center relative w-full">
           
           <div className="flex flex-wrap justify-center gap-2 animate-fade-up delay-100">
             <div className="inline-flex items-center gap-1.5 border border-red-500/20 bg-red-500/5 px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.2em] text-red-400 uppercase">
@@ -329,26 +329,29 @@ export default function Home() {
             </div>
           </div>
           
-          {/* LOGO ENRUTADO DIRECTO */}
+          {/* SECTOR ACTUALIZADO: LOGO ESCALADO RESPONSIVO + FILTRO DE EFECTO RADIAL DETRÁS PARA ELIMINAR EL VACÍO */}
           <div 
             onClick={handleLogoClick}
-            className="py-8 cursor-crosshair relative z-20 transition-transform duration-500 ease-out flex items-center justify-center animate-fade-up delay-200"
+            className="py-12 cursor-crosshair relative z-20 transition-transform duration-500 ease-out flex items-center justify-center animate-fade-up delay-200 group"
             style={{ transform: `translate(${mousePos.x}px, ${mousePos.y}px)` }}
           >
+            {/* Resplandor radial de soporte para dar atmósfera en el centro */}
+            <div className="absolute w-[200px] h-[200px] md:w-[350px] md:h-[350px] bg-radial-gradient from-red-950/20 via-transparent to-transparent blur-[60px] pointer-events-none z-0 opacity-80" style={{ backgroundImage: "radial-gradient(circle, rgba(139,30,30,0.12) 0%, transparent 70%)" }} />
+            
             <img 
               src="/logo-real.png" 
               alt="Vantum Logo Original" 
-              className="w-24 h-24 object-contain opacity-95 select-none pointer-events-none filter drop-shadow-[0_0_25px_rgba(255,255,255,0.08)]"
+              className="w-36 h-36 md:w-52 md:h-52 object-contain opacity-95 select-none pointer-events-none filter drop-shadow-[0_0_35px_rgba(255,255,255,0.06)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             />
           </div>
 
-          <p className="font-mono text-[11px] text-white/60 tracking-[0.25em] max-w-2xl mx-auto uppercase leading-relaxed animate-fade-up delay-300">
+          <p className="font-mono text-[11px] md:text-xs text-white/60 tracking-[0.28em] max-w-2xl mx-auto uppercase leading-relaxed animate-fade-up delay-300">
             Estructuras de alta simetría. Estética urbana con rigor de ingeniería.
           </p>
         </div>
 
         {/* TIME COUNTER */}
-        <div className="mt-16 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm animate-fade-up delay-400">
+        <div className="mt-20 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm animate-fade-up delay-400">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-black px-2.5 font-mono text-[8px] tracking-[0.25em] text-white/40 uppercase">
             // TERMINAL TIME COUNTER
           </div>
