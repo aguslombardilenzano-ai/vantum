@@ -16,15 +16,59 @@ export default function Home() {
     minutes: "00",
     seconds: "00",
   });
+  
+  // ESTADOS DE CONTROL DE INTERFAZ Y LOGÍSTICA DE CARGA
   const [isMounted, setIsMounted] = useState(false);
   const [isDropActive, setIsDropActive] = useState(false);
-  const [isDescUnlocked, setIsDescUnlocked] = useState(false); // Control de visualización de descripción
+  const [isDescUnlocked, setIsDescUnlocked] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [onlineUsers, setOnlineUsers] = useState(12);
+
+  // ESTADOS DEL SIMULADOR DE ERROR (GLITCH LAB)
+  const [loadingStep, setLoadingStep] = useState(0); // 0: cargando, 1: error_aleatorio, 2: sistema_limpio
+  const [glitchVersion, setGlitchVersion] = useState<"A" | "B" | "C">("A");
+  const [fakePassword, setFakePassword] = useState("");
 
   useEffect(() => {
     setIsMounted(true);
     
-    // FECHAS CRÍTICAS DEL SISTEMA
+    // 1. CONFIGURACIÓN ORGÁNICA DE TRÁFICO SIMULADO
+    setOnlineUsers(Math.floor(Math.random() * (19 - 7 + 1)) + 7);
+
+    // 2. ORQUESTADOR DEL SCRIPT DE ENTRADA (FAKE LOADER + GLITCH VARIATIONS)
+    const versions: ("A" | "B" | "C")[] = ["A", "B", "C"];
+    const randomVersion = versions[Math.floor(Math.random() * versions.length)];
+    setGlitchVersion(randomVersion);
+
+    // Fase 1: Fake Loader (1.5 segundos)
+    const loaderTimeout = setTimeout(() => {
+      setLoadingStep(1); // Pasamos al pantallazo de error
+
+      // Si toca la versión C, simulamos el tipeo automático de la clave
+      if (randomVersion === "C") {
+        let currentPass = "";
+        const targetPass = "••••••••";
+        let passIdx = 0;
+        const passInterval = setInterval(() => {
+          if (passIdx < targetPass.length) {
+            currentPass += targetPass[passIdx];
+            setFakePassword(currentPass);
+            passIdx++;
+          } else {
+            clearInterval(passInterval);
+          }
+        }, 150);
+      }
+
+      // Fase 2: Duración del error (2 segundos) antes de limpiar el chasis
+      const glitchTimeout = setTimeout(() => {
+        setLoadingStep(2);
+      }, 2000);
+
+      return () => clearTimeout(glitchTimeout);
+    }, 1500);
+
+    // 3. RELOJ CRONOLÓGICO Y AUTOMATIZACIÓN DE BLOQUEOS
     const targetDate = new Date("2026-07-25T00:00:00").getTime();
     const descUnlockDate = new Date("2026-07-23T00:00:00").getTime(); // 2 días antes
 
@@ -32,14 +76,14 @@ export default function Home() {
       const now = new Date().getTime();
       const difference = targetDate - now;
 
-      // 1. Verificar si las descripciones ya se tienen que desbloquear
+      // Desbloqueo automático de fichas técnicas
       if (now >= descUnlockDate) {
         setIsDescUnlocked(true);
       } else {
         setIsDescUnlocked(false);
       }
 
-      // 2. Verificar si el Drop ya está activo
+      // Liberación del Drop
       if (difference <= 0) {
         setTimeLeft({ days: "00", hours: "00", minutes: "00", seconds: "00" });
         setIsDropActive(true);
@@ -63,20 +107,94 @@ export default function Home() {
     updateTimer();
     const interval = setInterval(updateTimer, 1000);
 
+    // 4. CAPTURA DE COORDENADAS DEL MOUSE
     const handleMouseMove = (e: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
       const x = (e.clientX - innerWidth / 2) / 40;
       const y = (e.clientY - innerHeight / 2) / 40;
       setMousePos({ x, y });
     };
-
     window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
+      clearTimeout(loaderTimeout);
       clearInterval(interval);
       window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
+
+  // RENDERIZADO CONTROLADO DE LA FASE DE CARGA Y DE LOS ERRORES
+  if (isMounted && loadingStep === 0) {
+    return (
+      <div className="min-h-screen bg-black text-red-500 font-mono flex flex-col justify-center items-center px-6 select-none">
+        <div className="w-full max-w-xs space-y-4">
+          <div className="text-[10px] tracking-[0.3em] uppercase opacity-70 animate-pulse">// INITIALIZING CORE SYSTEM...</div>
+          <div className="w-full h-[1px] bg-red-900 relative overflow-hidden">
+            <div className="absolute top-0 left-0 h-full bg-red-500 animate-[loading_1.5s_ease-in-out_infinite] w-1/3" />
+          </div>
+          <div className="text-[9px] tracking-widest text-vantum-gray/40 uppercase text-right">DECRYPTING INTERFACE...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isMounted && loadingStep === 1) {
+    return (
+      <div className="min-h-screen bg-black font-mono flex flex-col justify-center items-center px-6 select-none overflow-hidden relative">
+        
+        {/* VARIACIÓN A: EL CRASH TERMINAL */}
+        {glitchVersion === "A" && (
+          <div className="w-full max-w-2xl text-left text-red-500 text-xs space-y-2 leading-relaxed p-4 border border-red-500/10 bg-red-950/5">
+            <p className="text-red-400 font-bold uppercase animate-pulse">!!! FATAL ERROR: UNAUTHORIZED ACCESS DETECTED !!!</p>
+            <p className="opacity-60">CRITICAL OVERFLOW DETECTED AT MEMORY SLOT: 0x00F3A2B7</p>
+            <p className="opacity-40">DUMPING REGISTERS: EAX=00000000 EBX=F7A3C12D ECX=0000001E EDX=54926176</p>
+            <p className="opacity-80 text-white">// FORCING SYSTEM OVERRIDE BYPASS SYSTEM WORKFLOWS...</p>
+            <p className="text-red-400/70 animate-bounce">SECURE SHUTDOWN ABORTED. KERNEL INJECTED.</p>
+          </div>
+        )}
+
+        {/* VARIACIÓN B: LA GRILLA EN CRISIS CROMÁTICA */}
+        {glitchVersion === "B" && (
+          <div className="absolute inset-0 flex flex-col justify-center items-center">
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ef444415_1px,transparent_1px),linear-gradient(to_bottom,#ef444415_1px,transparent_1px)] bg-[size:30px_30px] transform rotate-45 scale-125 animate-pulse" />
+            <div className="text-center space-y-3 z-10">
+              <h1 className="text-3xl font-light tracking-[0.5em] text-white/90 filter blur-[1px] animate-ping">VANTUM</h1>
+              <div className="border border-red-500 bg-red-500/10 text-red-500 font-mono text-[9px] tracking-[0.25em] px-4 py-1.5 uppercase">
+                [ GRID GEOMETRY SYMMETRY MALFUNCTION ]
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* VARIACIÓN C: EL FIREWALL CON LOG-IN SIMULADO */}
+        {glitchVersion === "C" && (
+          <div className="w-full max-w-sm border border-red-500/20 bg-red-950/5 p-6 space-y-6 text-left">
+            <div className="flex items-center gap-3 text-red-500">
+              <span className="w-2 h-2 bg-red-500 rounded-full animate-ping" />
+              <span className="text-[10px] tracking-[0.3em] uppercase font-bold">VANTUM SECURITY FIREWALL</span>
+            </div>
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <div className="text-[8px] text-vantum-gray/40 uppercase tracking-widest">OPERATOR LINK:</div>
+                <div className="text-xs text-white/80 font-mono">root@vantum_mendoza</div>
+              </div>
+              <div className="space-y-1.5">
+                <div className="text-[8px] text-vantum-gray/40 uppercase tracking-widest">ACCESS CREDENTIALS:</div>
+                <div className="h-7 w-full bg-red-950/20 border border-red-500/30 px-3 flex items-center text-xs text-red-400 font-mono">
+                  {fakePassword}
+                  <span className="w-1.5 h-3 bg-red-500 ml-0.5 animate-pulse" />
+                </div>
+              </div>
+            </div>
+            <div className="text-[9px] text-red-400 font-bold tracking-widest uppercase animate-pulse pt-2 border-t border-red-500/10">
+              // BYPASSING GATEWAY SECTOR... SUCCESS
+            </div>
+          </div>
+        )}
+
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-vantum-black text-vantum-white selection:bg-vantum-white selection:text-vantum-black overflow-x-hidden font-sans relative antialiased">
@@ -105,7 +223,7 @@ export default function Home() {
             </a>
           ) : (
             <a href="https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20ingresar%20a%20la%20lista%20de%20prioridad%20para%20el%20Lote%20001." target="_blank" rel="noopener noreferrer" className="border border-red-500/30 bg-red-500/10 px-5 py-2.5 text-[9px] font-mono tracking-[0.25em] uppercase text-red-400 hover:bg-red-500 hover:text-vantum-white transition-all duration-300">
-              PRIORITY ACCESS
+              LISTA DE ESPERA
             </a>
           )}
         </div>
@@ -120,12 +238,13 @@ export default function Home() {
               <span className="w-1.5 h-1.5 bg-red-500 rounded-full" />
               {isMounted && isDropActive ? "SYSTEM STATUS // LIVE" : "SYSTEM HOLDING // EDICIÓN 001"}
             </div>
+            {/* COMPONENTE DE ESCASEZ EXTREMA INYECTADO EN CABECERA */}
             <div className="inline-flex items-center border border-vantum-white/20 bg-vantum-white/5 px-4 py-1.5 rounded-full font-mono text-[9px] tracking-[0.25em] text-vantum-white uppercase">
               TOTAL BATCH // 30 UNITS ONLY
             </div>
           </div>
           
-          {/* LOGO DE MARCA AUTÉNTICO */}
+          {/* LOGO DE MARCA AUTÉNTICO SUBIDO COMO IMAGEN INTERACTIVA */}
           <div 
             className="py-8 cursor-crosshair relative z-20 transition-transform duration-300 ease-out flex items-center justify-center"
             style={{ transform: `translate(${mousePos.x}px, ${mousePos.y}px)` }}
@@ -142,7 +261,7 @@ export default function Home() {
           </p>
         </div>
 
-        {/* INTERFAZ DEL CONTADOR */}
+        {/* INTERFAZ DEL CONTADOR CON SEGUNDERO GLOW */}
         <div className="mt-16 border border-vantum-white/10 bg-vantum-black/60 backdrop-blur-md p-8 md:p-12 w-full max-w-3xl mx-auto relative group hover:border-vantum-white/20 transition-colors">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-vantum-black px-3 font-mono text-[9px] tracking-widest text-vantum-gray/60 uppercase">
             // TERMINAL TIME COUNTER
@@ -179,6 +298,11 @@ export default function Home() {
           </div>
         </div>
 
+        {/* TRÁFICO CONCURRENTE SIMULADO ORGÁNICO BAJO CONTADOR */}
+        <div className="mt-6 font-mono text-[10px] tracking-[0.15em] text-red-400/80 uppercase select-none">
+          [ SERVER STATUS: {onlineUsers} OPERATORS ONLINE IN MENDOZA NODE ]
+        </div>
+
         <div className="mt-12 flex flex-col sm:flex-row gap-4 font-mono text-[10px] tracking-widest">
           <a href="#modelos" className="border border-vantum-white bg-vantum-white text-vantum-black px-8 h-12 flex items-center justify-center uppercase hover:bg-transparent hover:text-vantum-white transition-all duration-300">
             EXPLORAR CATÁLOGO
@@ -196,7 +320,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS (Encriptación de Imagen + Desbloqueo de Descripciones el 23/07) */}
+      {/* 4. SECCIÓN MODELOS (Bloqueos Automatizados por Fechas) */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-20 flex flex-col md:flex-row md:items-end md:justify-between border-b border-vantum-white/10 pb-6">
           <div>
@@ -222,7 +346,7 @@ export default function Home() {
               
               <div className="absolute w-full h-[2px] bg-vantum-white/30 top-0 left-0 opacity-0 group-hover:opacity-100 group-hover:animate-[bounce_2s_infinite] pointer-events-none z-20 shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
               
-              {/* LA IMAGEN SE MANTIENE OCULTA HASTA LAS 00:00 DEL 25 DE JULIO */}
+              {/* IMAGEN DE LA GORRA ENCRIPTA HASTA LAS 00:00 DEL 25 DE JULIO */}
               <img 
                 src="/gorra-oliva.png" 
                 alt="Vantum Olive Khaki" 
@@ -237,7 +361,7 @@ export default function Home() {
                   <span className="text-green-400 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/20 tracking-widest text-[9px]">// SYSTEM LIVE</span>
                 ) : (
                   <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">
-                    {isDescUnlocked ? "// DESCRIPCIÓN DISPONIBLE" : "// DATA ENCRYPTED"}
+                    {isDescUnlocked ? "// FICHA DISPONIBLE" : "// ARCHIVO RESTRINGIDO"}
                   </span>
                 )}
               </div>
@@ -245,21 +369,20 @@ export default function Home() {
                 Olive Khaki
               </h3>
               
-              {/* OPACIDAD DINÁMICA AUTOMATIZADA EN LA DESCRIPCIÓN */}
+              {/* BLOQUEO CRONOLÓGICO AUTOMATIZADO DE LA DESCRIPCIÓN */}
               <div className="relative mt-4 min-h-[70px]">
-                <p className={`text-xs leading-relaxed font-light transition-all duration-1000 select-none
-                  ${isMounted && !isDescUnlocked ? "blur-[4px] opacity-15 grayscale contrast-50 pointer-events-none text-vantum-gray" : "text-vantum-gray/80"}`}
+                <p className={`text-xs leading-relaxed font-light transition-all duration-1000 select-none text-justify
+                  ${isMounted && !isDescUnlocked ? "blur-[4px] opacity-10 grayscale contrast-50 pointer-events-none text-vantum-gray" : "text-vantum-gray/80"}`}
                 >
                   Chasis estructural verde oliva profundo. Isotipo lineal en alto relieve beige desértico y vivo perimetral inferior a tono. Estética militarizada de alta precisión.
                 </p>
                 {isMounted && !isDescUnlocked && (
-                  <span className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-widest text-red-400/80 bg-black/10 text-center">
-                    [ DESCRIPTION ENCRYPTED // DEBLOCKED 23/07 ]
+                  <span className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-[0.2em] text-red-500/80 bg-black/10 text-center font-medium">
+                    [ DATA ENCRYPTED // REVEALED 23/07 ]
                   </span>
                 )}
               </div>
             </div>
-            
             <div className="mt-8 flex justify-between items-center border-t border-vantum-white/[0.06] pt-4 text-[11px] font-mono">
               <span className="text-vantum-gray/40">PREMIUM FLAT VISOR</span>
               {isMounted && isDropActive ? (
@@ -267,8 +390,8 @@ export default function Home() {
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
-                <a href="https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20anotarme%20en%20la%20lista%20de%20espera%20para%20la%20Vantum%20Olive%20Khaki." target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-red-400 hover:text-red-300 border border-red-500/20 bg-red-500/5 px-3 py-1 font-mono text-[9px] transition-colors rounded-sm">
-                  [ NOTIFICARME POR WSP ]
+                <a href="https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20unirme%20a%20la%20lista%20de%20espera%20para%20la%20pieza%20Vantum%20Olive%20Khaki." target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-red-400 hover:text-red-300 border border-red-500/20 bg-red-500/5 px-4 py-1.5 font-mono text-[9px] transition-colors rounded-sm tracking-widest font-medium">
+                  [ UNIRSE A LA LISTA DE ESPERA ]
                 </a>
               )}
             </div>
@@ -298,7 +421,7 @@ export default function Home() {
                   <span className="text-green-400 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/20 tracking-widest text-[9px]">// SYSTEM LIVE</span>
                 ) : (
                   <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">
-                    {isDescUnlocked ? "// DESCRIPCIÓN DISPONIBLE" : "// DATA ENCRYPTED"}
+                    {isDescUnlocked ? "// FICHA DISPONIBLE" : "// ARCHIVO RESTRINGIDO"}
                   </span>
                 )}
               </div>
@@ -307,14 +430,14 @@ export default function Home() {
               </h3>
               
               <div className="relative mt-4 min-h-[70px]">
-                <p className={`text-xs leading-relaxed font-light transition-all duration-1000 select-none
-                  ${isMounted && !isDescUnlocked ? "blur-[4px] opacity-15 grayscale contrast-50 pointer-events-none text-vantum-gray" : "text-vantum-gray/80"}`}
+                <p className={`text-xs leading-relaxed font-light transition-all duration-1000 select-none text-justify
+                  ${isMounted && !isDescUnlocked ? "blur-[4px] opacity-10 grayscale contrast-50 pointer-events-none text-vantum-gray" : "text-vantum-gray/80"}`}
                 >
                   Contraste crítico de alta hostilidad. Gabardina negra pura con isotipo frontal y vivos perimetrales inyectados en hilo carmesí. Diseñada para romper el entorno urbano.
                 </p>
                 {isMounted && !isDescUnlocked && (
-                  <span className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-widest text-red-400/80 bg-black/10 text-center">
-                    [ DESCRIPTION ENCRYPTED // DEBLOCKED 23/07 ]
+                  <span className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-[0.2em] text-red-500/80 bg-black/10 text-center font-medium">
+                    [ DATA ENCRYPTED // REVEALED 23/07 ]
                   </span>
                 )}
               </div>
@@ -326,8 +449,8 @@ export default function Home() {
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
-                <a href="https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20anotarme%20en%20la%20lista%20de%20espera%20para%20la%20Vantum%20Crimson%20Stealth." target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-red-400 hover:text-red-300 border border-red-500/20 bg-red-500/5 px-3 py-1 font-mono text-[9px] transition-colors rounded-sm">
-                  [ NOTIFICARME POR WSP ]
+                <a href="https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20unirme%20a%20la%20lista%20de%20espera%20para%20la%20pieza%20Vantum%20Crimson%20Stealth." target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-red-400 hover:text-red-300 border border-red-500/20 bg-red-500/5 px-4 py-1.5 font-mono text-[9px] transition-colors rounded-sm tracking-widest font-medium">
+                  [ UNIRSE A LA LISTA DE ESPERA ]
                 </a>
               )}
             </div>
@@ -357,7 +480,7 @@ export default function Home() {
                   <span className="text-green-400 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/20 tracking-widest text-[9px]">// SYSTEM LIVE</span>
                 ) : (
                   <span className="text-amber-500/60 font-medium bg-amber-500/5 px-2 py-0.5 border border-amber-500/10 tracking-widest text-[9px]">
-                    {isDescUnlocked ? "// DESCRIPCIÓN DISPONIBLE" : "// DATA ENCRYPTED"}
+                    {isDescUnlocked ? "// FICHA DISPONIBLE" : "// ARCHIVO RESTRINGIDO"}
                   </span>
                 )}
               </div>
@@ -366,14 +489,14 @@ export default function Home() {
               </h3>
               
               <div className="relative mt-4 min-h-[70px]">
-                <p className={`text-xs leading-relaxed font-light transition-all duration-1000 select-none
-                  ${isMounted && !isDescUnlocked ? "blur-[4px] opacity-15 grayscale contrast-50 pointer-events-none text-vantum-gray" : "text-vantum-gray/80"}`}
+                <p className={`text-xs leading-relaxed font-light transition-all duration-1000 select-none text-justify
+                  ${isMounted && !isDescUnlocked ? "blur-[4px] opacity-10 grayscale contrast-50 pointer-events-none text-vantum-gray" : "text-vantum-gray/80"}`}
                 >
                   Rigor clásico de ingeniería. Base monocromática negra con bordado lineal heráldico en hilo de oro seleccionado. Máxima simetría y sobriedad industrial.
                 </p>
                 {isMounted && !isDescUnlocked && (
-                  <span className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-widest text-red-400/80 bg-black/10 text-center">
-                    [ DESCRIPTION ENCRYPTED // DEBLOCKED 23/07 ]
+                  <span className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-[0.2em] text-red-500/80 bg-black/10 text-center font-medium">
+                    [ DATA ENCRYPTED // REVEALED 23/07 ]
                   </span>
                 )}
               </div>
@@ -385,8 +508,8 @@ export default function Home() {
                   SOLICITAR PIEZA <span className="text-[9px] translate-y-[-1px] group-hover/btn:translate-x-1 transition-transform">→</span>
                 </a>
               ) : (
-                <a href="https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20anotarme%20en%20la%20lista%20de%20espera%20para%20la%20Vantum%20Onyx%20Gold." target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-red-400 hover:text-red-300 border border-red-500/20 bg-red-500/5 px-3 py-1 font-mono text-[9px] transition-colors rounded-sm">
-                  [ NOTIFICARME POR WSP ]
+                <a href="https://wa.me/5492617616121?text=Hola%20Agust%C3%ADn!%20Quiero%20anotarme%20en%20la%20lista%20de%20espera%20para%20la%20pieza%20Vantum%20Onyx%20Gold." target="_blank" rel="noopener noreferrer" className="uppercase tracking-widest text-red-400 hover:text-red-300 border border-red-500/20 bg-red-500/5 px-4 py-1.5 font-mono text-[9px] transition-colors rounded-sm tracking-widest font-medium">
+                  [ UNIRSE A LA LISTA DE ESPERA ]
                 </a>
               )}
             </div>
@@ -394,7 +517,7 @@ export default function Home() {
 
         </div>
 
-        {/* INDICADOR DE STOCK EN VIVO AJUSTADO A 30 UNIDADES */}
+        {/* INDICADOR DE STOCK EN VIVO EXCLUSIVO POST-DROP */}
         {isMounted && isDropActive && (
           <div className="mt-16 max-w-xl mx-auto border border-green-500/20 bg-green-500/5 p-4 font-mono text-[10px] tracking-widest text-center text-green-400">
             <div className="flex justify-between mb-2">
@@ -408,7 +531,7 @@ export default function Home() {
         )}
       </section>
 
-      {/* 5. SECCIÓN ESPECIFICACIONES TÉCNICAS */}
+      {/* 5. SECCIÓN ESPECIFICACIONES TÉCNICAS (Sometida a Bloqueo Cronológico el 23/07) */}
       <section id="especificaciones" className="py-32 bg-vantum-black relative z-10 px-6 border-t border-vantum-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
@@ -428,10 +551,12 @@ export default function Home() {
               </div>
             </div>
 
-            {/* TABLA DE TOLERANCIAS INDUSTRIALES */}
-            <div className="border border-vantum-white/10 bg-vantum-black/40 p-6 flex flex-col justify-between">
+            {/* TABLA DE TOLERANCIAS INDUSTRIALES CON CORRUPCIÓN DE DATOS PRE-DESBLOQUEO */}
+            <div className="border border-vantum-white/10 bg-vantum-black/40 p-6 flex flex-col justify-between relative">
               <div className="text-[9px] text-vantum-white/40 mb-4 tracking-[0.2em] uppercase">// METRIC SYSTEM & TOLERANCE</div>
-              <table className="w-full text-left text-[11px] leading-relaxed">
+              <table className={`w-full text-left text-[11px] leading-relaxed transition-all duration-1000
+                ${isMounted && !isDescUnlocked ? "blur-[5px] opacity-10 pointer-events-none select-none" : ""}`}
+              >
                 <thead>
                   <tr className="border-b border-vantum-white/10 text-vantum-white">
                     <th className="pb-2 font-light tracking-wider">COMPONENTE</th>
@@ -446,6 +571,7 @@ export default function Home() {
                     <td className="py-2 text-right text-red-400">± 0.05 mm</td>
                   </tr>
                   <tr>
+                    <td className="py-2 text-vantum-white/80">Ancho de Visera</td>
                     <td className="py-2 text-right text-vantum-white">18.0 cm</td>
                     <td className="py-2 text-right text-red-400">± 0.02 mm</td>
                   </tr>
@@ -456,11 +582,16 @@ export default function Home() {
                   </tr>
                   <tr>
                     <td className="py-2 text-vantum-white/80">Densidad de Costura</td>
-                    <td className="py-2 text-right text-vantum-white">12 SPI</td>
+                    <td className="py-2 text-right text-white">12 SPI</td>
                     <td className="py-2 text-right text-red-400">Nominal</td>
                   </tr>
                 </tbody>
               </table>
+              {isMounted && !isDescUnlocked && (
+                <div className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-widest text-red-400 uppercase text-center font-medium">
+                  [ METRICS RESTRINGED // OVERRIDE AT 23/07 ]
+                </div>
+              )}
             </div>
           </div>
         </div>
