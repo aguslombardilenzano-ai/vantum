@@ -15,7 +15,6 @@ export default function Home() {
   // LOGÍSTICA GENERAL DE INTERFAZ
   const [isMounted, setIsMounted] = useState(false);
   const [isDropActive, setIsDropActive] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [onlineUsers, setOnlineUsers] = useState(7);
   const [currentDateTime, setCurrentDateTime] = useState("");
 
@@ -35,10 +34,6 @@ export default function Home() {
   const [waitlistPercentage, setWaitlistPercentage] = useState(84);
   const logoClickCount = useRef(0);
 
-  // MANEJO DE SCROLL PARA LA TIPOGRAFÍA VARIABLE DEL MANIFIESTO
-  const [fontWeight, setFontWeight] = useState(100);
-  const manifiestoRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     setIsMounted(true);
     setOnlineUsers(Math.floor(Math.random() * (16 - 7 + 1)) + 7);
@@ -55,21 +50,6 @@ export default function Home() {
       const secs = Math.floor((elapsed % 60000) / 1000).toString().padStart(2, "0");
       setCctvTime(`${hrs}:${mins}:${secs}`);
     }, 1000);
-
-    // CONTROL DE PESO TIPOGRÁFICO POR SCROLL EN VIVO
-    const handleScroll = () => {
-      if (manifiestoRef.current) {
-        const rect = manifiestoRef.current.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        const elementCenter = rect.top + rect.height / 2;
-        const distanceToCenter = Math.abs(windowHeight / 2 - elementCenter);
-        const maxDistance = windowHeight / 2 + rect.height / 2;
-        const scrollRatio = Math.min(Math.max(1 - distanceToCenter / maxDistance, 0), 1);
-        
-        setFontWeight(Math.floor(100 + scrollRatio * 300));
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
 
     // LISTA DE ESPERA MATEMÁTICA AUTOMATIZADA
     const nowTimestamp = Date.now();
@@ -112,7 +92,7 @@ export default function Home() {
       };
     }, 1000);
 
-    // CRONÓMETRO DINÁMICO RE-CALIBRADO (DROP REAL 25 DE JULIO)
+    // CRONÓMETRO DINÁMICO (DROP REAL 25 DE JULIO)
     const targetDate = new Date("2026-07-25T00:00:00").getTime();
 
     const updateTimer = () => {
@@ -142,20 +122,10 @@ export default function Home() {
     updateTimer();
     const intervalId = setInterval(updateTimer, 1000);
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const { innerWidth, innerHeight } = window;
-      const x = (e.clientX - innerWidth / 2) / 45;
-      const y = (e.clientY - innerHeight / 2) / 45;
-      setMousePos({ x, y });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-
     return () => {
       clearTimeout(loaderTimeout);
       clearInterval(timerInterval);
       clearInterval(intervalId);
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
@@ -170,11 +140,11 @@ export default function Home() {
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
         @keyframes brandOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.98); filter: blur(5px); } }
         @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100vh); } }
-        @keyframes vPulse { 0% { opacity: 0.03; transform: scale(1); filter: drop-shadow(0 0 10px rgba(255,255,255,0)); } 50% { opacity: 0.10; transform: scale(1.01); filter: drop-shadow(0 0 40px rgba(255,255,255,0.04)); } 100% { opacity: 0.03; transform: scale(1); filter: drop-shadow(0 0 10px rgba(255,255,255,0)); } }
+        @keyframes vPulse { 0% { opacity: 0.03; filter: drop-shadow(0 0 10px rgba(255,255,255,0)); } 50% { opacity: 0.09; filter: drop-shadow(0 0 40px rgba(255,255,255,0.03)); } 100% { opacity: 0.03; filter: drop-shadow(0 0 10px rgba(255,255,255,0)); } }
         .animate-fade-up { opacity: 0; animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .animate-fade-in { opacity: 0; animation: fadeIn 1.5s ease-out forwards; }
         .animate-brand-out { animation: brandOut 0.6s cubic-bezier(0.16, 1, 0.3, 1) 2.6s forwards; }
-        .animate-v-giant { animation: vPulse 9s ease-in-out infinite; }
+        .animate-v-giant { animation: vPulse 10s ease-in-out infinite; }
         .delay-100 { animation-delay: 150ms; }
         .delay-200 { animation-delay: 300ms; }
         .delay-300 { animation-delay: 450ms; }
@@ -216,12 +186,12 @@ export default function Home() {
     if (bioScanning || bioSuccess) return;
 
     setBioScanning(true);
-    setBioText("INICIANDO PROTOCOLO CENTRAL...");
+    setBioText("PROCESANDO SOLICITUD...");
 
     setTimeout(() => {
-      setBioText("COMPILANDO ACCESO AL BATCH 001...");
+      setBioText("COMPILANDO RESERVA DEL BATCH...");
       setTimeout(() => {
-        setBioText("RESERVA COMPLETA");
+        setBioText("CUPO ASIGNADO");
         setBioSuccess(true);
         setTimeout(() => {
           setBioScanning(false);
@@ -246,7 +216,7 @@ export default function Home() {
     );
   }
 
-  // INTRO FASE 1: SECURE FIREWALL (4 SEGUNDOS STRICT)
+  // INTRO FASE 1: SECURE FIREWALL
   if (isMounted && loadingStep === 1) {
     return (
       <div className="min-h-screen bg-black font-mono flex flex-col justify-center items-center px-6 select-none relative">
@@ -304,7 +274,7 @@ export default function Home() {
     );
   }
 
-  // FASE 3: TIENDA RUNNING DESBLOQUEADA
+  // FASE 3: TIENDA COMPLETA DESBLOQUEADA
   return (
     <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden font-sans relative antialiased animate-fade-in">
       
@@ -317,35 +287,29 @@ export default function Home() {
         <span>REC {cctvTime}</span>
       </div>
 
-      {/* METADATOS COMPILADOS EN EL BORDE */}
+      {/* METADATOS EN EL BORDE */}
       <div className="fixed bottom-6 left-6 font-mono text-[8px] tracking-[0.2em] text-white/20 flex flex-col gap-0.5 z-50 select-none uppercase hidden md:flex">
         <span>BÚNKER DE DISEÑO & DESARROLLO: MENDOZA, ARG</span>
         <span>LOGÍSTICA DE DISTRIBUCIÓN: ENVÍOS GLOBALES ACTIVADOS</span>
       </div>
 
-      {/* NUEVO AJUSTE: LA V GIGANTE RESPIRANDO EN SEGUNDO PLANO ABSOLUTO CON MÁSCARA RADIAL INTEGRADA */}
-      <div className="absolute top-0 left-0 w-full h-[100vh] overflow-hidden pointer-events-none z-0 flex items-center justify-center select-none">
-        {/* El destello de linterna táctica sutil que sigue al mouse de fondo */}
-        <div 
-          className="absolute inset-0 transition-opacity duration-300 hidden md:block"
-          style={{
-            background: `radial-gradient(400px circle at ${50 + mousePos.x}% ${50 + mousePos.y}%, rgba(255,255,255,0.02) 0%, transparent 100%)`,
-          }}
-        />
+      {/* CORRECCIÓN PUNTO CIEGO: LA V GIGANTE DE FONDO QUEDA CENTRADA MATEMÁTICAMENTE EN ABSOLUTO EQUILIBRIO */}
+      <div className="absolute top-0 left-0 w-full h-[100vh] pointer-events-none z-0 flex items-center justify-center select-none overflow-hidden">
         <img 
           src="/logo-real.png" 
-          alt="Vantum Chasis Background" 
-          className="w-[75%] max-w-[850px] object-contain opacity-[0.04] select-none pointer-events-none animate-v-giant filter contrast-125"
+          alt="Vantum Chasis Concentric Background" 
+          className="w-[82%] max-w-[900px] object-contain select-none pointer-events-none animate-v-giant filter contrast-[1.15]"
         />
       </div>
 
-      {/* 1. NAV BAR: CORREGIDA CON LA V EN PEQUEÑO EN LA ESQUINA SUPERIOR IZQUIERDA */}
+      {/* 1. NAV BAR: CORREGIDA CON LOGO MÁS GRANDE Y NOMBRE DE MARCA AL LADO */}
       <nav className="border-b border-white/5 backdrop-blur-md bg-black/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
           
-          {/* Isotipo en miniatura bien puesto en lugar de la palabra repetida */}
-          <a href="#" className="flex items-center hover:opacity-70 transition-opacity">
-            <img src="/logo-real.png" alt="V" className="w-6 h-6 object-contain filter brightness-110" />
+          {/* Logo superior izquierdo optimizado: Isotipo ampliado + Marca sella su presencia */}
+          <a href="#" className="flex items-center gap-3.5 hover:opacity-75 transition-opacity select-none">
+            <img src="/logo-real.png" alt="Vantum Isotipo" className="w-8 h-8 object-contain filter brightness-110" />
+            <span className="text-sm font-light tracking-[0.45em] uppercase text-white pl-0.5">VANTUM</span>
           </a>
 
           <div className="hidden md:flex items-center gap-12 text-[9px] font-mono tracking-[0.25em] uppercase text-white/40">
@@ -363,7 +327,7 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* 2. HERO SECTOR: RE-ARQUITECTURADO CON LA FIRMA MONOLÍTICA CENTRAL EN PRIMER PLANO */}
+      {/* 2. HERO SECTOR */}
       <header className="relative min-h-[calc(100vh-20px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-10 pb-20">
         <div className="space-y-12 max-w-4xl mx-auto flex flex-col items-center relative w-full">
           
@@ -377,9 +341,8 @@ export default function Home() {
             </div>
           </div>
           
-          {/* NUEVO BLOQUE: FIRMA MONOLÍTICA MONUMENTAL (V + VANTUM + LEMAS SIEMPRE JUNTOS) */}
+          {/* FIRMA MONOLÍTICA CENTRAL EN PRIMER PLANO */}
           <div className="flex flex-col items-center space-y-5 relative z-10">
-            {/* El Isotipo Central con escala responsiva e interacción limpia */}
             <div 
               onClick={handleLogoClick}
               className="cursor-crosshair flex items-center justify-center group"
@@ -391,12 +354,10 @@ export default function Home() {
               />
             </div>
             
-            {/* El Nombre de la Marca abajo de la V siempre, con tracking de alta gama */}
             <h2 className="text-xl md:text-2xl font-extralight tracking-[0.75em] text-white uppercase pl-[0.75em] select-none">
               VANTUM
             </h2>
             
-            {/* Los dos lemas identitarios en mono incorporados de forma indisoluble al bloque */}
             <div className="flex items-center gap-4 font-mono text-[8px] md:text-[9px] tracking-[0.25em] text-white/30 uppercase select-none">
               <span className="font-semibold text-white/50">BUILD WITH PURPOSE</span>
               <span className="text-white/10">|</span>
@@ -480,15 +441,12 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 3. SECCIÓN MANIFIESTO */}
-      <section id="manifiesto" className="py-32 border-y border-white/5 relative z-10 px-6" ref={manifiestoRef}>
-        <div className="max-w-3xl mx-auto text-center space-y-8">
-          <p className="font-mono text-[9px] text-white/40 tracking-[0.3em] uppercase">// OPERATIONAL PHILOSOPHY</p>
-          <p 
-            className="text-lg md:text-2xl tracking-wide leading-relaxed text-white transition-all duration-300 ease-out text-center"
-            style={{ fontWeight: fontWeight }}
-          >
-            No diseñamos accesorios. Construimos bloques estructurales de uso diario. Cada pieza responde a un control estricto de moldería urbana y simetría textil absoluta. VANTUM es la respuesta técnica a la saturación del mercado.
+      {/* 3. SECCIÓN MANIFIESTO: TOTALMENTE ESTÁTICA CON TIPOGRAFÍA REFINADA, LIMPIA Y SIN EFECTOS DE SCROLL */}
+      <section id="manifiesto" className="py-36 border-y border-white/5 relative z-10 px-6">
+        <div className="max-w-3xl mx-auto text-center space-y-6">
+          <p className="font-mono text-[9px] text-white/40 tracking-[0.32em] uppercase tracking-widest">// PHILOSOPHY & IDENTITY</p>
+          <p className="text-xl md:text-2xl font-extralight tracking-wide leading-relaxed text-white/90 font-serif italic text-center px-4">
+            "No diseñamos accesorios ordinarios. Construimos bloques estructurales rígidos para el uso diario. Cada pieza responde a un control estricto de moldería urbana y simetría textil absoluta. VANTUM es la respuesta técnica a la saturación del mercado contemporáneo."
           </p>
         </div>
       </section>
@@ -575,16 +533,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* II. PORTAL MONUMENTAL CENTRAL DE RESERVA */}
+      {/* II. PORTAL MONUMENTAL CENTRAL DE RESERVA: TEXTO ACTUALIZADO PARA SER CLARO, DIRECTO Y COMPRENSIBLE */}
       <section id="bloque-captura" className="py-24 px-6 max-w-4xl mx-auto relative z-10 text-center">
         <div className="border border-red-500/30 bg-[#050505] p-10 md:p-16 space-y-6 rounded-sm shadow-2xl relative overflow-hidden group">
           <div className="absolute inset-0 bg-radial-gradient from-red-950/5 via-transparent to-transparent pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(139,30,30,0.05) 0%, transparent 80%)" }} />
+          
           <div className="font-mono text-[10px] md:text-[11px] text-red-500 uppercase tracking-[0.3em] font-medium animate-pulse">
-            // INICIAR PROTOCOLO DE RESERVA CENTRAL
+            // REGISTRO DE ADMISIÓN - EDICIÓN DE BARRIO 001
           </div>
+          
           <h2 className="text-xl md:text-2xl font-extralight tracking-widest text-white uppercase max-w-xl mx-auto leading-relaxed">
-            REGISTRE SUS CREDENCIALES EN EL SERVIDOR CENTRAL PARA ASEGURAR CUOTA DE PRODUCCIÓN ANTES DEL CIERRE AUTOMÁTICO
+            SOLICITÁ TU LUGAR PARA ASEGURAR UNA DE LAS 30 PIEZAS EXCLUSIVAS ANTES DE QUE EL ACCESO SE CIERRE POR COMPLETO
           </h2>
+          
           <div className="pt-4 max-w-xl mx-auto">
             <button 
               onClick={executeGeneralReserve}
@@ -593,13 +554,14 @@ export default function Home() {
               {bioScanning ? bioText : "[ SOLICITAR ASIGNACIÓN DE PIEZA - BATCH 001 ]"}
             </button>
           </div>
+          
           <div className="font-mono text-[8px] tracking-widest text-white/20 uppercase pt-2">
             CUPO DEL LOTE DISPONIBLE: {100 - waitlistPercentage}% // ACCESO RESTRINGIDO
           </div>
         </div>
       </section>
 
-      {/* 5. SECCIÓN MEDIDAS */}
+      {/* 5. SECCIÓN MEDIDAS COMPILADA CON LAS NUEVAS MEJORAS DE DETALLE DE COMPONENTES */}
       <section id="especificaciones" className="py-32 bg-black relative z-10 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
