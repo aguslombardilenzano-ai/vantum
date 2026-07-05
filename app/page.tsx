@@ -15,6 +15,7 @@ export default function Home() {
   // LOGÍSTICA GENERAL DE INTERFAZ
   const [isMounted, setIsMounted] = useState(false);
   const [isDropActive, setIsDropActive] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [onlineUsers, setOnlineUsers] = useState(7);
   const [currentDateTime, setCurrentDateTime] = useState("");
 
@@ -92,7 +93,7 @@ export default function Home() {
       };
     }, 1000);
 
-    // CRONÓMETRO DINÁMICO (DROP REAL 25 DE JULIO)
+    // CRONÓMETRO DINÁMICO
     const targetDate = new Date("2026-07-25T00:00:00").getTime();
 
     const updateTimer = () => {
@@ -122,29 +123,38 @@ export default function Home() {
     updateTimer();
     const intervalId = setInterval(updateTimer, 1000);
 
+    const handleMouseMove = (e: MouseEvent) => {
+      const { innerWidth, innerHeight } = window;
+      const x = (e.clientX - innerWidth / 2) / 50;
+      const y = (e.clientY - innerHeight / 2) / 50;
+      setMousePos({ x, y });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+
     return () => {
       clearTimeout(loaderTimeout);
       clearInterval(timerInterval);
       clearInterval(intervalId);
+      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
-  // CONTROL DE ANIMACIONES CSS INYECTADAS
+  // ANIMACIONES INTERNAS INYECTADAS
   useEffect(() => {
     if (typeof window !== "undefined" && !document.getElementById("vantum-core-styles")) {
       const stylesheet = document.createElement("style");
       stylesheet.id = "vantum-core-styles";
       stylesheet.innerHTML = `
         @keyframes loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(300%); } }
-        @keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px); filter: blur(5px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
         @keyframes brandOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.98); filter: blur(5px); } }
         @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100vh); } }
-        @keyframes vPulse { 0% { opacity: 0.03; filter: drop-shadow(0 0 10px rgba(255,255,255,0)); } 50% { opacity: 0.09; filter: drop-shadow(0 0 40px rgba(255,255,255,0.03)); } 100% { opacity: 0.03; filter: drop-shadow(0 0 10px rgba(255,255,255,0)); } }
-        .animate-fade-up { opacity: 0; animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes vPulse { 0% { opacity: 0.03; transform: scale(1); } 50% { opacity: 0.08; transform: scale(1.005); } 100% { opacity: 0.03; transform: scale(1); } }
+        .animate-fade-up { opacity: 0; animation: fadeUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .animate-fade-in { opacity: 0; animation: fadeIn 1.5s ease-out forwards; }
         .animate-brand-out { animation: brandOut 0.6s cubic-bezier(0.16, 1, 0.3, 1) 2.6s forwards; }
-        .animate-v-giant { animation: vPulse 10s ease-in-out infinite; }
+        .animate-v-giant { animation: vPulse 11s ease-in-out infinite; }
         .delay-100 { animation-delay: 150ms; }
         .delay-200 { animation-delay: 300ms; }
         .delay-300 { animation-delay: 450ms; }
@@ -274,7 +284,7 @@ export default function Home() {
     );
   }
 
-  // FASE 3: TIENDA COMPLETA DESBLOQUEADA
+  // FASE 3: TIENDA COMPLETA EN ESPAÑOL DESBLOQUEADA
   return (
     <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden font-sans relative antialiased animate-fade-in">
       
@@ -287,29 +297,32 @@ export default function Home() {
         <span>REC {cctvTime}</span>
       </div>
 
-      {/* METADATOS EN EL BORDE */}
+      {/* METADATOS COMPILADOS EN EL BORDE */}
       <div className="fixed bottom-6 left-6 font-mono text-[8px] tracking-[0.2em] text-white/20 flex flex-col gap-0.5 z-50 select-none uppercase hidden md:flex">
         <span>BÚNKER DE DISEÑO & DESARROLLO: MENDOZA, ARG</span>
         <span>LOGÍSTICA DE DISTRIBUCIÓN: ENVÍOS GLOBALES ACTIVADOS</span>
       </div>
 
-      {/* CORRECCIÓN PUNTO CIEGO: LA V GIGANTE DE FONDO QUEDA CENTRADA MATEMÁTICAMENTE EN ABSOLUTO EQUILIBRIO */}
-      <div className="absolute top-0 left-0 w-full h-[100vh] pointer-events-none z-0 flex items-center justify-center select-none overflow-hidden">
+      {/* AJUSTE MAESTRO DE SIMETRÍA: LA V GIGANTE QUEDA CAPTURADA EN FLEXBOX CONTRÉNTRICO ABSOLUTO EN EL ENTORNO CERO */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden">
+        {/* Halo de luz cálida difusa de fondo que elimina la frialdad y suaviza los textos */}
+        <div className="absolute w-[350px] h-[350px] md:w-[650px] md:h-[650px] rounded-full bg-gradient-to-r from-red-950/10 via-transparent to-transparent blur-[120px] pointer-events-none opacity-60" style={{ backgroundImage: "radial-gradient(circle, rgba(139,30,30,0.11) 0%, transparent 75%)" }} />
+        
         <img 
           src="/logo-real.png" 
-          alt="Vantum Chasis Concentric Background" 
-          className="w-[82%] max-w-[900px] object-contain select-none pointer-events-none animate-v-giant filter contrast-[1.15]"
+          alt="Vantum Chasis Balanced Background" 
+          className="w-[82%] max-w-[850px] object-contain opacity-10 select-none pointer-events-none animate-v-giant filter contrast-[1.10]"
         />
       </div>
 
-      {/* 1. NAV BAR: CORREGIDA CON LOGO MÁS GRANDE Y NOMBRE DE MARCA AL LADO */}
+      {/* 1. NAV BAR: AJUSTADO EL TAMAÑO DE LA ESQUINA SUPERIOR CON TEXTO ALINEADO */}
       <nav className="border-b border-white/5 backdrop-blur-md bg-black/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
           
-          {/* Logo superior izquierdo optimizado: Isotipo ampliado + Marca sella su presencia */}
-          <a href="#" className="flex items-center gap-3.5 hover:opacity-75 transition-opacity select-none">
-            <img src="/logo-real.png" alt="Vantum Isotipo" className="w-8 h-8 object-contain filter brightness-110" />
-            <span className="text-sm font-light tracking-[0.45em] uppercase text-white pl-0.5">VANTUM</span>
+          {/* Logo superior izquierdo corregido: Isotipo de escala robusta w-10 y tipografía estirada a tono */}
+          <a href="#" className="flex items-center gap-4 hover:opacity-75 transition-opacity select-none group">
+            <img src="/logo-real.png" alt="Vantum Isotipo" className="w-10 h-10 object-contain filter brightness-110 transition-transform duration-500 group-hover:rotate-6" />
+            <span className="text-sm font-light tracking-[0.45em] uppercase text-white/90 pl-0.5">VANTUM</span>
           </a>
 
           <div className="hidden md:flex items-center gap-12 text-[9px] font-mono tracking-[0.25em] uppercase text-white/40">
@@ -327,11 +340,11 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* 2. HERO SECTOR */}
+      {/* 2. HERO SECTOR: LA V CHICA SUBE DE ESCALA A w-36 MD:w-44 PARA LOGRAR EL IMPACTO DOMINANTE */}
       <header className="relative min-h-[calc(100vh-20px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-10 pb-20">
         <div className="space-y-12 max-w-4xl mx-auto flex flex-col items-center relative w-full">
           
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap justify-center gap-2 relative z-10">
             <div className="inline-flex items-center gap-1.5 border border-red-500/20 bg-red-500/5 px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.2em] text-red-400 uppercase">
               <span className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
               EDICIÓN DE BARRIO 001
@@ -341,20 +354,21 @@ export default function Home() {
             </div>
           </div>
           
-          {/* FIRMA MONOLÍTICA CENTRAL EN PRIMER PLANO */}
-          <div className="flex flex-col items-center space-y-5 relative z-10">
+          {/* FIRMA CENTRAL RE-CORREGIDA MASIVA */}
+          <div className="flex flex-col items-center space-y-6 relative z-10">
+            {/* El Isotipo Central sube drásticamente a un chasis dominante para mandar en la pantalla */}
             <div 
               onClick={handleLogoClick}
               className="cursor-crosshair flex items-center justify-center group"
             >
               <img 
                 src="/logo-real.png" 
-                alt="Vantum Logo" 
-                className="w-24 h-24 md:w-32 md:h-32 object-contain opacity-[0.98] select-none pointer-events-none filter drop-shadow-[0_0_30px_rgba(255,255,255,0.08)] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                alt="Vantum Logo Focus" 
+                className="w-36 h-36 md:w-44 md:h-44 object-contain opacity-[0.98] select-none pointer-events-none filter drop-shadow-[0_0_45px_rgba(255,255,255,0.09)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
               />
             </div>
             
-            <h2 className="text-xl md:text-2xl font-extralight tracking-[0.75em] text-white uppercase pl-[0.75em] select-none">
+            <h2 className="text-2xl md:text-3xl font-extralight tracking-[0.75em] text-white uppercase pl-[0.75em] select-none">
               VANTUM
             </h2>
             
@@ -374,23 +388,23 @@ export default function Home() {
             </p>
           </div>
 
-          {/* LOGÍSTICA INDEX DE MATERIALES */}
-          <div className="pt-2 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-2xl font-mono text-[9px] tracking-widest uppercase text-white/30 relative z-10">
-            <div className="p-2 border border-white/5 bg-[#030303]/20 rounded-sm">
-              <span className="text-white/60 block mb-0.5">// TEXTIL REFORZADO</span>
+          {/* FILETES TÉCNICOS: ENMARCAN LAS MÉTRICAS INFERIORES EN UNA RECIPIENTE DE PLANO DE PRODUCCIÓN */}
+          <div className="pt-4 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-2xl font-mono text-[9px] tracking-widest uppercase text-white/30 relative z-10 border-t border-b border-white/5 py-4 bg-black/20 backdrop-blur-[1px]">
+            <div className="px-2">
+              <span className="text-white/50 block mb-0.5">// TEXTIL REFORZADO</span>
               GABARDINA 8OZ: 100%
             </div>
-            <div className="p-2 border border-white/5 bg-[#030303]/20 rounded-sm">
-              <span className="text-white/60 block mb-0.5">// INYECCIÓN BORDADO</span>
-              HILO PREMIUM: ALMACENADO
+            <div className="px-2 border-l border-white/5">
+              <span className="text-white/50 block mb-0.5">// INYECCIÓN BORDADO</span>
+              HILO PREMIUM: STOCK
             </div>
-            <div className="p-2 border border-white/5 bg-[#030303]/20 rounded-sm">
-              <span className="text-white/60 block mb-0.5">// CONTORNO INTERNO</span>
+            <div className="px-2 border-l border-white/5">
+              <span className="text-white/50 block mb-0.5">// CONTORNO INTERNO</span>
               ENTRETELA ALTA DEN: OK
             </div>
-            <div className="p-2 border border-white/5 bg-[#030303]/20 rounded-sm">
+            <div className="px-2 border-l border-white/5">
               <span className="text-red-400 block mb-0.5">// VOLUMEN DEL BATCH</span>
-              30 EJEMPLARES: CONFINADO
+              30 EJEMPLARES: LISTO
             </div>
           </div>
         </div>
@@ -441,11 +455,11 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 3. SECCIÓN MANIFIESTO: TOTALMENTE ESTÁTICA CON TIPOGRAFÍA REFINADA, LIMPIA Y SIN EFECTOS DE SCROLL */}
-      <section id="manifiesto" className="py-36 border-y border-white/5 relative z-10 px-6">
+      {/* 3. SECCIÓN MANIFIESTO: ESTÁTICO CON TIPOGRAFÍA REFINADA, LIMPIDO Y CON UN TONO DE CALIDAD ABOLUTA */}
+      <section id="manifiesto" className="py-36 border-y border-white/5 relative z-10 px-6 bg-[#020202]/30 backdrop-blur-[2px]">
         <div className="max-w-3xl mx-auto text-center space-y-6">
           <p className="font-mono text-[9px] text-white/40 tracking-[0.32em] uppercase tracking-widest">// PHILOSOPHY & IDENTITY</p>
-          <p className="text-xl md:text-2xl font-extralight tracking-wide leading-relaxed text-white/90 font-serif italic text-center px-4">
+          <p className="text-xl md:text-2xl font-light tracking-wide leading-relaxed text-white/90 font-serif italic text-center px-4">
             "No diseñamos accesorios ordinarios. Construimos bloques estructurales rígidos para el uso diario. Cada pieza responde a un control estricto de moldería urbana y simetría textil absoluta. VANTUM es la respuesta técnica a la saturación del mercado contemporáneo."
           </p>
         </div>
@@ -533,7 +547,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* II. PORTAL MONUMENTAL CENTRAL DE RESERVA: TEXTO ACTUALIZADO PARA SER CLARO, DIRECTO Y COMPRENSIBLE */}
+      {/* II. PORTAL MONUMENTAL CENTRAL DE RESERVA */}
       <section id="bloque-captura" className="py-24 px-6 max-w-4xl mx-auto relative z-10 text-center">
         <div className="border border-red-500/30 bg-[#050505] p-10 md:p-16 space-y-6 rounded-sm shadow-2xl relative overflow-hidden group">
           <div className="absolute inset-0 bg-radial-gradient from-red-950/5 via-transparent to-transparent pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(139,30,30,0.05) 0%, transparent 80%)" }} />
@@ -561,7 +575,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. SECCIÓN MEDIDAS COMPILADA CON LAS NUEVAS MEJORAS DE DETALLE DE COMPONENTES */}
+      {/* 5. SECCIÓN MEDIDAS */}
       <section id="especificaciones" className="py-32 bg-black relative z-10 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
