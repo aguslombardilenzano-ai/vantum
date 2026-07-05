@@ -144,8 +144,8 @@ export default function Home() {
 
     const handleMouseMove = (e: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
-      const x = (e.clientX - innerWidth / 2) / 60;
-      const y = (e.clientY - innerHeight / 2) / 60;
+      const x = (e.clientX - innerWidth / 2) / 45;
+      const y = (e.clientY - innerHeight / 2) / 45;
       setMousePos({ x, y });
     };
     window.addEventListener("mousemove", handleMouseMove);
@@ -159,7 +159,7 @@ export default function Home() {
     };
   }, []);
 
-  // ANIMACIONES INTERNAS INYECTADAS
+  // CONTROL DE ANIMACIONES CSS INYECTADAS
   useEffect(() => {
     if (typeof window !== "undefined" && !document.getElementById("vantum-core-styles")) {
       const stylesheet = document.createElement("style");
@@ -170,9 +170,11 @@ export default function Home() {
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
         @keyframes brandOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.98); filter: blur(5px); } }
         @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100vh); } }
+        @keyframes vPulse { 0% { opacity: 0.03; transform: scale(1); filter: drop-shadow(0 0 10px rgba(255,255,255,0)); } 50% { opacity: 0.10; transform: scale(1.01); filter: drop-shadow(0 0 40px rgba(255,255,255,0.04)); } 100% { opacity: 0.03; transform: scale(1); filter: drop-shadow(0 0 10px rgba(255,255,255,0)); } }
         .animate-fade-up { opacity: 0; animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .animate-fade-in { opacity: 0; animation: fadeIn 1.5s ease-out forwards; }
         .animate-brand-out { animation: brandOut 0.6s cubic-bezier(0.16, 1, 0.3, 1) 2.6s forwards; }
+        .animate-v-giant { animation: vPulse 9s ease-in-out infinite; }
         .delay-100 { animation-delay: 150ms; }
         .delay-200 { animation-delay: 300ms; }
         .delay-300 { animation-delay: 450ms; }
@@ -321,12 +323,31 @@ export default function Home() {
         <span>LOGÍSTICA DE DISTRIBUCIÓN: ENVÍOS GLOBALES ACTIVADOS</span>
       </div>
 
-      {/* 1. NAV BAR */}
+      {/* NUEVO AJUSTE: LA V GIGANTE RESPIRANDO EN SEGUNDO PLANO ABSOLUTO CON MÁSCARA RADIAL INTEGRADA */}
+      <div className="absolute top-0 left-0 w-full h-[100vh] overflow-hidden pointer-events-none z-0 flex items-center justify-center select-none">
+        {/* El destello de linterna táctica sutil que sigue al mouse de fondo */}
+        <div 
+          className="absolute inset-0 transition-opacity duration-300 hidden md:block"
+          style={{
+            background: `radial-gradient(400px circle at ${50 + mousePos.x}% ${50 + mousePos.y}%, rgba(255,255,255,0.02) 0%, transparent 100%)`,
+          }}
+        />
+        <img 
+          src="/logo-real.png" 
+          alt="Vantum Chasis Background" 
+          className="w-[75%] max-w-[850px] object-contain opacity-[0.04] select-none pointer-events-none animate-v-giant filter contrast-125"
+        />
+      </div>
+
+      {/* 1. NAV BAR: CORREGIDA CON LA V EN PEQUEÑO EN LA ESQUINA SUPERIOR IZQUIERDA */}
       <nav className="border-b border-white/5 backdrop-blur-md bg-black/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
-          <a href="#" className="text-lg font-light tracking-[0.5em] uppercase text-white hover:opacity-70 transition-opacity">
-            VANTUM
+          
+          {/* Isotipo en miniatura bien puesto en lugar de la palabra repetida */}
+          <a href="#" className="flex items-center hover:opacity-70 transition-opacity">
+            <img src="/logo-real.png" alt="V" className="w-6 h-6 object-contain filter brightness-110" />
           </a>
+
           <div className="hidden md:flex items-center gap-12 text-[9px] font-mono tracking-[0.25em] uppercase text-white/40">
             <a href="#manifiesto" className="hover:text-white transition-colors">[ EL MANIFIESTO ]</a>
             <a href="#modelos" className="hover:text-white transition-colors">[ GORRAS DISPONIBLES ]</a>
@@ -342,9 +363,9 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* 2. HERO SECTOR */}
-      <header className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-16 pb-24">
-        <div className="space-y-10 max-w-4xl mx-auto flex flex-col items-center relative w-full">
+      {/* 2. HERO SECTOR: RE-ARQUITECTURADO CON LA FIRMA MONOLÍTICA CENTRAL EN PRIMER PLANO */}
+      <header className="relative min-h-[calc(100vh-20px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-10 pb-20">
+        <div className="space-y-12 max-w-4xl mx-auto flex flex-col items-center relative w-full">
           
           <div className="flex flex-wrap justify-center gap-2">
             <div className="inline-flex items-center gap-1.5 border border-red-500/20 bg-red-500/5 px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.2em] text-red-400 uppercase">
@@ -356,22 +377,34 @@ export default function Home() {
             </div>
           </div>
           
-          {/* LOGO HERO RESPONSIVO */}
-          <div 
-            onClick={handleLogoClick}
-            className="py-6 cursor-crosshair relative z-20 transition-transform duration-500 ease-out flex items-center justify-center group"
-            style={{ transform: `translate(${mousePos.x}px, ${mousePos.y}px)` }}
-          >
-            <div className="absolute w-[250px] h-[250px] md:w-[400px] md:h-[400px] bg-radial-gradient from-red-950/20 via-transparent to-transparent blur-[70px] pointer-events-none z-0 opacity-80" style={{ backgroundImage: "radial-gradient(circle, rgba(139,30,30,0.15) 0%, transparent 70%)" }} />
+          {/* NUEVO BLOQUE: FIRMA MONOLÍTICA MONUMENTAL (V + VANTUM + LEMAS SIEMPRE JUNTOS) */}
+          <div className="flex flex-col items-center space-y-5 relative z-10">
+            {/* El Isotipo Central con escala responsiva e interacción limpia */}
+            <div 
+              onClick={handleLogoClick}
+              className="cursor-crosshair flex items-center justify-center group"
+            >
+              <img 
+                src="/logo-real.png" 
+                alt="Vantum Logo" 
+                className="w-24 h-24 md:w-32 md:h-32 object-contain opacity-[0.98] select-none pointer-events-none filter drop-shadow-[0_0_30px_rgba(255,255,255,0.08)] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+              />
+            </div>
             
-            <img 
-              src="/logo-real.png" 
-              alt="Vantum Logo Original" 
-              className="w-36 h-36 md:w-52 md:h-52 object-contain opacity-95 select-none pointer-events-none filter drop-shadow-[0_0_35px_rgba(255,255,255,0.06)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-            />
+            {/* El Nombre de la Marca abajo de la V siempre, con tracking de alta gama */}
+            <h2 className="text-xl md:text-2xl font-extralight tracking-[0.75em] text-white uppercase pl-[0.75em] select-none">
+              VANTUM
+            </h2>
+            
+            {/* Los dos lemas identitarios en mono incorporados de forma indisoluble al bloque */}
+            <div className="flex items-center gap-4 font-mono text-[8px] md:text-[9px] tracking-[0.25em] text-white/30 uppercase select-none">
+              <span className="font-semibold text-white/50">BUILD WITH PURPOSE</span>
+              <span className="text-white/10">|</span>
+              <span className="text-red-500/40">NOT FOR EVERYONE</span>
+            </div>
           </div>
 
-          <div className="space-y-5 max-w-2xl mx-auto">
+          <div className="space-y-5 max-w-2xl mx-auto relative z-10 pt-2">
             <h1 className="font-mono text-xs md:text-sm text-white tracking-[0.35em] uppercase font-bold">
               CONFECCIÓN URBANA PESADA DE ALTA DENSIDAD
             </h1>
@@ -381,7 +414,7 @@ export default function Home() {
           </div>
 
           {/* LOGÍSTICA INDEX DE MATERIALES */}
-          <div className="pt-2 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-2xl font-mono text-[9px] tracking-widest uppercase text-white/30">
+          <div className="pt-2 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-2xl font-mono text-[9px] tracking-widest uppercase text-white/30 relative z-10">
             <div className="p-2 border border-white/5 bg-[#030303]/20 rounded-sm">
               <span className="text-white/60 block mb-0.5">// TEXTIL REFORZADO</span>
               GABARDINA 8OZ: 100%
@@ -402,7 +435,7 @@ export default function Home() {
         </div>
 
         {/* TIME COUNTER */}
-        <div id="reloj-drop" className="mt-16 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm">
+        <div id="reloj-drop" className="mt-16 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm z-10">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-black px-2.5 font-mono text-[8px] tracking-[0.25em] text-red-500 uppercase font-medium animate-pulse">
             // [ SISTEMA EN ESPERA DE LANZAMIENTO GENERAL ]
           </div>
@@ -433,14 +466,14 @@ export default function Home() {
         </div>
 
         {/* REGISTRO OPERACIONAL */}
-        <div className="mt-8 font-mono text-[9px] tracking-[0.15em] text-white/30 uppercase select-none">
+        <div className="mt-8 font-mono text-[9px] tracking-[0.15em] text-white/30 uppercase select-none z-10">
           ÚLTIMO REGISTRO DE CONEXIÓN: [{currentDateTime || "PROCESANDO..."}] vía Mendoza_Node_02
         </div>
-        <div className="mt-2 font-mono text-[9px] tracking-[0.15em] text-red-500/40 uppercase select-none">
+        <div className="mt-2 font-mono text-[9px] tracking-[0.15em] text-red-500/40 uppercase select-none z-10">
           [ ESTADO DEL SERVIDOR: {onlineUsers} OPERATORES ONLINE EN EL NODO ]
         </div>
 
-        <div className="mt-12">
+        <div className="mt-12 z-10">
           <a href="#modelos" className="border border-white bg-white text-black px-8 h-11 flex items-center justify-center font-mono text-[9px] tracking-[0.25em] uppercase hover:bg-transparent hover:text-white transition-all duration-300 rounded-sm font-medium">
             VER PIEZAS DISPONIBLES
           </a>
@@ -455,12 +488,12 @@ export default function Home() {
             className="text-lg md:text-2xl tracking-wide leading-relaxed text-white transition-all duration-300 ease-out text-center"
             style={{ fontWeight: fontWeight }}
           >
-            No diseñamos accesorios. Construimos bloques estructurales de uso diario. Cada pieza responde a un control estricto de moldería urbana y simetría textil absoluta. VANTUM is the response to market saturation.
+            No diseñamos accesorios. Construimos bloques estructurales de uso diario. Cada pieza responde a un control estricto de moldería urbana y simetría textil absoluta. VANTUM es la respuesta técnica a la saturación del mercado.
           </p>
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS (CON BOTONES REMOVIDOS PARA DETENER LA FRICCIÓN INTERNA) */}
+      {/* 4. SECCIÓN MODELOS */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-24 flex flex-col md:flex-row md:items-end md:justify-between border-b border-white/5 pb-6">
           <div>
@@ -542,21 +575,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* II. PORTAL MONUMENTAL CENTRAL DE RESERVA (CORREGIDO: MÁS GRANDE, MÁS PRESENCIA, ATRAPA EL TRÁFICO) */}
+      {/* II. PORTAL MONUMENTAL CENTRAL DE RESERVA */}
       <section id="bloque-captura" className="py-24 px-6 max-w-4xl mx-auto relative z-10 text-center">
-        {/* Contenedor ampliado y reforzado con una visual asfalto más pesada */}
         <div className="border border-red-500/30 bg-[#050505] p-10 md:p-16 space-y-6 rounded-sm shadow-2xl relative overflow-hidden group">
-          
           <div className="absolute inset-0 bg-radial-gradient from-red-950/5 via-transparent to-transparent pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(139,30,30,0.05) 0%, transparent 80%)" }} />
-
           <div className="font-mono text-[10px] md:text-[11px] text-red-500 uppercase tracking-[0.3em] font-medium animate-pulse">
             // INICIAR PROTOCOLO DE RESERVA CENTRAL
           </div>
-          
           <h2 className="text-xl md:text-2xl font-extralight tracking-widest text-white uppercase max-w-xl mx-auto leading-relaxed">
             REGISTRE SUS CREDENCIALES EN EL SERVIDOR CENTRAL PARA ASEGURAR CUOTA DE PRODUCCIÓN ANTES DEL CIERRE AUTOMÁTICO
           </h2>
-          
           <div className="pt-4 max-w-xl mx-auto">
             <button 
               onClick={executeGeneralReserve}
@@ -565,7 +593,6 @@ export default function Home() {
               {bioScanning ? bioText : "[ SOLICITAR ASIGNACIÓN DE PIEZA - BATCH 001 ]"}
             </button>
           </div>
-          
           <div className="font-mono text-[8px] tracking-widest text-white/20 uppercase pt-2">
             CUPO DEL LOTE DISPONIBLE: {100 - waitlistPercentage}% // ACCESO RESTRINGIDO
           </div>
