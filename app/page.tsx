@@ -15,7 +15,6 @@ export default function Home() {
   // LOGÍSTICA GENERAL DE INTERFAZ
   const [isMounted, setIsMounted] = useState(false);
   const [isDropActive, setIsDropActive] = useState(false);
-  const [isDescUnlocked, setIsDescUnlocked] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [onlineUsers, setOnlineUsers] = useState(7);
   const [currentDateTime, setCurrentDateTime] = useState("");
@@ -112,13 +111,10 @@ export default function Home() {
 
     // CRONÓMETRO DEL DROP
     const targetDate = new Date("2026-07-25T00:00:00").getTime();
-    const descUnlockDate = new Date("2026-07-23T00:00:00").getTime();
 
     const updateTimer = () => {
       const now = new Date().getTime();
       const difference = targetDate - now;
-
-      if (now >= descUnlockDate) { setIsDescUnlocked(true); } else { setIsDescUnlocked(false); }
 
       if (difference <= 0) {
         setTimeLeft({ days: "00", hours: "00", minutes: "00", seconds: "00" });
@@ -160,7 +156,7 @@ export default function Home() {
     };
   }, []);
 
-  // ANIMACIONES EXCLUSIVAS DEL CHASIS NATIVO
+  // ANIMACIONES NATIVAS
   useEffect(() => {
     if (typeof window !== "undefined" && !document.getElementById("vantum-core-styles")) {
       const stylesheet = document.createElement("style");
@@ -213,12 +209,12 @@ export default function Home() {
     if (bioScanning || bioSuccess) return;
 
     setBioScanning(true);
-    setBioText("ESCANEANDO IDENTIDAD...");
+    setBioText("ESCANEANDO CREDENCIAL...");
 
     setTimeout(() => {
-      setBioText("VERIFICANDO EN NODO...");
+      setBioText("COMPILANDO LOTE 001...");
       setTimeout(() => {
-        setBioText("ACCESO CONCEDIDO");
+        setBioText("ACCESO OTORGADO");
         setBioSuccess(true);
         setTimeout(() => {
           setBioScanning(false);
@@ -293,8 +289,8 @@ export default function Home() {
 
       {/* COORDENADAS FIJAS GLOBAL CORRE (MENDOZA BÚNKER DE DESARROLLO) */}
       <div className="fixed bottom-6 left-6 font-mono text-[8px] tracking-[0.2em] text-white/20 flex flex-col gap-0.5 z-50 select-none uppercase hidden md:flex">
-        <span>BÚNKER DE DISEÑO & ARQUITECTURA: MENDOZA, ARG</span>
-        <span>LOGÍSTICA DE DISTRIBUCIÓN: ENVÍOS GLOBALES ACTIVADOS</span>
+        <span>BÚNKER DE CONFECCIÓN & DISEÑO: MENDOZA, ARG</span>
+        <span>LOGÍSTICA DE DISTRIBUCIÓN: ENVÍOS A TODO EL PAÍS</span>
       </div>
 
       {/* 1. NAVEGACIÓN COMPACTA EN ESPAÑOL */}
@@ -305,21 +301,20 @@ export default function Home() {
           </a>
           <div className="hidden md:flex items-center gap-12 text-[9px] font-mono tracking-[0.25em] uppercase text-white/40">
             <a href="#manifiesto" className="hover:text-white transition-colors">[ EL MANIFIESTO ]</a>
-            <a href="#modelos" className="hover:text-white transition-colors">[ PIEZAS DISPONIBLES ]</a>
-            <a href="#especificaciones" className="hover:text-white transition-colors">[ PLANO TÉCNICO ]</a>
+            <a href="#modelos" className="hover:text-white transition-colors">[ GORRAS DISPONIBLES ]</a>
+            <a href="#especificaciones" className="hover:text-white transition-colors">[ MEDIDAS EXACTAS ]</a>
           </div>
           
-          {/* BOTÓN CON ACCIÓN REDIRECT CORREGIDA: SQUEEZE EL SCROLL DIRECTO AL CONTADOR DE LA LISTA DE ESPERA */}
           <button 
             onClick={() => document.getElementById("reloj-drop")?.scrollIntoView({ behavior: "smooth" })}
             className="border border-red-500/30 bg-red-500/5 px-4 py-2 text-[9px] font-mono tracking-[0.2em] uppercase text-red-400 rounded-sm hover:bg-red-500 hover:text-black transition-colors font-medium cursor-pointer"
           >
-            [ ACCESO RESTRINGIDO ]
+            [ ACCESO AL DROP ]
           </button>
         </div>
       </nav>
 
-      {/* 2. HERO SECTOR: RECONSTRUCCIÓN CON IDENTIDAD TEXTIL DE CULTO IMPONENTE */}
+      {/* 2. HERO SECTOR */}
       <header className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-16 pb-24">
         <div className="space-y-10 max-w-4xl mx-auto flex flex-col items-center relative w-full">
           
@@ -329,7 +324,7 @@ export default function Home() {
               EDICIÓN DE BARRIO 001
             </div>
             <div className="inline-flex items-center border border-white/10 bg-white/[0.02] px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.2em] text-white/50 uppercase">
-              LOTE LIMITADO // 30 PIEZAS
+              LOTE ÚNICO // 30 GORRAS
             </div>
           </div>
           
@@ -348,21 +343,41 @@ export default function Home() {
             />
           </div>
 
-          {/* BIENVENIDA MASIVA COMPLETADA: DESTRUYE LA CONFUSIÓN DE LA MARCA PARA CUALQUIER USUARIO */}
+          {/* TRADUCCIÓN DEL MENSAJE COMERCIAL URBANO: ELIMINA EL HUMO INDUSTRIAL ACADÉMICO */}
           <div className="space-y-4 max-w-2xl mx-auto animate-fade-up delay-300">
             <h1 className="font-mono text-xs md:text-sm text-white tracking-[0.35em] uppercase font-bold">
-              ESTUDIO DE ARQUITECTURA & INGENIERÍA TEXTIL COMPACTA
+              CONFECCIÓN URBANA PESADA DE ALTA PREMIUM
             </h1>
             <p className="font-mono text-[11px] md:text-xs text-white/50 tracking-[0.22em] uppercase leading-relaxed text-center">
-              Desarrollamos bloques estructurales de streetwear urbano de alta gama bajo un control estricto de geometría tridimensional. No diseñamos accesorios comerciales; confinamos colecciones numeradas de <span className="text-white font-bold">30 ejemplares únicos por lote</span>. Rigor de simetría simétrica en gabardina de 8 onzas pesada.
+              Armamos bloques de moldería rígida bajo un control estricto de simetría estructural. No hacemos ropa en masa; confinamos colecciones numeradas de <span className="text-white font-bold">30 piezas únicas por modelo</span> desarrolladas en gabardina de 8 onzas de máximo grosor. Estética de búnker ajustada a la calle.
             </p>
+          </div>
+
+          {/* NUEVA IDEA RELLENO: LOGÍSTICA DE MATERIALES EN TIEMPO REAL */}
+          <div className="pt-2 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-2xl font-mono text-[9px] tracking-widest uppercase text-white/30 animate-fade-up delay-300">
+            <div className="p-2 border border-white/5 bg-[#030303]/20 rounded-sm">
+              <span className="text-white/60 block mb-0.5">// TEXTIL REFORZADO</span>
+              GABARDINA 8OZ: 100%
+            </div>
+            <div className="p-2 border border-white/5 bg-[#030303]/20 rounded-sm">
+              <span className="text-white/60 block mb-0.5">// INYECCIÓN BORDADO</span>
+              HILO PREMIUM: ALMACENADO
+            </div>
+            <div className="p-2 border border-white/5 bg-[#030303]/20 rounded-sm">
+              <span className="text-white/60 block mb-0.5">// CONTORNO INTERNO</span>
+              ENTRETELA ALTA DEN: OK
+            </div>
+            <div className="p-2 border border-white/5 bg-[#030303]/20 rounded-sm">
+              <span className="text-red-400 block mb-0.5">// VOLUMEN DEL BATCH</span>
+              30 EJEMPLARES: CONFINADO
+            </div>
           </div>
         </div>
 
-        {/* TIME COUNTER CON CORRECCIÓN DE ESTADO CRÍTICO */}
-        <div id="reloj-drop" className="mt-20 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm animate-fade-up delay-400">
+        {/* TIME COUNTER CON CONTROL CRÓNICO EN ESPAÑOL DIRECTO */}
+        <div id="reloj-drop" className="mt-16 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm animate-fade-up delay-400">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-black px-2.5 font-mono text-[8px] tracking-[0.25em] text-red-500 uppercase font-medium animate-pulse">
-            // [ SISTEMA EN ESPAÑA DE ACTIVACIÓN CRONOLÓGICA ]
+            // [ SISTEMA EN ESPERA DE LANZAMIENTO GENERAL ]
           </div>
           
           <div className="grid grid-cols-4 gap-2 md:gap-6 font-mono select-none">
@@ -401,7 +416,7 @@ export default function Home() {
 
         <div className="mt-12 animate-fade-up delay-500">
           <a href="#modelos" className="border border-white bg-white text-black px-8 h-11 flex items-center justify-center font-mono text-[9px] tracking-[0.25em] uppercase hover:bg-transparent hover:text-white transition-all duration-300 rounded-sm font-medium">
-            VER PIEZAS CONFIDENCIALES
+            VER PIEZAS DISPONIBLES
           </a>
         </div>
       </header>
@@ -414,12 +429,12 @@ export default function Home() {
             className="text-lg md:text-2xl tracking-wide leading-relaxed text-white transition-all duration-300 ease-out text-center"
             style={{ fontWeight: fontWeight }}
           >
-            No diseñamos accesorios. Construimos bloques estructurales de uso diario. Cada pieza responde a un control estricto de geometría tridimensional y simetría textil absoluta. VANTUM es la respuesta técnica a la saturación urbana.
+            No diseñamos accesorios. Construimos bloques estructurales de uso diario. Cada pieza responde a un control estricto de moldería urbana y simetría textil absoluta. VANTUM es la respuesta técnica a la saturación del mercado.
           </p>
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS */}
+      {/* 4. SECCIÓN MODELOS COMPLEMENTADA CON DESBLOQUEO TEXTUAL DE FICHA */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-24 flex flex-col md:flex-row md:items-end md:justify-between border-b border-white/5 pb-6">
           <div>
@@ -429,7 +444,7 @@ export default function Home() {
           <div className="font-mono text-[10px] text-white/40 flex items-center gap-4 mt-4 md:mt-0">
             <span>TAMAÑO DEL LOTE: 30 UNIDADES</span>
             <span className="text-white/10">|</span>
-            <span>ESTADO: EN ESPERA</span>
+            <span>ESTADO: RETENIDO</span>
           </div>
         </div>
         
@@ -438,23 +453,21 @@ export default function Home() {
           {/* MODELO 01: OLIVE KHAKI */}
           <div className="relative border border-white/5 bg-[#040404]/60 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-white/10 rounded-sm md:-translate-y-4">
             <div className="overflow-hidden bg-[#090909] relative aspect-square flex items-center justify-center border border-white/5 rounded-sm">
-              <img src="/gorra-oliva.png" alt="Vantum Olive Khaki" className={`w-[80%] h-[80%] object-contain scale-95 transition-all duration-1000 select-none pointer-events-none ${isMounted && !isDropActive ? "blur-[4px] grayscale opacity-50 contrast-125" : ""}`} />
+              <img src="/gorra-oliva.png" alt="Vantum Olive Khaki" className="w-[80%] h-[80%] object-contain scale-95 transition-all duration-1000 select-none pointer-events-none blur-[4px] grayscale opacity-50 contrast-125" />
             </div>
             <div className="mt-8">
               <div className="flex items-center justify-between font-mono text-[9px] text-white/40 tracking-wider">
                 <span>SPEC // 01.OLV-KHK</span>
-                <span className="text-white/40 font-medium tracking-widest">
-                  {isDescUnlocked ? "// FICHA DISPONIBLE" : "// ARCHIVO RESTRINGIDO"}
+                <span className="text-green-500/50 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/10 tracking-widest text-[8px]">
+                  // FICHA ABIERTA
                 </span>
               </div>
               <h3 className="text-xl font-light tracking-widest uppercase mt-2.5 text-white/90">Olive Khaki</h3>
-              <div className="relative mt-4 min-h-[65px]">
-                <p className={`text-xs leading-relaxed font-light transition-all duration-1000 select-none text-justify ${isMounted && !isDescUnlocked ? "blur-[4px] opacity-5 pointer-events-none" : "text-white/60"}`}>
-                  Chasis estructural verde oliva profundo. Isotipo lineal en alto relieve beige desértico y vivo perimetral inferior a tono. Estética militarizada de alta precisión.
+              <div className="relative mt-4">
+                {/* DESBLOQUEO TOTAL DE LA DESCRIPCIÓN PARA GENERAR DESEO PRE-DROP */}
+                <p className="text-xs leading-relaxed font-light text-white/60 text-justify">
+                  Estructura rígida armada verde oliva profundo. Isotipo lineal frontal bordado en relieve desértico y vivo perimetral inferior a tono. Visera reforzada de alta resistencia.
                 </p>
-                {isMounted && !isDescUnlocked && (
-                  <span className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-[0.2em] text-white/40 bg-black/5 text-center font-medium">[ DATOS ENCRIPTADOS ]</span>
-                )}
               </div>
             </div>
             <div className="mt-8 flex flex-col gap-3 border-t border-white/5 pt-4 font-mono">
@@ -464,9 +477,9 @@ export default function Home() {
               </div>
               <button 
                 onClick={(e) => executeBiometricScan(e, "Olive Khaki")}
-                className={`uppercase text-center py-2.5 text-[9px] font-medium tracking-widest transition-all duration-300 rounded-sm font-mono border ${bioScanning && !bioSuccess ? "border-red-500/50 bg-red-950/20 text-red-400 animate-pulse cursor-wait" : bioSuccess ? "border-green-500 bg-green-500/10 text-green-400" : "border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500 hover:text-white"}`}
+                className="uppercase text-center py-2.5 text-[9px] font-medium tracking-widest transition-all duration-300 rounded-sm font-mono border border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500 hover:text-white"
               >
-                {bioScanning ? bioText : "[ UNIRSE A LA LISTA DE ESPERA ]"}
+                [ UNIRSE A LA LISTA DE ESPERA ]
               </button>
             </div>
           </div>
@@ -474,23 +487,20 @@ export default function Home() {
           {/* MODELO 02: CRIMSON STEALTH */}
           <div className="relative border border-white/5 bg-[#040404]/60 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-white/10 rounded-sm">
             <div className="overflow-hidden bg-[#090909] relative aspect-square flex items-center justify-center border border-white/5 rounded-sm">
-              <img src="/gorra-roja.png" alt="Vantum Crimson Stealth" className={`w-[80%] h-[80%] object-contain scale-95 transition-all duration-1000 select-none pointer-events-none ${isMounted && !isDropActive ? "blur-[4px] grayscale opacity-50 contrast-125" : ""}`} />
+              <img src="/gorra-roja.png" alt="Vantum Crimson Stealth" className="w-[80%] h-[80%] object-contain scale-95 transition-all duration-1000 select-none pointer-events-none blur-[4px] grayscale opacity-50 contrast-125" />
             </div>
             <div className="mt-8">
               <div className="flex items-center justify-between font-mono text-[9px] text-white/40 tracking-wider">
                 <span>SPEC // 02.CRMS-STL</span>
-                <span className="text-white/40 font-medium tracking-widest">
-                  {isDescUnlocked ? "// FICHA DISPONIBLE" : "// ARCHIVO RESTRINGIDO"}
+                <span className="text-green-500/50 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/10 tracking-widest text-[8px]">
+                  // FICHA ABIERTA
                 </span>
               </div>
               <h3 className="text-xl font-light tracking-widest uppercase mt-2.5 text-white/90">Crimson Stealth</h3>
-              <div className="relative mt-4 min-h-[65px]">
-                <p className={`text-xs leading-relaxed font-light transition-all duration-1000 select-none text-justify ${isMounted && !isDescUnlocked ? "blur-[4px] opacity-5 pointer-events-none" : "text-white/60"}`}>
-                  Contraste crítico de alta hostilidad. Gabardina negra pura con isotipo frontal y vivos perimetrales inyectados en hilo carmesí. Diseñada para romper el entorno urbano.
+              <div className="relative mt-4">
+                <p className="text-xs leading-relaxed font-light text-white/60 text-justify">
+                  Cuerpo rígido de gabardina negra pura de máxima densidad. Bordado frontal y líneas perimetrales inyectadas en hilo carmesí premium. Contraste urbano severo.
                 </p>
-                {isMounted && !isDescUnlocked && (
-                  <span className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-[0.2em] text-white/40 bg-black/5 text-center font-medium">[ DATOS ENCRYPTADOS ]</span>
-                )}
               </div>
             </div>
             <div className="mt-8 flex flex-col gap-3 border-t border-white/5 pt-4 font-mono">
@@ -500,9 +510,9 @@ export default function Home() {
               </div>
               <button 
                 onClick={(e) => executeBiometricScan(e, "Crimson Stealth")}
-                className={`uppercase text-center py-2.5 text-[9px] font-medium tracking-widest transition-all duration-300 rounded-sm font-mono border ${bioScanning && !bioSuccess ? "border-red-500/50 bg-red-950/20 text-red-400 animate-pulse cursor-wait" : bioSuccess ? "border-green-500 bg-green-500/10 text-green-400" : "border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500 hover:text-white"}`}
+                className="uppercase text-center py-2.5 text-[9px] font-medium tracking-widest transition-all duration-300 rounded-sm font-mono border border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500 hover:text-white"
               >
-                {bioScanning ? bioText : "[ UNIRSE A LA LISTA DE ESPERA ]"}
+                [ UNIRSE A LA LISTA DE ESPERA ]
               </button>
             </div>
           </div>
@@ -510,23 +520,20 @@ export default function Home() {
           {/* MODELO 03: ONYX GOLD */}
           <div className="relative border border-white/5 bg-[#040404]/60 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-white/10 rounded-sm md:translate-y-4">
             <div className="overflow-hidden bg-[#090909] relative aspect-square flex items-center justify-center border border-white/5 rounded-sm">
-              <img src="/gorra-oro.png" alt="Vantum Onyx Gold" className={`w-[80%] h-[80%] object-contain scale-95 transition-all duration-1000 select-none pointer-events-none ${isMounted && !isDropActive ? "blur-[4px] grayscale opacity-50 contrast-125" : ""}`} />
+              <img src="/gorra-oro.png" alt="Vantum Onyx Gold" className="w-[80%] h-[80%] object-contain scale-95 transition-all duration-1000 select-none pointer-events-none blur-[4px] grayscale opacity-50 contrast-125" />
             </div>
             <div className="mt-8">
               <div className="flex items-center justify-between font-mono text-[9px] text-white/40 tracking-wider">
                 <span>SPEC // 03.ONX-GLD</span>
-                <span className="text-white/40 font-medium tracking-widest">
-                  {isDescUnlocked ? "// FICHA DISPONIBLE" : "// ARCHIVO RESTRINGIDO"}
+                <span className="text-green-500/50 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/10 tracking-widest text-[8px]">
+                  // FICHA ABIERTA
                 </span>
               </div>
               <h3 className="text-xl font-light tracking-widest uppercase mt-2.5 text-white/90">Onyx Gold</h3>
-              <div className="relative mt-4 min-h-[65px]">
-                <p className={`text-xs leading-relaxed font-light transition-all duration-1000 select-none text-justify ${isMounted && !isDescUnlocked ? "blur-[4px] opacity-5 pointer-events-none" : "text-white/60"}`}>
-                  Rigor clásico de ingeniería. Base monocromática negra con bordado lineal heráldico en hilo de oro seleccionado. Máxima simetría y sobriedad industrial.
+              <div className="relative mt-4">
+                <p className="text-xs leading-relaxed font-light text-white/60 text-justify">
+                  Base monocromática negra azabache estructurada. Isotipo frontal lineal bordado con hilo metálico de oro seleccionado. Sobriedad total y calce profundo.
                 </p>
-                {isMounted && !isDescUnlocked && (
-                  <span className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-[0.2em] text-white/40 bg-black/5 text-center font-medium">[ DATOS ENCRIPTADOS ]</span>
-                )}
               </div>
             </div>
             <div className="mt-8 flex flex-col gap-3 border-t border-white/5 pt-4 font-mono">
@@ -536,9 +543,9 @@ export default function Home() {
               </div>
               <button 
                 onClick={(e) => executeBiometricScan(e, "Onyx Gold")}
-                className={`uppercase text-center py-2.5 text-[9px] font-medium tracking-widest transition-all duration-300 rounded-sm font-mono border ${bioScanning && !bioSuccess ? "border-red-500/50 bg-red-950/20 text-red-400 animate-pulse cursor-wait" : bioSuccess ? "border-green-500 bg-green-500/10 text-green-400" : "border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500 hover:text-white"}`}
+                className="uppercase text-center py-2.5 text-[9px] font-medium tracking-widest transition-all duration-300 rounded-sm font-mono border border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500 hover:text-white"
               >
-                {bioScanning ? bioText : "[ UNIRSE A LA LISTA DE ESPERA ]"}
+                [ UNIRSE A LA LISTA DE ESPERA ]
               </button>
             </div>
           </div>
@@ -546,62 +553,59 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. SECCIÓN ESPECIFICACIONES TÉCNICAS */}
+      {/* 5. SECCIÓN ESPECIFICACIONES TÉCNICAS (TOTALMENTE DESBLOQUEADA) */}
       <section id="especificaciones" className="py-32 bg-black relative z-10 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
             <p className="text-[9px] text-white/40 font-mono tracking-[0.25em] uppercase mb-2">// TECHNICAL CORE</p>
-            <h2 className="text-3xl font-extralight tracking-widest uppercase text-white">Geometría de Precisión</h2>
+            <h2 className="text-3xl font-extralight tracking-widest uppercase text-white">Moldería & Dimensiones</h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 font-mono text-xs text-white/40">
             <div className="space-y-8">
               <div className="border-l border-white/20 pl-6 space-y-3">
-                <p className="text-white/80 font-medium tracking-wider">// COMPOSICIÓN MATERIAL</p>
-                <p>Gabardina pesada de 8 onzas con tramado de alta torsión estructural. Resistencia garantizada a la abrasión urbana y pérdida de color por exposición UV prolongada.</p>
+                <p className="text-white/80 font-medium tracking-wider">// DETALLES DE CONFECCIÓN</p>
+                <p>Gabardina pesada de alta torsión estructural. Resistencia extrema al desgaste urbano y máxima durabilidad del color frente a la exposición solar directa.</p>
               </div>
               <div className="border-l border-white/20 pl-6 space-y-3">
-                <p className="text-white/80 font-medium tracking-wider">// ARQUITECTURA DEL CONTORNO</p>
-                <p>Paneles reforzados internamente con entretela termo-fusionada alemana. Visera plana con memoria elástica perimetral y costuras de alta tensión simétricas.</p>
+                <p className="text-white/80 font-medium tracking-wider">// PANEL INTERNO RÍGIDO</p>
+                <p>Paneles frontales reforzados con entretela termo-fusionada importada de alta densidad. Mantiene la forma rígida de la corona armada de forma permanente.</p>
               </div>
             </div>
 
             <div className="border border-white/5 bg-[#030303]/40 p-6 flex flex-col justify-between relative rounded-sm">
-              <div className="text-[8px] text-white/30 mb-4 tracking-[0.2em] uppercase">// METRIC SYSTEM & TOLERANCE</div>
-              <table className={`w-full text-left text-[11px] leading-relaxed transition-all duration-1000 ${isMounted && !isDescUnlocked ? "blur-[5px] opacity-5 pointer-events-none select-none" : ""}`}>
+              <div className="text-[8px] text-white/30 mb-4 tracking-[0.2em] uppercase">// GUÍA DE MEDIDAS DEL CONTORNO</div>
+              <table className="w-full text-left text-[11px] leading-relaxed">
                 <thead>
                   <tr className="border-b border-white/10 text-white/60">
                     <th className="pb-2 font-light tracking-wider">COMPONENTE</th>
                     <th className="pb-2 font-light tracking-wider text-right">DIMENSIÓN</th>
-                    <th className="pb-2 font-light tracking-wider text-right">TOLERANCIA</th>
+                    <th className="pb-2 font-light tracking-wider text-right">TIPO</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/[0.02]">
                   <tr>
                     <td className="py-2 text-white/40">Altura de Corona</td>
                     <td className="py-2 text-right text-white/70">11.5 cm</td>
-                    <td className="py-2 text-right text-white/30">± 0.05 mm</td>
+                    <td className="py-2 text-right text-white/40">Calce Profundo</td>
                   </tr>
                   <tr>
                     <td className="py-2 text-white/40">Ancho de Visera</td>
                     <td className="py-2 text-right text-white/70">18.0 cm</td>
-                    <td className="py-2 text-right text-white/30">± 0.02 mm</td>
+                    <td className="py-2 text-right text-white/40">Plana Estándar</td>
                   </tr>
                   <tr>
-                    <td className="py-2 text-white/40">Ángulo de Inyección</td>
-                    <td className="py-2 text-right text-white/70">180°C</td>
-                    <td className="py-2 text-right text-white/30">Fixed</td>
+                    <td className="py-2 text-white/40">Regulador Trasero</td>
+                    <td className="py-2 text-right text-white/70">Ajustable</td>
+                    <td className="py-2 text-right text-white/40">Hebilla Metálica</td>
                   </tr>
                   <tr>
                     <td className="py-2 text-white/40">Densidad de Costura</td>
                     <td className="py-2 text-right text-white/70">12 SPI</td>
-                    <td className="py-2 text-right text-white/30">Nominal</td>
+                    <td className="py-2 text-right text-white/40">Reforzada</td>
                   </tr>
                 </tbody>
               </table>
-              {isMounted && !isDescUnlocked && (
-                <div className="absolute inset-0 flex items-center justify-center font-mono text-[9px] tracking-widest text-white/40 uppercase text-center font-medium">[ PLANO BLOQUEADO ]</div>
-              )}
             </div>
           </div>
         </div>
