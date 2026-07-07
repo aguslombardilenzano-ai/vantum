@@ -61,7 +61,7 @@ export default function Home() {
     const progressRatio = Math.min(Math.max(elapsedDuration / totalDuration, 0), 1);
     setWaitlistPercentage(Math.floor(84 + (progressRatio * 12)));
 
-    // IDEA 1: SCRIPT FIREWALL CORREGIDO A EXACTAMENTE 2 SEGUNDOS DE MÁXIMO
+    // FASE 1: SCRIPT FIREWALL (2 SEGUNDOS MÁXIMO)
     const firewallDuration = 2000;
     const loaderTimeout = setTimeout(() => {
       setLoadingStep(1);
@@ -80,17 +80,15 @@ export default function Home() {
         }
       }, (firewallDuration - 800) / targetPass.length);
 
-      // TRANSICIÓN AL FLASH CINEMÁTICO (Fase 2) LUEGO DE LOS 2 SEGUNDOS
+      // TRANSICIÓN AL FLASH CINEMÁTICO (FASE 2)
       const gatewayTimeout = setTimeout(() => {
         setLoadingStep(2);
         
-        // Manejo secuencial del doble destello intermitente (Flash)
         setTimeout(() => setFlashActive(true), 1200);
         setTimeout(() => setFlashActive(false), 1450);
         setTimeout(() => setFlashActive(true), 1600);
         setTimeout(() => setFlashActive(false), 1850);
 
-        // Desbloqueo definitivo de la tienda
         setTimeout(() => {
           setLoadingStep(3);
         }, 3400);
@@ -151,10 +149,10 @@ export default function Home() {
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
         @keyframes brandOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.99); filter: blur(4px); } }
         @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100vh); } }
-        @keyframes vPulse { 0% { opacity: 0.03; transform: scale(1); } 50% { opacity: 0.08; transform: scale(1.008); } 100% { opacity: 0.03; transform: scale(1); } }
+        @keyframes vPulse { 0% { opacity: 0.03; transform: scale(1); } 50% { opacity: 0.08; transform: scale(1.005); } 100% { opacity: 0.03; transform: scale(1); } }
         @keyframes spinText { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .animate-fade-up { opacity: 0; animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-fade-in { opacity: 0; animation: fadeIn 1.4s ease-out forwards; }
+        .animate-fade-in { opacity: 0; animation: fadeIn 1.5s ease-out forwards; }
         .animate-brand-out { animation: brandOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) 3s forwards; }
         .animate-v-giant { animation: vPulse 10s ease-in-out infinite; }
         .animate-spin-text { animation: spinText 25s linear infinite; }
@@ -230,7 +228,7 @@ export default function Home() {
     );
   }
 
-  // INTRO FASE 1: SECURE FIREWALL (2 SEGUNDOS STRICT RE-CALIBRADOS)
+  // INTRO FASE 1: SECURE FIREWALL
   if (isMounted && loadingStep === 1) {
     return (
       <div className="min-h-screen bg-black font-mono flex flex-col justify-center items-center px-6 select-none relative">
@@ -264,13 +262,12 @@ export default function Home() {
     );
   }
 
-  // IDEA 2: NUEVA FASE 2 INTERMITENTE DE ALTA PERTENENCIA (LEMAS + SUPERPOSICIÓN DE MARCA FLASH)
+  // CORRECCIÓN FASE 2: ELEMENTOS DE IMPACTO CINEMÁTICO AL DOBLE DE SU TAMAÑO ORIGINAL
   if (isMounted && loadingStep === 2) {
     return (
       <div className={`min-h-screen transition-colors duration-75 flex flex-col justify-center items-center px-6 select-none animate-brand-out relative overflow-hidden ${flashActive ? "bg-white text-black" : "bg-black text-white"}`}>
         <div className="cctv-noise" />
         
-        {/* Capa de los Lemas que emerge primero de forma limpia */}
         {!flashActive && (
           <div className="space-y-2 font-mono text-[10px] md:text-[11px] tracking-[0.32em] text-white/40 uppercase text-center animate-fade-in">
             <p className="font-medium tracking-[0.35em] text-white/70">BUILD WITH PURPOSE</p>
@@ -278,17 +275,16 @@ export default function Home() {
           </div>
         )}
 
-        {/* El Estallido Intermitente: Fusión superpuesta de Isotipo Masivo + Nombre Grabado */}
         {flashActive && (
-          <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6 animate-[fadeIn_0.1s_ease-out_forwards]">
-            {/* V Laberinto blanca pura estallando detrás */}
+          <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6 animate-[fadeIn_0.05s_ease-out_forwards]">
+            {/* Isotipo laberinto duplicado en tamaño robusto */}
             <img 
               src="/logo-real.png" 
-              alt="VANTUM CORE FLASH" 
-              className="w-64 h-64 md:w-80 md:h-80 object-contain absolute opacity-100 filter invert tracking-widest"
+              alt="VANTUM CORE MASTER FLASH" 
+              className="w-[450px] h-[450px] md:w-[600px] md:h-[600px] object-contain absolute opacity-100 filter invert select-none"
             />
-            {/* Nombre cruzando en eje central superpuesto */}
-            <h2 className="text-3xl md:text-5xl font-black tracking-[0.8em] text-black uppercase pl-[0.8em] relative z-10 mix-blend-difference">
+            {/* Letras del titular escaladas al doble de su tamaño de jerarquía anterior */}
+            <h2 className="text-5xl md:text-8xl font-black tracking-[0.75em] text-black uppercase pl-[0.75em] relative z-10 mix-blend-difference select-none">
               VANTUM
             </h2>
           </div>
@@ -297,32 +293,41 @@ export default function Home() {
     );
   }
 
-  // FASE 3: TIENDA INTEGRAL DE NICHOS UNIFICADA
+  // FASE 3: TIENDA RUNNING
   return (
     <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden font-sans relative antialiased animate-fade-in">
       
       <div className="cctv-scanline" />
       <div className="cctv-noise" />
 
-      {/* RE-CALIBRACIÓN CROMÁTICA REC ACTIVADA */}
+      {/* RE-CALIBRACIÓN CROMÁTICA REC */}
       <div className="fixed top-6 right-6 font-mono text-[9px] tracking-[0.25em] text-white/30 flex items-center gap-2 z-50 select-none">
         <span className="w-1 h-1 bg-red-600 rounded-full animate-pulse" />
         <span>REC {cctvTime}</span>
       </div>
 
-      {/* METADATOS COMPILADOS EN EL BORDE */}
+      {/* METADATOS EN EL BORDE */}
       <div className="fixed bottom-6 left-6 font-mono text-[8px] tracking-[0.2em] text-white/20 flex flex-col gap-0.5 z-50 select-none uppercase hidden md:flex">
         <span>BÚNKER DE DISEÑO & DESARROLLO: MENDOZA, ARG</span>
         <span>LOGÍSTICA DE DISTRIBUCIÓN: ENVÍOS GLOBALES ACTIVADOS</span>
       </div>
 
-      {/* 1. NAV BAR: CORREGIDA CON LA V ROBUSTA w-12 Y LA MARCA EN LA ESQUINA */}
+      {/* DETECTOR DE CAPAS FIJO: LA V GIGANTE DE FONDO QUEDA FIJADA ESTRICTAMENTE DETRÁS DEL HERO */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden h-[100vh]">
+        <div className="absolute w-[350px] h-[350px] md:w-[650px] md:h-[650px] rounded-full bg-gradient-to-r from-red-950/15 via-transparent to-transparent blur-[130px] opacity-60 animate-pulse" />
+        <img 
+          src="/logo-real.png" 
+          alt="Vantum Giant Core Locked" 
+          className="w-[82%] max-w-[850px] object-contain opacity-10 select-none pointer-events-none animate-v-giant filter contrast-125"
+        />
+      </div>
+
+      {/* 1. NAV BAR */}
       <nav className="border-b border-white/5 backdrop-blur-md bg-black/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
           
-          {/* IDEA 3: Isotipo superior robusto + Nombre estirado a tono */}
           <a href="#" className="flex items-center gap-4 hover:opacity-75 transition-opacity select-none group">
-            <img src="/logo-real.png" alt="Vantum Isotipo" className="w-12 h-12 object-contain filter brightness-110" />
+            <img src="/logo-real.png" alt="Vantum Isotipo" className="w-10 h-10 object-contain filter brightness-110" />
             <span className="text-sm font-light tracking-[0.45em] uppercase text-white/90 pl-0.5">VANTUM</span>
           </a>
 
@@ -341,22 +346,11 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* 2. HERO SECTOR: LA V GIGANTE CONFINADA ESTRICTAMENTE AL HEADER + LA V CHICA SUBE 2.5x CON AISLAMIENTO VISUAL */}
+      {/* 2. HERO SECTOR: CORREGIDA LA ALINEACIÓN Y ESCALADO DE LA V CENTRAL A 2.5x EN CAJA DE FLEX CONCÉNTRICO INFLEXIBLE */}
       <header className="relative min-h-[calc(100vh-20px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-10 pb-20 overflow-hidden">
-        
-        {/* IDEA 5: Confinamiento estricto de la V gigante pulsante y el halo cálido en el Header */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
-          <div className="absolute w-[350px] h-[350px] md:w-[650px] md:h-[650px] rounded-full bg-gradient-to-r from-red-950/15 via-transparent to-transparent blur-[130px] opacity-60 animate-pulse" />
-          <img 
-            src="/logo-real.png" 
-            alt="Vantum Giant Core" 
-            className="w-[82%] max-w-[850px] object-contain opacity-10 select-none pointer-events-none animate-v-giant filter contrast-125"
-          />
-        </div>
-
-        <div className="space-y-6 max-w-4xl mx-auto flex flex-col items-center relative w-full z-10">
+        <div className="space-y-12 max-w-4xl mx-auto flex flex-col items-center relative w-full z-10">
           
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap justify-center gap-2 relative z-10">
             <div className="inline-flex items-center gap-1.5 border border-red-500/20 bg-red-500/5 px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.2em] text-red-400 uppercase crimson-glow">
               <span className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
               EDICIÓN DE BARRIO 001
@@ -366,14 +360,14 @@ export default function Home() {
             </div>
           </div>
           
-          {/* IDEA 4: AISLAMIENTO MÁXIMO (my-24) Y MULTIPLICACIÓN 2.5x DE LA FIRMA CENTRAL */}
-          <div className="flex flex-col items-center space-y-7 my-24 relative">
+          {/* CONTROL CONCÉNTRICO DE FIRMA MAESTRA (AISLAMIENTO RADIAL my-24 COMPILADO PERFECTO) */}
+          <div className="flex flex-col items-center space-y-7 my-24 relative w-full justify-center">
             
-            {/* Chasis de Certificación Esténcil Integrado (Anillo de metadatos circular rotativo espectral) */}
-            <div className="absolute -inset-10 flex items-center justify-center pointer-events-none opacity-20 hidden md:flex">
-              <svg className="w-64 h-64 animate-spin-text" viewBox="0 0 200 200">
+            {/* CORRECCIÓN DE ALINEACIÓN DEL ESTÉNCIL: Centrado matemático absoluto sobre el mismo eje concéntrico */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 hidden md:flex z-0">
+              <svg className="w-80 h-80 animate-spin-text" viewBox="0 0 200 200">
                 <path id="textPath" d="M 100, 100 m -75, 0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0" fill="none" />
-                <text className="font-mono text-[7px] tracking-[0.25em] fill-white uppercase">
+                <text className="font-mono text-[6.5px] tracking-[0.26em] fill-white uppercase">
                   <textPath href="#textPath">VANTUM TEXTILE ARCHITECTURE // BATCH 001 // VERIFIED NODO MENDOZA // </textPath>
                 </text>
               </svg>
@@ -381,13 +375,13 @@ export default function Home() {
 
             <div 
               onClick={handleLogoClick}
-              className="cursor-crosshair flex items-center justify-center group relative z-10"
+              className="cursor-crosshair flex items-center justify-center group relative z-10 w-full"
             >
-              {/* Isotipo central agigantado de 2 a 2.5 veces robusto */}
+              {/* CORRECCIÓN: LA V CENTRAL SE ESCALA A 2.5x DE FORMA INTRASPASABLE MEDIANTE h-48 e h-56 */}
               <img 
                 src="/logo-real.png" 
-                alt="Vantum Monolith Logo" 
-                className="w-36 h-36 md:w-44 md:h-44 object-contain opacity-[0.98] select-none pointer-events-none filter drop-shadow-[0_0_40px_rgba(255,255,255,0.09)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                alt="Vantum Monolith 2.5x Focus" 
+                className="w-48 h-48 md:w-56 md:h-56 object-contain opacity-[0.98] select-none pointer-events-none filter drop-shadow-[0_0_40px_rgba(255,255,255,0.09)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
               />
             </div>
             
@@ -395,7 +389,6 @@ export default function Home() {
               VANTUM
             </h2>
             
-            {/* IDEA 6: THE CRIMSON BOOST (Refracción analógica láser en el color rojo de los lemas) */}
             <div className="flex items-center gap-4 font-mono text-[8px] md:text-[9px] tracking-[0.25em] uppercase select-none relative z-10">
               <span className="font-semibold text-white/50">BUILD WITH PURPOSE</span>
               <span className="text-white/10">|</span>
@@ -403,7 +396,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="space-y-5 max-w-2xl mx-auto relative z-10">
+          <div className="space-y-5 max-w-2xl mx-auto relative z-10 pt-2">
             <h1 className="font-mono text-xs md:text-sm text-white tracking-[0.35em] uppercase font-bold">
               CONFECCIÓN URBANA PESADA DE ALTA DENSIDAD
             </h1>
@@ -412,7 +405,7 @@ export default function Home() {
             </p>
           </div>
 
-          {/* FILETES TÉCNICOS: ENMARCAN LAS MÉTRICAS INFERIORES */}
+          {/* FILETES TÉCNICOS */}
           <div className="pt-4 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-2xl font-mono text-[9px] tracking-widest uppercase text-white/30 relative z-10 border-t border-b border-white/5 py-4 bg-black/20 backdrop-blur-[1px]">
             <div className="px-2">
               <span className="text-white/50 block mb-0.5">// TEXTIL REFORZADO</span>
@@ -433,7 +426,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* TIME COUNTER CON CRIMSON REFRACCIÓN */}
+        {/* TIME COUNTER */}
         <div id="reloj-drop" className="mt-16 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm z-10">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-black px-2.5 font-mono text-[8px] tracking-[0.25em] text-[#e12a2a] uppercase font-medium animate-pulse crimson-glow">
             // [ SISTEMA EN ESPERA DE LANZAMIENTO GENERAL ]
@@ -478,17 +471,17 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 3. SECCIÓN MANIFIESTO: IDEA 7 CORREGIDA (TOTALMENTE ESTÁTICA Y UNIFICADA EN SANS-SERIF INDUSTRIAL TÉCNICA) */}
+      {/* 3. SECCIÓN MANIFIESTO: UNIFICADA SANS-SERIF INDUSTRIAL LIMPIA (CORREGIDO SIN ITÁLICAS NI ADORNOS RATAS) */}
       <section id="manifiesto" className="py-36 border-y border-white/5 relative z-10 px-6 bg-[#020202]/30 backdrop-blur-[2px]">
         <div className="max-w-3xl mx-auto text-center space-y-6">
           <p className="font-mono text-[9px] text-white/40 tracking-[0.32em] uppercase tracking-widest">// PHILOSOPHY & IDENTITY</p>
-          <p className="text-lg md:text-xl font-light tracking-wide leading-relaxed text-white/80 font-sans uppercase tracking-wider text-center px-4">
+          <p className="text-base md:text-lg font-light tracking-[0.18em] leading-relaxed text-white/80 font-sans uppercase text-center px-4">
             No diseñamos accesorios ordinarios. Construimos bloques estructurales rígidos para el uso diario. Cada pieza responde a un control estricto de moldería urbana y simetría textil absoluta. VANTUM es la respuesta técnica a la saturación del mercado contemporáneo.
           </p>
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS */}
+      {/* 4. SECCIÓN MODELOS: DESCRIPCIONES REALISTAS DE TALLER SIN HUMO EXTTRANJERO */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-24 flex flex-col md:flex-row md:items-end md:justify-between border-b border-white/5 pb-6">
           <div>
@@ -570,7 +563,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* II. PORTAL MONUMENTAL CENTRAL DE RESERVA: IDEA 8 IDIOMA CALLE DIGERIBLE */}
+      {/* II. PORTAL MONUMENTAL CENTRAL DE RESERVA */}
       <section id="bloque-captura" className="py-24 px-6 max-w-4xl mx-auto relative z-10 text-center">
         <div className="border border-red-500/30 bg-[#050505] p-10 md:p-16 space-y-6 rounded-sm shadow-2xl relative overflow-hidden group">
           <div className="absolute inset-0 bg-radial-gradient from-red-950/5 via-transparent to-transparent pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(139,30,30,0.05) 0%, transparent 80%)" }} />
@@ -598,7 +591,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. SECCIÓN MEDIDAS */}
+      {/* 5. SECCIÓN MEDIDAS: REALISTA DE TALLER SIN HUMO DE TOLERANCIAS IMPOSIBLES */}
       <section id="especificaciones" className="py-32 bg-black relative z-10 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
@@ -610,22 +603,22 @@ export default function Home() {
             <div className="space-y-8">
               <div className="border-l border-white/20 pl-6 space-y-3">
                 <p className="text-white/80 font-medium tracking-wider">// DETALLES DE CONFECCIÓN</p>
-                <p>Gabardina pesada de alta torsión de hilos. Máxima resistencia al roce del uso diario y protección de color certificada.</p>
+                <p>Gabardina de 8 onzas tejida a alta torsión de hilos. Ofrece la máxima resistencia al roce del uso diario y firmeza del color.</p>
               </div>
               <div className="border-l border-white/20 pl-6 space-y-3">
                 <p className="text-white/80 font-medium tracking-wider">// PANEL INTERNO RÍGIDO</p>
-                <p>Paneles frontales estructurados mediante fusión térmica alemana. Evita la deformación de la corona a largo plazo.</p>
+                <p>Paneles frontales estructurados mediante entretela fusionada a presión térmica. Mantiene la rigidez de la corona armada permanente.</p>
               </div>
             </div>
 
             <div className="border border-white/5 bg-[#030303]/40 p-6 flex flex-col justify-between relative rounded-sm">
-              <div className="text-[8px] text-white/30 mb-4 tracking-[0.2em] uppercase">// INDICE DE ESPECIFICACIONES TEXTILES</div>
+              <div className="text-[8px] text-white/30 mb-4 tracking-[0.2em] uppercase">// ÍNDICE DE ESPECIFICACIONES TEXTILES REALES</div>
               <table className="w-full text-left text-[11px] leading-relaxed">
                 <thead>
                   <tr className="border-b border-white/10 text-white/60">
                     <th className="pb-2 font-light tracking-wider">COMPONENTE</th>
                     <th className="pb-2 font-light tracking-wider text-right">DIMENSIÓN</th>
-                    <th className="pb-2 font-light tracking-wider text-right">ESTÁNDAR COLD</th>
+                    <th className="pb-2 font-light tracking-wider text-right">ESTÁNDAR GENERAL</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/[0.02]">
@@ -642,12 +635,12 @@ export default function Home() {
                   <tr>
                     <td className="py-2 text-white/40">Regulador Trasero</td>
                     <td className="py-2 text-right text-white/70">Ajustable</td>
-                    <td className="py-2 text-right text-white/50">Cierre de Presión / Polímero de Alta Tensión</td>
+                    <td className="py-2 text-right text-white/50">Hebilla de Ajuste Inyectada</td>
                   </tr>
                   <tr>
                     <td className="py-2 text-white/40">Densidad de Costura</td>
                     <td className="py-2 text-right text-white/70">12 SPI</td>
-                    <td className="py-2 text-right text-white/50">Filamento de Alta Torsión Reforzado</td>
+                    <td className="py-2 text-right text-white/50">Costura de Tensión Reforzada</td>
                   </tr>
                 </tbody>
               </table>
