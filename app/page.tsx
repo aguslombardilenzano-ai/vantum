@@ -80,7 +80,7 @@ export default function Home() {
         }
       }, (firewallDuration - 800) / targetPass.length);
 
-      // TRANSICIÓN AL FLASH CINEMÁTICO (FASE 2)
+      // TRANSICIÓN AL FLASH CINEMÁTICO (FASE 2) LUEGO DE LOS 2 SEGUNDOS
       const gatewayTimeout = setTimeout(() => {
         setLoadingStep(2);
         
@@ -150,18 +150,11 @@ export default function Home() {
         @keyframes brandOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.99); filter: blur(4px); } }
         @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100vh); } }
         @keyframes vPulse { 0% { opacity: 0.03; transform: scale(1); } 50% { opacity: 0.08; transform: scale(1.005); } 100% { opacity: 0.03; transform: scale(1); } }
-        @keyframes spinText { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .animate-fade-up { opacity: 0; animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .animate-fade-in { opacity: 0; animation: fadeIn 1.5s ease-out forwards; }
         .animate-brand-out { animation: brandOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) 3s forwards; }
         .animate-v-giant { animation: vPulse 10s ease-in-out infinite; }
-        .animate-spin-text { animation: spinText 25s linear infinite; }
         .crimson-glow { filter: drop-shadow(0 0 8px rgba(225, 42, 42, 0.45)); }
-        .delay-100 { animation-delay: 150ms; }
-        .delay-200 { animation-delay: 300ms; }
-        .delay-300 { animation-delay: 450ms; }
-        .delay-400 { animation-delay: 600ms; }
-        .delay-500 { animation-delay: 750ms; }
         .cctv-scanline { position: fixed; top: 0; left: 0; width: 100%; h-full: 2px; background: rgba(255,255,255,0.012); pointer-events: none; z-index: 99; animation: scanline 5s linear infinite; }
         .cctv-noise { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.90' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.012'/%3E%3C/svg%3E"); pointer-events: none; z-index: 98; }
       `;
@@ -262,7 +255,7 @@ export default function Home() {
     );
   }
 
-  // CORRECCIÓN FASE 2: ELEMENTOS DE IMPACTO CINEMÁTICO AL DOBLE DE SU TAMAÑO ORIGINAL
+  // FASE 2: ELEMENTOS DE IMPACTO CINEMÁTICA DOBLE TAMAÑO
   if (isMounted && loadingStep === 2) {
     return (
       <div className={`min-h-screen transition-colors duration-75 flex flex-col justify-center items-center px-6 select-none animate-brand-out relative overflow-hidden ${flashActive ? "bg-white text-black" : "bg-black text-white"}`}>
@@ -277,13 +270,11 @@ export default function Home() {
 
         {flashActive && (
           <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6 animate-[fadeIn_0.05s_ease-out_forwards]">
-            {/* Isotipo laberinto duplicado en tamaño robusto */}
             <img 
               src="/logo-real.png" 
               alt="VANTUM CORE MASTER FLASH" 
               className="w-[450px] h-[450px] md:w-[600px] md:h-[600px] object-contain absolute opacity-100 filter invert select-none"
             />
-            {/* Letras del titular escaladas al doble de su tamaño de jerarquía anterior */}
             <h2 className="text-5xl md:text-8xl font-black tracking-[0.75em] text-black uppercase pl-[0.75em] relative z-10 mix-blend-difference select-none">
               VANTUM
             </h2>
@@ -293,7 +284,7 @@ export default function Home() {
     );
   }
 
-  // FASE 3: TIENDA RUNNING
+  // FASE 3: TIENDA RUNNING DESBLOQUEADA
   return (
     <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden font-sans relative antialiased animate-fade-in">
       
@@ -310,16 +301,6 @@ export default function Home() {
       <div className="fixed bottom-6 left-6 font-mono text-[8px] tracking-[0.2em] text-white/20 flex flex-col gap-0.5 z-50 select-none uppercase hidden md:flex">
         <span>BÚNKER DE DISEÑO & DESARROLLO: MENDOZA, ARG</span>
         <span>LOGÍSTICA DE DISTRIBUCIÓN: ENVÍOS GLOBALES ACTIVADOS</span>
-      </div>
-
-      {/* DETECTOR DE CAPAS FIJO: LA V GIGANTE DE FONDO QUEDA FIJADA ESTRICTAMENTE DETRÁS DEL HERO */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden h-[100vh]">
-        <div className="absolute w-[350px] h-[350px] md:w-[650px] md:h-[650px] rounded-full bg-gradient-to-r from-red-950/15 via-transparent to-transparent blur-[130px] opacity-60 animate-pulse" />
-        <img 
-          src="/logo-real.png" 
-          alt="Vantum Giant Core Locked" 
-          className="w-[82%] max-w-[850px] object-contain opacity-10 select-none pointer-events-none animate-v-giant filter contrast-125"
-        />
       </div>
 
       {/* 1. NAV BAR */}
@@ -346,8 +327,14 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* 2. HERO SECTOR: CORREGIDA LA ALINEACIÓN Y ESCALADO DE LA V CENTRAL A 2.5x EN CAJA DE FLEX CONCÉNTRICO INFLEXIBLE */}
+      {/* 2. HERO SECTOR */}
       <header className="relative min-h-[calc(100vh-20px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-10 pb-20 overflow-hidden">
+        
+        {/* Halo de luz cálida difusa de fondo que elimina la frialdad */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
+          <div className="absolute w-[350px] h-[350px] md:w-[650px] md:h-[650px] rounded-full bg-gradient-to-r from-red-950/15 via-transparent to-transparent blur-[130px] opacity-60 animate-pulse" />
+        </div>
+
         <div className="space-y-12 max-w-4xl mx-auto flex flex-col items-center relative w-full z-10">
           
           <div className="flex flex-wrap justify-center gap-2 relative z-10">
@@ -360,35 +347,32 @@ export default function Home() {
             </div>
           </div>
           
-          {/* CONTROL CONCÉNTRICO DE FIRMA MAESTRA (AISLAMIENTO RADIAL my-24 COMPILADO PERFECTO) */}
-          <div className="flex flex-col items-center space-y-7 my-24 relative w-full justify-center">
+          {/* LA V CENTRAL COMPLETAMENTE LIBERADA, ENMARCADA EN CORCHETES TÉCNICOS SÓLIDOS Y EQUILIBRADA A 2.5x VERDADEROS */}
+          <div className="flex items-center justify-center my-24 relative w-full gap-6 md:gap-10 select-none">
             
-            {/* CORRECCIÓN DE ALINEACIÓN DEL ESTÉNCIL: Centrado matemático absoluto sobre el mismo eje concéntrico */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 hidden md:flex z-0">
-              <svg className="w-80 h-80 animate-spin-text" viewBox="0 0 200 200">
-                <path id="textPath" d="M 100, 100 m -75, 0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0" fill="none" />
-                <text className="font-mono text-[6.5px] tracking-[0.26em] fill-white uppercase">
-                  <textPath href="#textPath">VANTUM TEXTILE ARCHITECTURE // BATCH 001 // VERIFIED NODO MENDOZA // </textPath>
-                </text>
-              </svg>
-            </div>
+            {/* Corchete Izquierdo */}
+            <span className="font-mono text-2xl md:text-4xl text-white/20 tracking-normal font-extralight select-none select-none">[</span>
 
             <div 
               onClick={handleLogoClick}
-              className="cursor-crosshair flex items-center justify-center group relative z-10 w-full"
+              className="cursor-crosshair flex items-center justify-center group relative z-10"
             >
-              {/* CORRECCIÓN: LA V CENTRAL SE ESCALA A 2.5x DE FORMA INTRASPASABLE MEDIANTE h-48 e h-56 */}
               <img 
                 src="/logo-real.png" 
-                alt="Vantum Monolith 2.5x Focus" 
-                className="w-48 h-48 md:w-56 md:h-56 object-contain opacity-[0.98] select-none pointer-events-none filter drop-shadow-[0_0_40px_rgba(255,255,255,0.09)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                alt="Vantum Monolith 2.5x Absolute Size" 
+                className="w-48 h-48 md:w-56 md:h-56 object-contain opacity-[0.98] filter drop-shadow-[0_0_40px_rgba(255,255,255,0.09)] transition-transform duration-700 ease-out group-hover:scale-[1.02]"
               />
             </div>
-            
+
+            {/* Corchete Derecho */}
+            <span className="font-mono text-2xl md:text-4xl text-white/20 tracking-normal font-extralight select-none select-none">]</span>
+          </div>
+
+          {/* FIRMA DE NOMBRE DE LA MARCA */}
+          <div className="flex flex-col items-center space-y-4">
             <h2 className="text-2xl md:text-3xl font-extralight tracking-[0.75em] text-white uppercase pl-[0.75em] select-none relative z-10">
               VANTUM
             </h2>
-            
             <div className="flex items-center gap-4 font-mono text-[8px] md:text-[9px] tracking-[0.25em] uppercase select-none relative z-10">
               <span className="font-semibold text-white/50">BUILD WITH PURPOSE</span>
               <span className="text-white/10">|</span>
@@ -396,13 +380,27 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="space-y-5 max-w-2xl mx-auto relative z-10 pt-2">
-            <h1 className="font-mono text-xs md:text-sm text-white tracking-[0.35em] uppercase font-bold">
-              CONFECCIÓN URBANA PESADA DE ALTA DENSIDAD
-            </h1>
-            <p className="font-mono text-[11px] md:text-xs text-white/50 tracking-[0.22em] uppercase leading-relaxed text-center">
-              Armamos bloques de moldería rígida bajo un control estricto de simetría estructural. No hacemos ropa en masa; confinamos colecciones numeradas de <span className="text-white font-bold">30 gorras exclusivas por modelo</span> desarrolladas en gabardina de 8 onzas de máximo grosor. Estética de búnker ajustada a la calle.
-            </p>
+          {/* AJUSTE CLAVE: LA V GIGANTE PULSANTE SE POSICIONA ESPECÍFICAMENTE ATRÁS DEL TEXTO DE PRESENTACIÓN, EL PRIMERO */}
+          <div className="w-full max-w-2xl mx-auto relative py-12 px-4 group">
+            
+            {/* Contenedor absoluto de la V gigante, centrado exactamente detrás de este párrafo */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
+              <img 
+                src="/logo-real.png" 
+                alt="Vantum Presentation Background Core" 
+                className="w-[85%] max-w-[500px] object-contain opacity-[0.09] animate-v-giant filter contrast-125 select-none"
+              />
+            </div>
+
+            {/* El Bloque de Texto de Presentación en Primer Plano */}
+            <div className="space-y-5 relative z-10 select-none">
+              <h1 className="font-mono text-xs md:text-sm text-white tracking-[0.35em] uppercase font-bold">
+                CONFECCIÓN URBANA PESADA DE ALTA DENSIDAD
+              </h1>
+              <p className="font-mono text-[11px] md:text-xs text-white/70 tracking-[0.22em] uppercase leading-relaxed text-center">
+                Armamos bloques de moldería rígida bajo un control estricto de simetría estructural. No hacemos ropa en masa; confinamos colecciones numeradas de <span className="text-white font-bold">30 gorras exclusivas por modelo</span> desarrolladas en gabardina de 8 onzas de máximo grosor. Estética de búnker ajustada a la calle.
+              </p>
+            </div>
           </div>
 
           {/* FILETES TÉCNICOS */}
@@ -471,7 +469,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 3. SECCIÓN MANIFIESTO: UNIFICADA SANS-SERIF INDUSTRIAL LIMPIA (CORREGIDO SIN ITÁLICAS NI ADORNOS RATAS) */}
+      {/* 3. SECCIÓN MANIFIESTO */}
       <section id="manifiesto" className="py-36 border-y border-white/5 relative z-10 px-6 bg-[#020202]/30 backdrop-blur-[2px]">
         <div className="max-w-3xl mx-auto text-center space-y-6">
           <p className="font-mono text-[9px] text-white/40 tracking-[0.32em] uppercase tracking-widest">// PHILOSOPHY & IDENTITY</p>
@@ -481,7 +479,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS: DESCRIPCIONES REALISTAS DE TALLER SIN HUMO EXTTRANJERO */}
+      {/* 4. SECCIÓN MODELOS: TEXTOS FACHEROS Y REALISTAS SIN HUMO */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-24 flex flex-col md:flex-row md:items-end md:justify-between border-b border-white/5 pb-6">
           <div>
@@ -591,7 +589,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. SECCIÓN MEDIDAS: REALISTA DE TALLER SIN HUMO DE TOLERANCIAS IMPOSIBLES */}
+      {/* 5. SECCIÓN MEDIDAS: REALISTAS SIN HUMO IMPOSIBLE */}
       <section id="especificaciones" className="py-32 bg-black relative z-10 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
