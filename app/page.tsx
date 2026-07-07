@@ -15,14 +15,14 @@ export default function Home() {
   // LOGÍSTICA GENERAL DE INTERFAZ
   const [isMounted, setIsMounted] = useState(false);
   const [isDropActive, setIsDropActive] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [onlineUsers, setOnlineUsers] = useState(7);
   const [currentDateTime, setCurrentDateTime] = useState("");
 
-  // INTRO POR CONTRASEÑA Y SECUENCIA DE MARCA (0: Loader, 1: Firewall, 2: Intro Cinemática, 3: Web Unlocked)
+  // INTRO POR CONTRASEÑA Y SECUENCIA DE MARCA (0: Loader, 1: Firewall, 2: Intro Cinemática Flash, 3: Web Unlocked)
   const [loadingStep, setLoadingStep] = useState(0); 
   const [fakePassword, setFakePassword] = useState("");
   const [showFinalPhrase, setShowFinalPhrase] = useState(false);
+  const [flashActive, setFlashActive] = useState(false);
 
   // MECÁNICAS INTERACTIVAS COMPILADAS
   const [cctvTime, setCctvTime] = useState("00:00:00");
@@ -61,8 +61,8 @@ export default function Home() {
     const progressRatio = Math.min(Math.max(elapsedDuration / totalDuration, 0), 1);
     setWaitlistPercentage(Math.floor(84 + (progressRatio * 12)));
 
-    // SCRIPT CONTRASEÑA INTERFAZ - EXACTAMENTE 4 SEGUNDOS TOTALES
-    const introDuration = 4000;
+    // IDEA 1: SCRIPT FIREWALL CORREGIDO A EXACTAMENTE 2 SEGUNDOS DE MÁXIMO
+    const firewallDuration = 2000;
     const loaderTimeout = setTimeout(() => {
       setLoadingStep(1);
 
@@ -78,22 +78,32 @@ export default function Home() {
           clearInterval(passInterval);
           setShowFinalPhrase(true);
         }
-      }, (introDuration - 1500) / targetPass.length);
+      }, (firewallDuration - 800) / targetPass.length);
 
+      // TRANSICIÓN AL FLASH CINEMÁTICO (Fase 2) LUEGO DE LOS 2 SEGUNDOS
       const gatewayTimeout = setTimeout(() => {
         setLoadingStep(2);
+        
+        // Manejo secuencial del doble destello intermitente (Flash)
+        setTimeout(() => setFlashActive(true), 1200);
+        setTimeout(() => setFlashActive(false), 1450);
+        setTimeout(() => setFlashActive(true), 1600);
+        setTimeout(() => setFlashActive(false), 1850);
+
+        // Desbloqueo definitivo de la tienda
         setTimeout(() => {
           setLoadingStep(3);
-        }, 3200);
-      }, introDuration);
+        }, 3400);
+
+      }, firewallDuration);
 
       return () => {
         clearInterval(passInterval);
         clearTimeout(gatewayTimeout);
       };
-    }, 1000);
+    }, 800);
 
-    // CRONÓMETRO DINÁMICO
+    // CRONÓMETRO DEL DROP REAL (25 DE JULIO)
     const targetDate = new Date("2026-07-25T00:00:00").getTime();
 
     const updateTimer = () => {
@@ -123,38 +133,32 @@ export default function Home() {
     updateTimer();
     const intervalId = setInterval(updateTimer, 1000);
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const { innerWidth, innerHeight } = window;
-      const x = (e.clientX - innerWidth / 2) / 50;
-      const y = (e.clientY - innerHeight / 2) / 50;
-      setMousePos({ x, y });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-
     return () => {
       clearTimeout(loaderTimeout);
       clearInterval(timerInterval);
       clearInterval(intervalId);
-      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
-  // ANIMACIONES INTERNAS INYECTADAS
+  // ANIMACIONES INTERNAS AVANZADAS INYECTADAS
   useEffect(() => {
     if (typeof window !== "undefined" && !document.getElementById("vantum-core-styles")) {
       const stylesheet = document.createElement("style");
       stylesheet.id = "vantum-core-styles";
       stylesheet.innerHTML = `
         @keyframes loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(300%); } }
-        @keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px); filter: blur(5px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+        @keyframes fadeUp { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
-        @keyframes brandOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.98); filter: blur(5px); } }
+        @keyframes brandOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.99); filter: blur(4px); } }
         @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100vh); } }
-        @keyframes vPulse { 0% { opacity: 0.03; transform: scale(1); } 50% { opacity: 0.08; transform: scale(1.005); } 100% { opacity: 0.03; transform: scale(1); } }
-        .animate-fade-up { opacity: 0; animation: fadeUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-fade-in { opacity: 0; animation: fadeIn 1.5s ease-out forwards; }
-        .animate-brand-out { animation: brandOut 0.6s cubic-bezier(0.16, 1, 0.3, 1) 2.6s forwards; }
-        .animate-v-giant { animation: vPulse 11s ease-in-out infinite; }
+        @keyframes vPulse { 0% { opacity: 0.03; transform: scale(1); } 50% { opacity: 0.08; transform: scale(1.008); } 100% { opacity: 0.03; transform: scale(1); } }
+        @keyframes spinText { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .animate-fade-up { opacity: 0; animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-fade-in { opacity: 0; animation: fadeIn 1.4s ease-out forwards; }
+        .animate-brand-out { animation: brandOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) 3s forwards; }
+        .animate-v-giant { animation: vPulse 10s ease-in-out infinite; }
+        .animate-spin-text { animation: spinText 25s linear infinite; }
+        .crimson-glow { filter: drop-shadow(0 0 8px rgba(225, 42, 42, 0.45)); }
         .delay-100 { animation-delay: 150ms; }
         .delay-200 { animation-delay: 300ms; }
         .delay-300 { animation-delay: 450ms; }
@@ -226,7 +230,7 @@ export default function Home() {
     );
   }
 
-  // INTRO FASE 1: SECURE FIREWALL
+  // INTRO FASE 1: SECURE FIREWALL (2 SEGUNDOS STRICT RE-CALIBRADOS)
   if (isMounted && loadingStep === 1) {
     return (
       <div className="min-h-screen bg-black font-mono flex flex-col justify-center items-center px-6 select-none relative">
@@ -260,38 +264,47 @@ export default function Home() {
     );
   }
 
-  // FASE 2: INTRO CINEMÁTICA DE IDENTIDAD DE MARCA
+  // IDEA 2: NUEVA FASE 2 INTERMITENTE DE ALTA PERTENENCIA (LEMAS + SUPERPOSICIÓN DE MARCA FLASH)
   if (isMounted && loadingStep === 2) {
     return (
-      <div className="min-h-screen bg-black flex flex-col justify-center items-center px-6 select-none animate-brand-out relative overflow-hidden">
+      <div className={`min-h-screen transition-colors duration-75 flex flex-col justify-center items-center px-6 select-none animate-brand-out relative overflow-hidden ${flashActive ? "bg-white text-black" : "bg-black text-white"}`}>
         <div className="cctv-noise" />
-        <div className="space-y-8 flex flex-col items-center max-w-xl text-center">
-          <img 
-            src="/logo-real.png" 
-            alt="Vantum Isotipo" 
-            className="w-36 h-36 md:w-44 md:h-44 object-contain opacity-95 filter drop-shadow-[0_0_30px_rgba(255,255,255,0.05)] animate-fade-up"
-          />
-          <h2 className="text-2xl md:text-3xl font-extralight tracking-[0.65em] text-white uppercase pl-[0.65em] animate-fade-up delay-100">
-            VANTUM
-          </h2>
-          <div className="w-12 h-[1px] bg-white/20 animate-fade-up delay-200" />
-          <div className="space-y-2 font-mono text-[10px] md:text-[11px] tracking-[0.3em] text-white/40 uppercase">
-            <p className="animate-fade-up delay-300 font-medium tracking-[0.35em] text-white/60">BUILD WITH PURPOSE</p>
-            <p className="animate-fade-up delay-400 font-light text-red-500/50">NOT FOR EVERYONE</p>
+        
+        {/* Capa de los Lemas que emerge primero de forma limpia */}
+        {!flashActive && (
+          <div className="space-y-2 font-mono text-[10px] md:text-[11px] tracking-[0.32em] text-white/40 uppercase text-center animate-fade-in">
+            <p className="font-medium tracking-[0.35em] text-white/70">BUILD WITH PURPOSE</p>
+            <p className="font-light text-red-500/60 crimson-glow">NOT FOR EVERYONE</p>
           </div>
-        </div>
+        )}
+
+        {/* El Estallido Intermitente: Fusión superpuesta de Isotipo Masivo + Nombre Grabado */}
+        {flashActive && (
+          <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6 animate-[fadeIn_0.1s_ease-out_forwards]">
+            {/* V Laberinto blanca pura estallando detrás */}
+            <img 
+              src="/logo-real.png" 
+              alt="VANTUM CORE FLASH" 
+              className="w-64 h-64 md:w-80 md:h-80 object-contain absolute opacity-100 filter invert tracking-widest"
+            />
+            {/* Nombre cruzando en eje central superpuesto */}
+            <h2 className="text-3xl md:text-5xl font-black tracking-[0.8em] text-black uppercase pl-[0.8em] relative z-10 mix-blend-difference">
+              VANTUM
+            </h2>
+          </div>
+        )}
       </div>
     );
   }
 
-  // FASE 3: TIENDA COMPLETA EN ESPAÑOL DESBLOQUEADA
+  // FASE 3: TIENDA INTEGRAL DE NICHOS UNIFICADA
   return (
     <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden font-sans relative antialiased animate-fade-in">
       
       <div className="cctv-scanline" />
       <div className="cctv-noise" />
 
-      {/* RE-CALIBRACIÓN CROMÁTICA REC */}
+      {/* RE-CALIBRACIÓN CROMÁTICA REC ACTIVADA */}
       <div className="fixed top-6 right-6 font-mono text-[9px] tracking-[0.25em] text-white/30 flex items-center gap-2 z-50 select-none">
         <span className="w-1 h-1 bg-red-600 rounded-full animate-pulse" />
         <span>REC {cctvTime}</span>
@@ -303,25 +316,13 @@ export default function Home() {
         <span>LOGÍSTICA DE DISTRIBUCIÓN: ENVÍOS GLOBALES ACTIVADOS</span>
       </div>
 
-      {/* AJUSTE MAESTRO DE SIMETRÍA: LA V GIGANTE QUEDA CAPTURADA EN FLEXBOX CONTRÉNTRICO ABSOLUTO EN EL ENTORNO CERO */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden">
-        {/* Halo de luz cálida difusa de fondo que elimina la frialdad y suaviza los textos */}
-        <div className="absolute w-[350px] h-[350px] md:w-[650px] md:h-[650px] rounded-full bg-gradient-to-r from-red-950/10 via-transparent to-transparent blur-[120px] pointer-events-none opacity-60" style={{ backgroundImage: "radial-gradient(circle, rgba(139,30,30,0.11) 0%, transparent 75%)" }} />
-        
-        <img 
-          src="/logo-real.png" 
-          alt="Vantum Chasis Balanced Background" 
-          className="w-[82%] max-w-[850px] object-contain opacity-10 select-none pointer-events-none animate-v-giant filter contrast-[1.10]"
-        />
-      </div>
-
-      {/* 1. NAV BAR: AJUSTADO EL TAMAÑO DE LA ESQUINA SUPERIOR CON TEXTO ALINEADO */}
+      {/* 1. NAV BAR: CORREGIDA CON LA V ROBUSTA w-12 Y LA MARCA EN LA ESQUINA */}
       <nav className="border-b border-white/5 backdrop-blur-md bg-black/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
           
-          {/* Logo superior izquierdo corregido: Isotipo de escala robusta w-10 y tipografía estirada a tono */}
+          {/* IDEA 3: Isotipo superior robusto + Nombre estirado a tono */}
           <a href="#" className="flex items-center gap-4 hover:opacity-75 transition-opacity select-none group">
-            <img src="/logo-real.png" alt="Vantum Isotipo" className="w-10 h-10 object-contain filter brightness-110 transition-transform duration-500 group-hover:rotate-6" />
+            <img src="/logo-real.png" alt="Vantum Isotipo" className="w-12 h-12 object-contain filter brightness-110" />
             <span className="text-sm font-light tracking-[0.45em] uppercase text-white/90 pl-0.5">VANTUM</span>
           </a>
 
@@ -340,12 +341,23 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* 2. HERO SECTOR: LA V CHICA SUBE DE ESCALA A w-36 MD:w-44 PARA LOGRAR EL IMPACTO DOMINANTE */}
-      <header className="relative min-h-[calc(100vh-20px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-10 pb-20">
-        <div className="space-y-12 max-w-4xl mx-auto flex flex-col items-center relative w-full">
+      {/* 2. HERO SECTOR: LA V GIGANTE CONFINADA ESTRICTAMENTE AL HEADER + LA V CHICA SUBE 2.5x CON AISLAMIENTO VISUAL */}
+      <header className="relative min-h-[calc(100vh-20px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-10 pb-20 overflow-hidden">
+        
+        {/* IDEA 5: Confinamiento estricto de la V gigante pulsante y el halo cálido en el Header */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
+          <div className="absolute w-[350px] h-[350px] md:w-[650px] md:h-[650px] rounded-full bg-gradient-to-r from-red-950/15 via-transparent to-transparent blur-[130px] opacity-60 animate-pulse" />
+          <img 
+            src="/logo-real.png" 
+            alt="Vantum Giant Core" 
+            className="w-[82%] max-w-[850px] object-contain opacity-10 select-none pointer-events-none animate-v-giant filter contrast-125"
+          />
+        </div>
+
+        <div className="space-y-6 max-w-4xl mx-auto flex flex-col items-center relative w-full z-10">
           
-          <div className="flex flex-wrap justify-center gap-2 relative z-10">
-            <div className="inline-flex items-center gap-1.5 border border-red-500/20 bg-red-500/5 px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.2em] text-red-400 uppercase">
+          <div className="flex flex-wrap justify-center gap-2">
+            <div className="inline-flex items-center gap-1.5 border border-red-500/20 bg-red-500/5 px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.2em] text-red-400 uppercase crimson-glow">
               <span className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
               EDICIÓN DE BARRIO 001
             </div>
@@ -354,32 +366,44 @@ export default function Home() {
             </div>
           </div>
           
-          {/* FIRMA CENTRAL RE-CORREGIDA MASIVA */}
-          <div className="flex flex-col items-center space-y-6 relative z-10">
-            {/* El Isotipo Central sube drásticamente a un chasis dominante para mandar en la pantalla */}
+          {/* IDEA 4: AISLAMIENTO MÁXIMO (my-24) Y MULTIPLICACIÓN 2.5x DE LA FIRMA CENTRAL */}
+          <div className="flex flex-col items-center space-y-7 my-24 relative">
+            
+            {/* Chasis de Certificación Esténcil Integrado (Anillo de metadatos circular rotativo espectral) */}
+            <div className="absolute -inset-10 flex items-center justify-center pointer-events-none opacity-20 hidden md:flex">
+              <svg className="w-64 h-64 animate-spin-text" viewBox="0 0 200 200">
+                <path id="textPath" d="M 100, 100 m -75, 0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0" fill="none" />
+                <text className="font-mono text-[7px] tracking-[0.25em] fill-white uppercase">
+                  <textPath href="#textPath">VANTUM TEXTILE ARCHITECTURE // BATCH 001 // VERIFIED NODO MENDOZA // </textPath>
+                </text>
+              </svg>
+            </div>
+
             <div 
               onClick={handleLogoClick}
-              className="cursor-crosshair flex items-center justify-center group"
+              className="cursor-crosshair flex items-center justify-center group relative z-10"
             >
+              {/* Isotipo central agigantado de 2 a 2.5 veces robusto */}
               <img 
                 src="/logo-real.png" 
-                alt="Vantum Logo Focus" 
-                className="w-36 h-36 md:w-44 md:h-44 object-contain opacity-[0.98] select-none pointer-events-none filter drop-shadow-[0_0_45px_rgba(255,255,255,0.09)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                alt="Vantum Monolith Logo" 
+                className="w-36 h-36 md:w-44 md:h-44 object-contain opacity-[0.98] select-none pointer-events-none filter drop-shadow-[0_0_40px_rgba(255,255,255,0.09)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
               />
             </div>
             
-            <h2 className="text-2xl md:text-3xl font-extralight tracking-[0.75em] text-white uppercase pl-[0.75em] select-none">
+            <h2 className="text-2xl md:text-3xl font-extralight tracking-[0.75em] text-white uppercase pl-[0.75em] select-none relative z-10">
               VANTUM
             </h2>
             
-            <div className="flex items-center gap-4 font-mono text-[8px] md:text-[9px] tracking-[0.25em] text-white/30 uppercase select-none">
+            {/* IDEA 6: THE CRIMSON BOOST (Refracción analógica láser en el color rojo de los lemas) */}
+            <div className="flex items-center gap-4 font-mono text-[8px] md:text-[9px] tracking-[0.25em] uppercase select-none relative z-10">
               <span className="font-semibold text-white/50">BUILD WITH PURPOSE</span>
               <span className="text-white/10">|</span>
-              <span className="text-red-500/40">NOT FOR EVERYONE</span>
+              <span className="text-[#e12a2a] font-medium crimson-glow">NOT FOR EVERYONE</span>
             </div>
           </div>
 
-          <div className="space-y-5 max-w-2xl mx-auto relative z-10 pt-2">
+          <div className="space-y-5 max-w-2xl mx-auto relative z-10">
             <h1 className="font-mono text-xs md:text-sm text-white tracking-[0.35em] uppercase font-bold">
               CONFECCIÓN URBANA PESADA DE ALTA DENSIDAD
             </h1>
@@ -388,7 +412,7 @@ export default function Home() {
             </p>
           </div>
 
-          {/* FILETES TÉCNICOS: ENMARCAN LAS MÉTRICAS INFERIORES EN UNA RECIPIENTE DE PLANO DE PRODUCCIÓN */}
+          {/* FILETES TÉCNICOS: ENMARCAN LAS MÉTRICAS INFERIORES */}
           <div className="pt-4 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-2xl font-mono text-[9px] tracking-widest uppercase text-white/30 relative z-10 border-t border-b border-white/5 py-4 bg-black/20 backdrop-blur-[1px]">
             <div className="px-2">
               <span className="text-white/50 block mb-0.5">// TEXTIL REFORZADO</span>
@@ -403,15 +427,15 @@ export default function Home() {
               ENTRETELA ALTA DEN: OK
             </div>
             <div className="px-2 border-l border-white/5">
-              <span className="text-red-400 block mb-0.5">// VOLUMEN DEL BATCH</span>
+              <span className="text-[#e12a2a] font-medium block mb-0.5 crimson-glow">// VOLUMEN DEL BATCH</span>
               30 EJEMPLARES: LISTO
             </div>
           </div>
         </div>
 
-        {/* TIME COUNTER */}
+        {/* TIME COUNTER CON CRIMSON REFRACCIÓN */}
         <div id="reloj-drop" className="mt-16 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm z-10">
-          <div className="absolute top-0 left-6 -translate-y-1/2 bg-black px-2.5 font-mono text-[8px] tracking-[0.25em] text-red-500 uppercase font-medium animate-pulse">
+          <div className="absolute top-0 left-6 -translate-y-1/2 bg-black px-2.5 font-mono text-[8px] tracking-[0.25em] text-[#e12a2a] uppercase font-medium animate-pulse crimson-glow">
             // [ SISTEMA EN ESPERA DE LANZAMIENTO GENERAL ]
           </div>
           
@@ -430,8 +454,7 @@ export default function Home() {
             </div>
             <div>
               <div 
-                className="text-3xl md:text-5xl font-normal tracking-tight text-[#c23232] tabular-nums relative"
-                style={{ textShadow: "0 0 12px rgba(194, 50, 50, 0.35)" }}
+                className="text-3xl md:text-5xl font-normal tracking-tight text-[#e12a2a] tabular-nums relative crimson-glow"
               >
                 {timeLeft.seconds}
               </div>
@@ -444,7 +467,7 @@ export default function Home() {
         <div className="mt-8 font-mono text-[9px] tracking-[0.15em] text-white/30 uppercase select-none z-10">
           ÚLTIMO REGISTRO DE CONEXIÓN: [{currentDateTime || "PROCESANDO..."}] vía Mendoza_Node_02
         </div>
-        <div className="mt-2 font-mono text-[9px] tracking-[0.15em] text-red-500/40 uppercase select-none z-10">
+        <div className="mt-2 font-mono text-[9px] tracking-[0.15em] text-[#e12a2a]/50 uppercase select-none z-10 crimson-glow">
           [ ESTADO DEL SERVIDOR: {onlineUsers} OPERATORES ONLINE EN EL NODO ]
         </div>
 
@@ -455,12 +478,12 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 3. SECCIÓN MANIFIESTO: ESTÁTICO CON TIPOGRAFÍA REFINADA, LIMPIDO Y CON UN TONO DE CALIDAD ABOLUTA */}
+      {/* 3. SECCIÓN MANIFIESTO: IDEA 7 CORREGIDA (TOTALMENTE ESTÁTICA Y UNIFICADA EN SANS-SERIF INDUSTRIAL TÉCNICA) */}
       <section id="manifiesto" className="py-36 border-y border-white/5 relative z-10 px-6 bg-[#020202]/30 backdrop-blur-[2px]">
         <div className="max-w-3xl mx-auto text-center space-y-6">
           <p className="font-mono text-[9px] text-white/40 tracking-[0.32em] uppercase tracking-widest">// PHILOSOPHY & IDENTITY</p>
-          <p className="text-xl md:text-2xl font-light tracking-wide leading-relaxed text-white/90 font-serif italic text-center px-4">
-            "No diseñamos accesorios ordinarios. Construimos bloques estructurales rígidos para el uso diario. Cada pieza responde a un control estricto de moldería urbana y simetría textil absoluta. VANTUM es la respuesta técnica a la saturación del mercado contemporáneo."
+          <p className="text-lg md:text-xl font-light tracking-wide leading-relaxed text-white/80 font-sans uppercase tracking-wider text-center px-4">
+            No diseñamos accesorios ordinarios. Construimos bloques estructurales rígidos para el uso diario. Cada pieza responde a un control estricto de moldería urbana y simetría textil absoluta. VANTUM es la respuesta técnica a la saturación del mercado contemporáneo.
           </p>
         </div>
       </section>
@@ -547,12 +570,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* II. PORTAL MONUMENTAL CENTRAL DE RESERVA */}
+      {/* II. PORTAL MONUMENTAL CENTRAL DE RESERVA: IDEA 8 IDIOMA CALLE DIGERIBLE */}
       <section id="bloque-captura" className="py-24 px-6 max-w-4xl mx-auto relative z-10 text-center">
         <div className="border border-red-500/30 bg-[#050505] p-10 md:p-16 space-y-6 rounded-sm shadow-2xl relative overflow-hidden group">
           <div className="absolute inset-0 bg-radial-gradient from-red-950/5 via-transparent to-transparent pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(139,30,30,0.05) 0%, transparent 80%)" }} />
           
-          <div className="font-mono text-[10px] md:text-[11px] text-red-500 uppercase tracking-[0.3em] font-medium animate-pulse">
+          <div className="font-mono text-[10px] md:text-[11px] text-[#e12a2a] uppercase tracking-[0.3em] font-medium animate-pulse crimson-glow">
             // REGISTRO DE ADMISIÓN - EDICIÓN DE BARRIO 001
           </div>
           
@@ -563,7 +586,7 @@ export default function Home() {
           <div className="pt-4 max-w-xl mx-auto">
             <button 
               onClick={executeGeneralReserve}
-              className={`w-full uppercase text-center py-5 text-[11px] md:text-xs font-bold tracking-[0.35em] transition-all duration-300 rounded-sm font-mono border cursor-pointer ${bioScanning && !bioSuccess ? "border-red-500/50 bg-red-950/20 text-red-400 animate-pulse cursor-wait" : bioSuccess ? "border-green-500 bg-green-500/10 text-green-400" : "border-red-500 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-black shadow-[0_0_30px_rgba(239,68,68,0.05)]"}`}
+              className={`w-full uppercase text-center py-5 text-[11px] md:text-xs font-bold tracking-[0.35em] transition-all duration-300 rounded-sm font-mono border cursor-pointer ${bioScanning && !bioSuccess ? "border-red-500/50 bg-red-950/20 text-red-400 animate-pulse cursor-wait" : bioSuccess ? "border-green-500 bg-green-500/10 text-green-400" : "border-[#e12a2a] bg-red-500/10 text-red-400 hover:bg-[#e12a2a] hover:text-black crimson-glow shadow-[0_0_30px_rgba(239,68,68,0.05)]"}`}
             >
               {bioScanning ? bioText : "[ SOLICITAR ASIGNACIÓN DE PIEZA - BATCH 001 ]"}
             </button>
@@ -662,7 +685,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 font-mono text-[9px] tracking-widest text-white/20 uppercase text-center md:text-left">
           <div className="space-y-1">
             <p className="text-white/40 font-medium">SOPORTE CENTRAL: VANTUM553@GMAIL.COM // CONTROL DE LOGÍSTICA & CONFECCIÓN</p>
-            <p className="text-red-500/40">SISTEMA DE PRODUCCIÓN CONFINADO. NINGUNA ESTRUCTURA SERÁ REEDITADA TRAS EL CIERRE DEL BATCH 001.</p>
+            <p className="text-[#e12a2a]/60 font-medium crimson-glow">SISTEMA DE PRODUCCIÓN CONFINADO. NINGUNA ESTRUCTURA SERÁ REEDITADA TRAS EL CIERRE DEL BATCH 001.</p>
             <p className="text-white/15 block pt-2">© 2026 DISTRIBUTION & LOGISTICS. ALL RIGHTS RESERVED.</p>
           </div>
           <div className="flex gap-8 text-white/30 font-medium">
