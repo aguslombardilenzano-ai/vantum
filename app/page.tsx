@@ -80,7 +80,7 @@ export default function Home() {
         }
       }, (firewallDuration - 800) / targetPass.length);
 
-      // TRANSICIÓN AL FLASH CINEMÁTICO (FASE 2) LUEGO DE LOS 2 SEGUNDOS
+      // TRANSICIÓN AL FLASH CINEMÁTICO (FASE 2)
       const gatewayTimeout = setTimeout(() => {
         setLoadingStep(2);
         
@@ -138,7 +138,7 @@ export default function Home() {
     };
   }, []);
 
-  // ANIMACIONES INTERNAS AVANZADAS INYECTADAS
+  // ANIMACIONES INTERNAS INYECTADAS
   useEffect(() => {
     if (typeof window !== "undefined" && !document.getElementById("vantum-core-styles")) {
       const stylesheet = document.createElement("style");
@@ -303,6 +303,11 @@ export default function Home() {
         <span>LOGÍSTICA DE DISTRIBUCIÓN: ENVÍOS GLOBALES ACTIVADOS</span>
       </div>
 
+      {/* HALO LUMÍNICO BASE DEL HERO */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden h-[100vh]">
+        <div className="absolute w-[350px] h-[350px] md:w-[650px] md:h-[650px] rounded-full bg-gradient-to-r from-red-950/15 via-transparent to-transparent blur-[130px] opacity-60 animate-pulse" />
+      </div>
+
       {/* 1. NAV BAR */}
       <nav className="border-b border-white/5 backdrop-blur-md bg-black/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
@@ -329,12 +334,6 @@ export default function Home() {
 
       {/* 2. HERO SECTOR */}
       <header className="relative min-h-[calc(100vh-20px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-10 pb-20 overflow-hidden">
-        
-        {/* Halo de luz cálida difusa de fondo que elimina la frialdad */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
-          <div className="absolute w-[350px] h-[350px] md:w-[650px] md:h-[650px] rounded-full bg-gradient-to-r from-red-950/15 via-transparent to-transparent blur-[130px] opacity-60 animate-pulse" />
-        </div>
-
         <div className="space-y-12 max-w-4xl mx-auto flex flex-col items-center relative w-full z-10">
           
           <div className="flex flex-wrap justify-center gap-2 relative z-10">
@@ -347,29 +346,30 @@ export default function Home() {
             </div>
           </div>
           
-          {/* LA V CENTRAL COMPLETAMENTE LIBERADA, ENMARCADA EN CORCHETES TÉCNICOS SÓLIDOS Y EQUILIBRADA A 2.5x VERDADEROS */}
-          <div className="flex items-center justify-center my-24 relative w-full gap-6 md:gap-10 select-none">
+          {/* CORRECCIÓN DE ESCALA ABSOLUTA A 3x MÁS GRANDE RETENIENDO LA POSICIÓN ESTÁTICA DE LOS CORCHETES */}
+          <div className="flex items-center justify-center my-36 relative w-full gap-24 md:gap-40 select-none">
             
-            {/* Corchete Izquierdo */}
-            <span className="font-mono text-2xl md:text-4xl text-white/20 tracking-normal font-extralight select-none select-none">[</span>
+            {/* Corchete Izquierdo fijo en su posición original */}
+            <span className="font-mono text-3xl md:text-5xl text-white/20 tracking-normal font-extralight select-none">[</span>
 
             <div 
               onClick={handleLogoClick}
               className="cursor-crosshair flex items-center justify-center group relative z-10"
             >
+              {/* V Central multiplicada por 3 mediante scale-300 manteniendo su caja estructural nativa */}
               <img 
                 src="/logo-real.png" 
-                alt="Vantum Monolith 2.5x Absolute Size" 
-                className="w-48 h-48 md:w-56 md:h-56 object-contain opacity-[0.98] filter drop-shadow-[0_0_40px_rgba(255,255,255,0.09)] transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                alt="Vantum Monolith 3x Scaled" 
+                className="w-48 h-48 md:w-56 md:h-56 object-contain opacity-[0.98] filter drop-shadow-[0_0_50px_rgba(255,255,255,0.12)] transform scale-[2.8] md:scale-[3.0] transition-transform duration-700 ease-out"
               />
             </div>
 
-            {/* Corchete Derecho */}
-            <span className="font-mono text-2xl md:text-4xl text-white/20 tracking-normal font-extralight select-none select-none">]</span>
+            {/* Corchete Derecho fijo en su posición original */}
+            <span className="font-mono text-3xl md:text-5xl text-white/20 tracking-normal font-extralight select-none">]</span>
           </div>
 
           {/* FIRMA DE NOMBRE DE LA MARCA */}
-          <div className="flex flex-col items-center space-y-4">
+          <div className="flex flex-col items-center space-y-4 pt-4">
             <h2 className="text-2xl md:text-3xl font-extralight tracking-[0.75em] text-white uppercase pl-[0.75em] select-none relative z-10">
               VANTUM
             </h2>
@@ -380,10 +380,9 @@ export default function Home() {
             </div>
           </div>
 
-          {/* AJUSTE CLAVE: LA V GIGANTE PULSANTE SE POSICIONA ESPECÍFICAMENTE ATRÁS DEL TEXTO DE PRESENTACIÓN, EL PRIMERO */}
+          {/* LA V GIGANTE PULSANTE POSICIONADA FIJA ATRÁS DEL PÁRRAFO DE PRESENTACIÓN */}
           <div className="w-full max-w-2xl mx-auto relative py-12 px-4 group">
             
-            {/* Contenedor absoluto de la V gigante, centrado exactamente detrás de este párrafo */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
               <img 
                 src="/logo-real.png" 
@@ -392,7 +391,6 @@ export default function Home() {
               />
             </div>
 
-            {/* El Bloque de Texto de Presentación en Primer Plano */}
             <div className="space-y-5 relative z-10 select-none">
               <h1 className="font-mono text-xs md:text-sm text-white tracking-[0.35em] uppercase font-bold">
                 CONFECCIÓN URBANA PESADA DE ALTA DENSIDAD
@@ -479,7 +477,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS: TEXTOS FACHEROS Y REALISTAS SIN HUMO */}
+      {/* 4. SECCIÓN MODELOS */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div className="mb-24 flex flex-col md:flex-row md:items-end md:justify-between border-b border-white/5 pb-6">
           <div>
@@ -589,7 +587,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. SECCIÓN MEDIDAS: REALISTAS SIN HUMO IMPOSIBLE */}
+      {/* 5. SECCIÓN MEDIDAS */}
       <section id="especificaciones" className="py-32 bg-black relative z-10 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
