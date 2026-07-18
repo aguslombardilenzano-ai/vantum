@@ -18,13 +18,13 @@ export default function Home() {
   const [onlineUsers, setOnlineUsers] = useState(7);
   const [currentDateTime, setCurrentDateTime] = useState("");
 
-  // INTRO POR CONTRASEÑA Y SECUENCIA DE MARCA (0: Loader, 1: Firewall, 2: Intro Cinemática Flash, 3: Web Unlocked)
+  // INTRO POR CONTRASEÑA Y SECUENCIA DE DESTELLOS RESTAURADA AL 100%
   const [loadingStep, setLoadingStep] = useState(0); 
   const [fakePassword, setFakePassword] = useState("");
   const [showFinalPhrase, setShowFinalPhrase] = useState(false);
   const [flashActive, setFlashActive] = useState(false);
 
-  // CONTROL INTERACTIVO DE GALERÍA (4 VISTAS POR GORRA)
+  // CONTROL INTERACTIVO DE GALERÍA (INSTANTÁNEO POR OPACIDAD)
   const [activeViewWhite, setActiveViewWhite] = useState(0);
   const [activeViewBlack, setActiveViewBlack] = useState(0);
 
@@ -32,14 +32,13 @@ export default function Home() {
   const [cctvTime, setCctvTime] = useState("00:00:00");
   const [showTerminalConsole, setShowTerminalConsole] = useState(false);
   const [terminalInput, setTerminalInput] = useState("");
-  const [terminalLogs, setTerminalLogs] = useState<string[]>(["VANTUM LABS CORE v2.01", "Nodo Mendoza operativo. Enlace seguro."]);
+  const [terminalLogs, setTerminalLogs] = useState<string[]>(["VANTUM LABS CORE v2.01", "Nodo Mendoza operativo."]);
   const [bioScanning, setBioScanning] = useState(false);
   const [bioText, setBioText] = useState("");
   const [bioSuccess, setBioSuccess] = useState(false);
   const [waitlistPercentage, setWaitlistPercentage] = useState(84);
   const logoClickCount = useRef(0);
 
-  // RUTAS DEFINITIVAS ASIGNADAS PARA EL CARRUSEL DE 4 VISTAS EN ALTA DENSIDAD
   const whiteCapImages = [
     "/gorra-blanca-frontal.jpg",
     "/gorra-blanca-derecha.jpg",
@@ -54,11 +53,62 @@ export default function Home() {
     "/gorra-negra-trasera.jpg"
   ];
 
+  // CICLO INDEPENDIENTE EXCLUSIVO PARA LA INTRO DE DESTELLOS
   useEffect(() => {
     setIsMounted(true);
-    setOnlineUsers(Math.floor(Math.random() * (16 - 7 + 1)) + 7);
+    
+    const firewallDuration = 2000;
+    
+    const loaderTimeout = setTimeout(() => {
+      setLoadingStep(1);
 
+      let currentPass = "";
+      const targetPass = "•V•A•N•T•U•M•";
+      let passIdx = 0;
+      
+      const passInterval = setInterval(() => {
+        if (passIdx < targetPass.length) {
+          currentPass += targetPass[passIdx];
+          setFakePassword(currentPass);
+          passIdx++;
+        } else {
+          clearInterval(passInterval);
+          setShowFinalPhrase(true);
+        }
+      }, 80);
+
+      const gatewayTimeout = setTimeout(() => {
+        clearInterval(passInterval);
+        setLoadingStep(2);
+        
+        // Cadena secuencial de parpadeos violentos de identidad
+        setTimeout(() => setFlashActive(true), 400);
+        setTimeout(() => setFlashActive(false), 650);
+        setTimeout(() => setFlashActive(true), 800);
+        setTimeout(() => setFlashActive(false), 1050);
+
+        setTimeout(() => {
+          setLoadingStep(3);
+        }, 2200);
+
+      }, firewallDuration);
+
+      return () => {
+        clearInterval(passInterval);
+        clearTimeout(gatewayTimeout);
+      };
+    }, 800);
+
+    return () => clearTimeout(loaderTimeout);
+  }, []);
+
+  // RE-CALIBRACIÓN RELOJ Y LOGÍSTICA DE INTERFAZ
+  useEffect(() => {
+    if (loadingStep !== 3) return;
+
+    setOnlineUsers(Math.floor(Math.random() * (16 - 7 + 1)) + 7);
     const startTime = Date.now();
+    
     const timerInterval = setInterval(() => {
       const now = new Date();
       setCurrentDateTime(`${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} - ${now.toLocaleTimeString()}`);
@@ -70,7 +120,6 @@ export default function Home() {
       setCctvTime(`${hrs}:${mins}:${secs}`);
     }, 1000);
 
-    // CRONÓMETRO DEFINITIVO AJUSTADO: VIERNES 31 DE JULIO DE 2026
     const targetDate = new Date("2026-07-31T00:00:00").getTime();
     const creationTimestamp = new Date("2026-07-04T00:00:00").getTime();
 
@@ -78,7 +127,6 @@ export default function Home() {
       const now = new Date().getTime();
       const difference = targetDate - now;
 
-      // Actualizar porcentaje de lista de espera
       const totalDuration = targetDate - creationTimestamp;
       const elapsedDuration = now - creationTimestamp;
       const progressRatio = Math.min(Math.max(elapsedDuration / totalDuration, 0), 1);
@@ -101,57 +149,16 @@ export default function Home() {
         minutes: m < 10 ? `0${m}` : `${m}`,
         seconds: s < 10 ? `0${s}` : `${s}`,
       });
-      setIsDropActive(false);
     };
-
-    // SCRIPT FIREWALL DE INTERFAZ (2 SEGUNDOS EXACTOS)
-    const firewallDuration = 2000;
-    const loaderTimeout = setTimeout(() => {
-      setLoadingStep(1);
-
-      let currentPass = "";
-      const targetPass = "•V•A•N•T•U•M•";
-      let passIdx = 0;
-      const passInterval = setInterval(() => {
-        if (passIdx < targetPass.length) {
-          currentPass += targetPass[passIdx];
-          setFakePassword(currentPass);
-          passIdx++;
-        } else {
-          clearInterval(passInterval);
-          setShowFinalPhrase(true);
-        }
-      }, (firewallDuration - 800) / targetPass.length);
-
-      const gatewayTimeout = setTimeout(() => {
-        setLoadingStep(2);
-        
-        setTimeout(() => setFlashActive(true), 1200);
-        setTimeout(() => setFlashActive(false), 1450);
-        setTimeout(() => setFlashActive(true), 1600);
-        setTimeout(() => setFlashActive(false), 1850);
-
-        setTimeout(() => {
-          setLoadingStep(3);
-        }, 3400);
-
-      }, firewallDuration);
-
-      return () => {
-        clearInterval(passInterval);
-        clearTimeout(gatewayTimeout);
-      };
-    }, 800);
 
     updateTimer();
     const intervalId = setInterval(updateTimer, 1000);
 
     return () => {
-      clearTimeout(loaderTimeout);
       clearInterval(timerInterval);
       clearInterval(intervalId);
     };
-  }, []);
+  }, [loadingStep]);
 
   useEffect(() => {
     if (typeof window !== "undefined" && !document.getElementById("vantum-core-styles")) {
@@ -164,12 +171,11 @@ export default function Home() {
         @keyframes brandOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.99); filter: blur(4px); } }
         @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100vh); } }
         @keyframes vPulse { 0% { opacity: 0.03; transform: scale(1); } 50% { opacity: 0.08; transform: scale(1.005); } 100% { opacity: 0.03; transform: scale(1); } }
-        .animate-fade-up { opacity: 0; animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-fade-in { opacity: 0; animation: fadeIn 1.5s ease-out forwards; }
-        .animate-brand-out { animation: brandOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) 3s forwards; }
+        .animate-fade-in { opacity: 0; animation: fadeIn 1.2s ease-out forwards; }
+        .animate-brand-out { animation: brandOut 0.4s cubic-bezier(0.16, 1, 0.3, 1) 1.8s forwards; }
         .animate-v-giant { animation: vPulse 10s ease-in-out infinite; }
         .crimson-glow { filter: drop-shadow(0 0 8px rgba(225, 42, 42, 0.45)); }
-        .cctv-scanline { position: fixed; top: 0; left: 0; width: 100%; h-full: 2px; background: rgba(255,255,255,0.012); pointer-events: none; z-index: 99; animation: scanline 5s linear infinite; }
+        .cctv-scanline { position: fixed; top: 0; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.012); pointer-events: none; z-index: 99; animation: scanline 5s linear infinite; }
         .cctv-noise { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.90' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.012'/%3E%3C/svg%3E"); pointer-events: none; z-index: 98; }
       `;
       document.head.appendChild(stylesheet);
@@ -180,7 +186,7 @@ export default function Home() {
     logoClickCount.current += 1;
     if (logoClickCount.current === 3) {
       setShowTerminalConsole(true);
-      setTerminalLogs(prev => [...prev, ">> TERMINAL OVERRIDE GRANTED // NODE ACCESS DEPLOYED."]);
+      setTerminalLogs(prev => [...prev, ">> TERMINAL OVERRIDE GRANTED."]);
       logoClickCount.current = 0;
     }
   };
@@ -189,13 +195,11 @@ export default function Home() {
     e.preventDefault();
     const cmd = terminalInput.trim().toLowerCase();
     if (!cmd) return;
-
-    let response = `Comando inválido: '${cmd}'. Tipeá 'help'.`;
-    if (cmd === "help") { response = "Registros válidos: 'help' // 'lote001' // 'clear' // 'exit'"; }
-    else if (cmd === "lote001") { response = "DATOS: 20 unidades confinadas al taller de Maipú. Numeradas del 01 al 10 por modelo."; }
+    let response = `Comando inválido: '${cmd}'.`;
+    if (cmd === "help") response = "Registros: 'lote001' // 'clear' // 'exit'";
+    else if (cmd === "lote001") response = "20 unidades en Maipú. Numeradas 01-10 por modelo.";
     else if (cmd === "clear") { setTerminalLogs([]); setTerminalInput(""); return; }
     else if (cmd === "exit") { setShowTerminalConsole(false); setTerminalInput(""); return; }
-
     setTerminalLogs(prev => [...prev, `> ${terminalInput}`, response]);
     setTerminalInput("");
   };
@@ -220,6 +224,80 @@ export default function Home() {
       }, 600);
     }, 700);
   };
+
+  if (isMounted && loadingStep === 0) {
+    return (
+      <div className="min-h-screen bg-black text-white/50 font-mono flex flex-col justify-center items-center px-6 select-none">
+        <div className="w-full max-w-xs space-y-3">
+          <div className="text-[9px] tracking-[0.3em] uppercase opacity-50">// VANTUM NETWORK INTERFACE...</div>
+          <div className="w-full h-[1px] bg-white/10 relative overflow-hidden">
+            <div className="absolute top-0 left-0 h-full bg-white/40 w-1/4" style={{ animation: "loading 1.4s ease-in-out infinite" }} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isMounted && loadingStep === 1) {
+    return (
+      <div className="min-h-screen bg-black font-mono flex flex-col justify-center items-center px-6 select-none relative">
+        <div className="w-full max-w-sm p-6 space-y-5 text-left border border-white/10 bg-[#030303] shadow-2xl">
+          <div className="flex items-center gap-2.5 text-white/40">
+            <span className="w-1 h-1 bg-white/30 rounded-full animate-pulse" />
+            <span className="text-[9px] tracking-[0.3em] uppercase">CONTROL DE ACCESO VANTUM</span>
+          </div>
+          <div className="space-y-3">
+            <div className="space-y-0.5">
+              <div className="text-[8px] text-white/30 uppercase tracking-widest">NODO DE ENLACE:</div>
+              <div className="text-xs text-white/70">root@mendoza_node_02</div>
+            </div>
+            <div className="space-y-1">
+              <div className="text-[8px] text-white/30 uppercase tracking-widest">INGRESAR CREDENCIAL:</div>
+              <div className="h-7 w-full bg-white/[0.03] border border-white/10 px-2.5 flex items-center text-xs text-white/80 tracking-widest">
+                {fakePassword}
+                {!showFinalPhrase && <span className="w-1 h-3 bg-white/50 ml-0.5 animate-pulse" />}
+              </div>
+            </div>
+          </div>
+          <div className="h-4 font-mono">
+            {showFinalPhrase && (
+              <div className="text-white font-bold text-[9px] tracking-[0.2em] uppercase">
+                // SISTEMA DESBLOQUEADO. [ DROP_001 IS COMING. ]
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isMounted && loadingStep === 2) {
+    return (
+      <div className={`min-h-screen transition-colors duration-[40ms] flex flex-col justify-center items-center px-6 select-none animate-brand-out relative overflow-hidden ${flashActive ? "bg-white text-black" : "bg-black text-white"}`}>
+        <div className="cctv-noise" />
+        
+        {!flashActive && (
+          <div className="space-y-2 font-mono text-[10px] md:text-[11px] tracking-[0.32em] text-white/40 uppercase text-center animate-fade-in">
+            <p className="font-medium tracking-[0.35em] text-white/70">BUILD WITH PURPOSE</p>
+            <p className="font-light text-red-500/60 crimson-glow">NOT FOR EVERYONE</p>
+          </div>
+        )}
+
+        {flashActive && (
+          <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6">
+            <img 
+              src="/logo-real.png" 
+              alt="VANTUM CORE MASTER FLASH" 
+              className="w-[450px] h-[450px] md:w-[600px] md:h-[600px] object-contain absolute opacity-100 filter invert select-none"
+            />
+            <h2 className="text-5xl md:text-8xl font-black tracking-[0.75em] text-black uppercase pl-[0.75em] relative z-10 mix-blend-difference select-none">
+              VANTUM
+            </h2>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden font-sans relative antialiased animate-fade-in">
@@ -247,18 +325,15 @@ export default function Home() {
       {/* 1. NAV BAR */}
       <nav className="border-b border-white/5 backdrop-blur-md bg-black/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
-          
           <a href="#" className="flex items-center gap-4 hover:opacity-75 transition-opacity select-none group">
             <img src="/logo-real.png" alt="Vantum Isotipo" className="w-10 h-10 object-contain filter brightness-110" />
             <span className="text-sm font-light tracking-[0.45em] uppercase text-white/90 pl-0.5">VANTUM</span>
           </a>
-
           <div className="hidden md:flex items-center gap-12 text-[9px] font-mono tracking-[0.25em] uppercase text-white/40">
             <a href="#manifiesto" className="hover:text-white transition-colors">[ EL MANIFIESTO ]</a>
             <a href="#modelos" className="hover:text-white transition-colors">[ GORRAS DISPONIBLES ]</a>
             <a href="#especificaciones" className="hover:text-white transition-colors">[ PLANO DE MEDIDAS ]</a>
           </div>
-          
           <button 
             onClick={() => document.getElementById("bloque-captura")?.scrollIntoView({ behavior: "smooth" })}
             className="border border-red-500/30 bg-red-500/5 px-4 py-2 text-[9px] font-mono tracking-[0.2em] uppercase text-red-400 rounded-sm hover:bg-red-500 hover:text-black transition-colors font-medium cursor-pointer"
@@ -353,7 +428,6 @@ export default function Home() {
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-black px-2.5 font-mono text-[8px] tracking-[0.25em] text-[#e12a2a] uppercase font-medium animate-pulse crimson-glow">
             // [ SISTEMA EN ESPERA DE LANZAMIENTO GENERAL ]
           </div>
-          
           <div className="grid grid-cols-4 gap-2 md:gap-6 font-mono select-none">
             <div>
               <div className="text-3xl md:text-5xl font-extralight tracking-tight text-white/90 tabular-nums">{timeLeft.days}</div>
@@ -373,19 +447,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        <div className="mt-8 font-mono text-[9px] tracking-[0.15em] text-white/30 uppercase select-none z-10">
-          ÚLTIMO REGISTRO DE CONEXIÓN: [{currentDateTime || "PROCESANDO..."}] vía Mendoza_Node_02
-        </div>
-        <div className="mt-2 font-mono text-[9px] tracking-[0.15em] text-[#e12a2a]/50 uppercase select-none z-10 crimson-glow">
-          [ ESTADO DEL SERVIDOR: {onlineUsers} OPERATORES ONLINE EN EL NODO ]
-        </div>
-
-        <div className="mt-12 z-10">
-          <a href="#modelos" className="border border-white bg-white text-black px-8 h-11 flex items-center justify-center font-mono text-[9px] tracking-[0.25em] uppercase hover:bg-transparent hover:text-white transition-all duration-300 rounded-sm font-medium">
-            VER PIEZAS DISPONIBLES
-          </a>
-        </div>
       </header>
 
       {/* 3. SECCIÓN MANIFIESTO */}
@@ -398,17 +459,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS: INTERACTIVO ENLAZADO CON LAS 4 VISTAS RENOMBRADAS */}
+      {/* 4. SECCIÓN MODELOS: CARGA SIMULTÁNEA DE 4 VISTAS (0 MILISEGUNDOS DE DELAY AL INTERCAMBIAR) */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-5xl mx-auto relative z-10">
         <div className="mb-24 flex flex-col md:flex-row md:items-end md:justify-between border-b border-white/5 pb-6">
           <div>
             <p className="text-[9px] text-white/40 font-mono tracking-[0.25em] uppercase mb-2">// TEXTILE ARCHITECTURE</p>
             <h2 className="text-3xl font-extralight tracking-widest uppercase text-white/90">Edición de Barrio</h2>
-          </div>
-          <div className="font-mono text-[10px] text-white/40 flex items-center gap-4 mt-4 md:mt-0">
-            <span>VOLUMEN: 2 MODELOS // 10 UNIDADES POR PIEZA</span>
-            <span className="text-white/10">|</span>
-            <span>ESTADO: RESERVAS ABIERTAS</span>
           </div>
         </div>
         
@@ -416,21 +472,27 @@ export default function Home() {
           
           {/* MODELO 01: ONYX WHITE BEIGE */}
           <div className="relative border border-white/5 bg-[#040404]/60 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-white/10 rounded-sm">
-            <div className="space-y-4">
-              <div className="overflow-hidden bg-[#090909] relative aspect-square flex items-center justify-center border border-white/5 rounded-sm">
-                <img 
-                  src={whiteCapImages[activeViewWhite]} 
-                  alt={`Vantum White Cap View ${activeViewWhite + 1}`} 
-                  className="w-full h-full object-cover transition-all duration-300 select-none pointer-events-none contrast-105" 
-                />
+            <div className="space-y-5">
+              
+              {/* Contenedor Cuadrado Inflexible Anti-Blur con Pilas de Capas Pre-cargadas */}
+              <div className="overflow-hidden bg-[#090909] relative aspect-square w-full border border-white/5 rounded-sm">
+                {whiteCapImages.map((src, idx) => (
+                  <img 
+                    key={idx}
+                    src={src} 
+                    alt={`Vantum White Cap Angle ${idx + 1}`} 
+                    className={`absolute inset-0 w-full h-full object-cover object-center select-none pointer-events-none contrast-105 transition-opacity duration-[150ms] ease-in-out ${activeViewWhite === idx ? "opacity-100 z-10" : "opacity-0 z-0"}`} 
+                  />
+                ))}
               </div>
 
+              {/* Botonera Hardware */}
               <div className="grid grid-cols-4 gap-2 font-mono text-[9px] tracking-widest">
                 {["01 FRONTAL", "02 LAT DER", "03 LAT IZQ", "04 TRASERA"].map((label, index) => (
                   <button
                     key={index}
                     onClick={() => setActiveViewWhite(index)}
-                    className={`border py-1.5 text-center transition-colors rounded-sm uppercase font-medium cursor-pointer ${activeViewWhite === index ? "border-[#e12a2a] bg-red-500/5 text-red-400 crimson-glow font-bold" : "border-white/5 bg-white/[0.01] text-white/40 hover:text-white/80 hover:border-white/10"}`}
+                    className={`border py-2 text-center transition-all rounded-sm uppercase font-medium cursor-pointer ${activeViewWhite === index ? "border-[#e12a2a] bg-red-500/5 text-red-400 crimson-glow font-bold" : "border-white/5 bg-white/[0.01] text-white/40 hover:text-white/80 hover:border-white/10"}`}
                   >
                     {label.split(" ")[0]}
                   </button>
@@ -446,31 +508,35 @@ export default function Home() {
                 </span>
               </div>
               <h3 className="text-xl font-light tracking-widest uppercase mt-2.5 text-white/90">Onyx White Beige</h3>
-              <div className="relative mt-4">
-                <p className="text-xs leading-relaxed font-light text-white/60 text-justify">
-                  Cuerpo limpio confeccionado íntegramente en gabardina esmerilada blanca pura. Bloque tipográfico frontal y detalles de chasis bordados con hilo punteado de alta densidad en tonalidad beige orgánica.
-                </p>
-              </div>
+              <p className="text-xs leading-relaxed font-light text-white/60 text-justify mt-4">
+                Cuerpo limpio confeccionado íntegramente en gabardina esmerilada blanca pura. Bloque tipográfico frontal y detalles de chasis bordados con hilo punteado de alta densidad en tonalidad beige orgánica.
+              </p>
             </div>
           </div>
 
           {/* MODELO 02: CRIMSON ONYX STEALTH */}
           <div className="relative border border-white/5 bg-[#040404]/60 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-white/10 rounded-sm">
-            <div className="space-y-4">
-              <div className="overflow-hidden bg-[#090909] relative aspect-square flex items-center justify-center border border-white/5 rounded-sm">
-                <img 
-                  src={blackCapImages[activeViewBlack]} 
-                  alt={`Vantum Black Cap View ${activeViewBlack + 1}`} 
-                  className="w-full h-full object-cover transition-all duration-300 select-none pointer-events-none contrast-105" 
-                />
+            <div className="space-y-5">
+              
+              {/* Contenedor Cuadrado Inflexible Anti-Blur con Pilas de Capas Pre-cargadas */}
+              <div className="overflow-hidden bg-[#090909] relative aspect-square w-full border border-white/5 rounded-sm">
+                {blackCapImages.map((src, idx) => (
+                  <img 
+                    key={idx}
+                    src={src} 
+                    alt={`Vantum Black Cap Angle ${idx + 1}`} 
+                    className={`absolute inset-0 w-full h-full object-cover object-center select-none pointer-events-none contrast-105 transition-opacity duration-[150ms] ease-in-out ${activeViewBlack === idx ? "opacity-100 z-10" : "opacity-0 z-0"}`} 
+                  />
+                ))}
               </div>
 
+              {/* Botonera Hardware */}
               <div className="grid grid-cols-4 gap-2 font-mono text-[9px] tracking-widest">
                 {["01 FRONTAL", "02 LAT DER", "03 LAT IZQ", "04 TRASERA"].map((label, index) => (
                   <button
                     key={index}
                     onClick={() => setActiveViewBlack(index)}
-                    className={`border py-1.5 text-center transition-colors rounded-sm uppercase font-medium cursor-pointer ${activeViewBlack === index ? "border-[#e12a2a] bg-red-500/5 text-red-400 crimson-glow font-bold" : "border-white/5 bg-white/[0.01] text-white/40 hover:text-white/80 hover:border-white/10"}`}
+                    className={`border py-2 text-center transition-all rounded-sm uppercase font-medium cursor-pointer ${activeViewBlack === index ? "border-[#e12a2a] bg-red-500/5 text-red-400 crimson-glow font-bold" : "border-white/5 bg-white/[0.01] text-white/40 hover:text-white/80 hover:border-white/10"}`}
                   >
                     {label.split(" ")[0]}
                   </button>
@@ -486,41 +552,31 @@ export default function Home() {
                 </span>
               </div>
               <h3 className="text-xl font-light tracking-widest uppercase mt-2.5 text-white/90">Crimson Onyx Stealth</h3>
-              <div className="relative mt-4">
-                <p className="text-xs leading-relaxed font-light text-white/60 text-justify">
-                  Estructura armada en gabardina esmerilada negra de alta torsión. Isotipo monumental de moldería concéntrica inyectado en el panel frontal con hilo punteado de alta densidad color gris plateado.
-                </p>
-              </div>
+              <p className="text-xs leading-relaxed font-light text-white/60 text-justify mt-4">
+                Estructura armada en gabardina esmerilada negra de alta torsión. Isotipo monumental de moldería concéntrica inyectado en el panel frontal con hilo punteado de alta densidad color gris plateado.
+              </p>
             </div>
           </div>
 
         </div>
       </section>
 
-      {/* II. PORTAL CENTRAL DE RESERVA */}
+      {/* PORTAL CENTRAL DE RESERVA */}
       <section id="bloque-captura" className="py-24 px-6 max-w-4xl mx-auto relative z-10 text-center">
-        <div className="border border-red-500/30 bg-[#050505] p-10 md:p-16 space-y-6 rounded-sm shadow-2xl relative overflow-hidden group">
-          <div className="absolute inset-0 bg-radial-gradient from-red-950/5 via-transparent to-transparent pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(139,30,30,0.05) 0%, transparent 80%)" }} />
-          
+        <div className="border border-red-500/30 bg-[#050505] p-10 md:p-16 space-y-6 rounded-sm shadow-2xl relative overflow-hidden">
           <div className="font-mono text-[10px] md:text-[11px] text-[#e12a2a] uppercase tracking-[0.3em] font-medium animate-pulse crimson-glow">
             // REGISTRO DE ADMISIÓN - EDICIÓN DE BARRIO 001
           </div>
-          
           <h2 className="text-xl md:text-2xl font-extralight tracking-widest text-white uppercase max-w-xl mx-auto leading-relaxed">
             SOLICITÁ TU LUGAR PARA ASEGURAR UNA DE LAS 20 PIEZAS EXCLUSIVAS ANTES DE QUE EL ACCESO SE CIERRE POR COMPLETO
           </h2>
-          
           <div className="pt-4 max-w-xl mx-auto">
             <button 
               onClick={executeGeneralReserve}
-              className={`w-full uppercase text-center py-5 text-[11px] md:text-xs font-bold tracking-[0.35em] transition-all duration-300 rounded-sm font-mono border cursor-pointer ${bioScanning && !bioSuccess ? "border-red-500/50 bg-red-950/20 text-red-400 animate-pulse cursor-wait" : bioSuccess ? "border-green-500 bg-green-500/10 text-green-400" : "border-[#e12a2a] bg-red-500/10 text-red-400 hover:bg-[#e12a2a] hover:text-black crimson-glow shadow-[0_0_30px_rgba(239,68,68,0.05)]"}`}
+              className={`w-full uppercase text-center py-5 text-[11px] md:text-xs font-bold tracking-[0.35em] transition-all duration-300 rounded-sm font-mono border cursor-pointer border-[#e12a2a] bg-red-500/10 text-red-400 hover:bg-[#e12a2a] hover:text-black crimson-glow`}
             >
               {bioScanning ? bioText : "[ SOLICITAR ASIGNACIÓN DE PIEZA - BATCH 001 ]"}
             </button>
-          </div>
-          
-          <div className="font-mono text-[8px] tracking-widest text-white/20 uppercase pt-2">
-            CUPO DEL LOTE DISPONIBLE: {100 - waitlistPercentage}% // ACCESO RESTRINGIDO
           </div>
         </div>
       </section>
@@ -532,7 +588,6 @@ export default function Home() {
             <p className="text-[9px] text-white/40 font-mono tracking-[0.25em] uppercase mb-2">// TECHNICAL CORE</p>
             <h2 className="text-3xl font-extralight tracking-widest uppercase text-white">Moldería & Dimensiones</h2>
           </div>
-          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 font-mono text-xs text-white/40">
             <div className="space-y-8">
               <div className="border-l border-white/20 pl-6 space-y-3">
@@ -541,40 +596,25 @@ export default function Home() {
               </div>
               <div className="border-l border-white/20 pl-6 space-y-3">
                 <p className="text-white/80 font-medium tracking-wider">// PANEL INTERNO RÍGIDO</p>
-                <p>Paneles frontales estructurados mediante entretela fusionada a presión térmica. Mantiene la rigidez de la corona armada permanente.</p>
+                <p>Paneles frontales estructurados mediante entretela fusionada a presión térmica.</p>
               </div>
             </div>
-
-            <div className="border border-white/5 bg-[#030303]/40 p-6 flex flex-col justify-between relative rounded-sm">
-              <div className="text-[8px] text-white/30 mb-4 tracking-[0.2em] uppercase">// ÍNDICE DE ESPECIFICACIONES TEXTILES REALES</div>
+            <div className="border border-white/5 bg-[#030303]/40 p-6 rounded-sm">
               <table className="w-full text-left text-[11px] leading-relaxed">
                 <thead>
                   <tr className="border-b border-white/10 text-white/60">
                     <th className="pb-2 font-light tracking-wider">COMPONENTE</th>
                     <th className="pb-2 font-light tracking-wider text-right">DIMENSIÓN</th>
-                    <th className="pb-2 font-light tracking-wider text-right">ESTÁNDAR GENERAL</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/[0.02]">
+                <tbody>
                   <tr>
                     <td className="py-2 text-white/40">Altura de Corona</td>
                     <td className="py-2 text-right text-white/70">11.5 cm</td>
-                    <td className="py-2 text-right text-white/50">Moldería Rígida Profunda</td>
                   </tr>
                   <tr>
                     <td className="py-2 text-white/40">Ancho de Visera</td>
                     <td className="py-2 text-right text-white/70">18.0 cm</td>
-                    <td className="py-2 text-right text-white/50">Memoria Elástica Perimetral</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 text-white/40">Regulador Trasero</td>
-                    <td className="py-2 text-right text-white/70">Ajustable</td>
-                    <td className="py-2 text-right text-white/50">Hebilla de Ajuste Inyectada</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 text-white/40">Densidad de Costura</td>
-                    <td className="py-2 text-right text-white/70">12 SPI</td>
-                    <td className="py-2 text-right text-white/50">Costura de Tensión Reforzada</td>
                   </tr>
                 </tbody>
               </table>
@@ -611,18 +651,11 @@ export default function Home() {
       <footer id="contacto" className="py-20 border-t border-white/5 bg-black relative z-10 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 font-mono text-[9px] tracking-widest text-white/20 uppercase text-center md:text-left">
           <div className="space-y-1">
-            <p className="text-white/40 font-medium">SOPORTE CENTRAL: VANTUM553@GMAIL.COM // CONTROL DE LOGÍSTICA & CONFECCIÓN</p>
-            <p className="text-[#e12a2a]/60 font-medium crimson-glow">SISTEMA DE PRODUCCIÓN CONFINADO. NINGUNA ESTRUCTURA SERÁ REEDITADA TRAS EL CIERRE DEL BATCH 001.</p>
-            <p className="text-white/15 block pt-2">© 2026 DISTRIBUTION & LOGISTICS. ALL RIGHTS RESERVED.</p>
-          </div>
-          <div className="flex gap-8 text-white/30 font-medium">
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">INSTAGRAM</a>
-            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">TIKTOK</a>
-            <a href="mailto:vantum553@gmail.com" className="hover:text-white transition-colors">GMAIL</a>
+            <p className="text-white/40 font-medium">SOPORTE CENTRAL: VANTUM553@GMAIL.COM</p>
+            <p className="text-[#e12a2a]/60 font-medium crimson-glow">SISTEMA DE PRODUCCIÓN CONFINADO. BATCH 001.</p>
           </div>
         </div>
       </footer>
-
     </div>
   );
 }
