@@ -24,6 +24,10 @@ export default function Home() {
   const [showFinalPhrase, setShowFinalPhrase] = useState(false);
   const [flashActive, setFlashActive] = useState(false);
 
+  // CONTROL INTERACTIVO DE GALERÍA (4 VISTAS POR GORRA)
+  const [activeViewWhite, setActiveViewWhite] = useState(0);
+  const [activeViewBlack, setActiveViewBlack] = useState(0);
+
   // MECÁNICAS INTERACTIVAS COMPILADAS
   const [cctvTime, setCctvTime] = useState("00:00:00");
   const [showTerminalConsole, setShowTerminalConsole] = useState(false);
@@ -35,11 +39,25 @@ export default function Home() {
   const [waitlistPercentage, setWaitlistPercentage] = useState(84);
   const logoClickCount = useRef(0);
 
+  // RUTAS DEFINITIVAS ASIGNADAS PARA EL CARRUSEL DE 4 VISTAS EN ALTA DENSIDAD
+  const whiteCapImages = [
+    "/gorra-blanca-frontal.jpg",
+    "/gorra-blanca-derecha.jpg",
+    "/gorra-blanca-izquierda.jpg",
+    "/gorra-blanca-trasera.jpg"
+  ];
+
+  const blackCapImages = [
+    "/gorra-negra-frontal.jpg",
+    "/gorra-negra-derecha.jpg",
+    "/gorra-negra-izquierda.jpg",
+    "/gorra-negra-trasera.jpg"
+  ];
+
   useEffect(() => {
     setIsMounted(true);
     setOnlineUsers(Math.floor(Math.random() * (16 - 7 + 1)) + 7);
 
-    // SISTEMA DE HORARIOS Y CCTV RUNNING
     const startTime = Date.now();
     const timerInterval = setInterval(() => {
       const now = new Date();
@@ -52,61 +70,19 @@ export default function Home() {
       setCctvTime(`${hrs}:${mins}:${secs}`);
     }, 1000);
 
-    // LISTA DE ESPERA MATEMÁTICA AUTOMATIZADA
-    const nowTimestamp = Date.now();
-    const targetTimestamp = new Date("2026-07-25T00:00:00").getTime();
+    // CRONÓMETRO DEFINITIVO AJUSTADO: VIERNES 31 DE JULIO DE 2026
+    const targetDate = new Date("2026-07-31T00:00:00").getTime();
     const creationTimestamp = new Date("2026-07-04T00:00:00").getTime();
-    const totalDuration = targetTimestamp - creationTimestamp;
-    const elapsedDuration = nowTimestamp - creationTimestamp;
-    const progressRatio = Math.min(Math.max(elapsedDuration / totalDuration, 0), 1);
-    setWaitlistPercentage(Math.floor(84 + (progressRatio * 12)));
-
-    // FASE 1: SCRIPT FIREWALL (2 SEGUNDOS MÁXIMO)
-    const firewallDuration = 2000;
-    const loaderTimeout = setTimeout(() => {
-      setLoadingStep(1);
-
-      let currentPass = "";
-      const targetPass = "•V•A•N•T•U•M•";
-      let passIdx = 0;
-      const passInterval = setInterval(() => {
-        if (passIdx < targetPass.length) {
-          currentPass += targetPass[passIdx];
-          setFakePassword(currentPass);
-          passIdx++;
-        } else {
-          clearInterval(passInterval);
-          setShowFinalPhrase(true);
-        }
-      }, (firewallDuration - 800) / targetPass.length);
-
-      // TRANSICIÓN AL FLASH CINEMÁTICO (FASE 2)
-      const gatewayTimeout = setTimeout(() => {
-        setLoadingStep(2);
-        
-        setTimeout(() => setFlashActive(true), 1200);
-        setTimeout(() => setFlashActive(false), 1450);
-        setTimeout(() => setFlashActive(true), 1600);
-        setTimeout(() => setFlashActive(false), 1850);
-
-        setTimeout(() => {
-          setLoadingStep(3);
-        }, 3400);
-
-      }, firewallDuration);
-
-      return () => {
-        clearInterval(passInterval);
-        clearTimeout(gatewayTimeout);
-      };
-    }, 800);
-
-    // CRONÓMETRO DEL DROP REAL (25 DE JULIO)
-    const targetDate = new Date("2026-07-25T00:00:00").getTime();
 
     const updateTimer = () => {
       const now = new Date().getTime();
       const difference = targetDate - now;
+
+      // Actualizar porcentaje de lista de espera
+      const totalDuration = targetDate - creationTimestamp;
+      const elapsedDuration = now - creationTimestamp;
+      const progressRatio = Math.min(Math.max(elapsedDuration / totalDuration, 0), 1);
+      setWaitlistPercentage(Math.floor(84 + (progressRatio * 12)));
 
       if (difference <= 0) {
         setTimeLeft({ days: "00", hours: "00", minutes: "00", seconds: "00" });
@@ -128,6 +104,45 @@ export default function Home() {
       setIsDropActive(false);
     };
 
+    // SCRIPT FIREWALL DE INTERFAZ (2 SEGUNDOS EXACTOS)
+    const firewallDuration = 2000;
+    const loaderTimeout = setTimeout(() => {
+      setLoadingStep(1);
+
+      let currentPass = "";
+      const targetPass = "•V•A•N•T•U•M•";
+      let passIdx = 0;
+      const passInterval = setInterval(() => {
+        if (passIdx < targetPass.length) {
+          currentPass += targetPass[passIdx];
+          setFakePassword(currentPass);
+          passIdx++;
+        } else {
+          clearInterval(passInterval);
+          setShowFinalPhrase(true);
+        }
+      }, (firewallDuration - 800) / targetPass.length);
+
+      const gatewayTimeout = setTimeout(() => {
+        setLoadingStep(2);
+        
+        setTimeout(() => setFlashActive(true), 1200);
+        setTimeout(() => setFlashActive(false), 1450);
+        setTimeout(() => setFlashActive(true), 1600);
+        setTimeout(() => setFlashActive(false), 1850);
+
+        setTimeout(() => {
+          setLoadingStep(3);
+        }, 3400);
+
+      }, firewallDuration);
+
+      return () => {
+        clearInterval(passInterval);
+        clearTimeout(gatewayTimeout);
+      };
+    }, 800);
+
     updateTimer();
     const intervalId = setInterval(updateTimer, 1000);
 
@@ -138,7 +153,6 @@ export default function Home() {
     };
   }, []);
 
-  // ANIMACIONES INTERNAS INYECTADAS
   useEffect(() => {
     if (typeof window !== "undefined" && !document.getElementById("vantum-core-styles")) {
       const stylesheet = document.createElement("style");
@@ -178,7 +192,7 @@ export default function Home() {
 
     let response = `Comando inválido: '${cmd}'. Tipeá 'help'.`;
     if (cmd === "help") { response = "Registros válidos: 'help' // 'lote001' // 'clear' // 'exit'"; }
-    else if (cmd === "lote001") { response = "DATOS: 30 unidades confinadas al taller de Maipú. Sin reabastecimiento."; }
+    else if (cmd === "lote001") { response = "DATOS: 20 unidades confinadas al taller de Maipú. Numeradas del 01 al 10 por modelo."; }
     else if (cmd === "clear") { setTerminalLogs([]); setTerminalInput(""); return; }
     else if (cmd === "exit") { setShowTerminalConsole(false); setTerminalInput(""); return; }
 
@@ -207,84 +221,6 @@ export default function Home() {
     }, 700);
   };
 
-  // INTRO FASE 0: INITIAL LOADER
-  if (isMounted && loadingStep === 0) {
-    return (
-      <div className="min-h-screen bg-black text-white/50 font-mono flex flex-col justify-center items-center px-6 select-none">
-        <div className="w-full max-w-xs space-y-3">
-          <div className="text-[9px] tracking-[0.3em] uppercase opacity-50">// VANTUM NETWORK INTERFACE...</div>
-          <div className="w-full h-[1px] bg-white/10 relative overflow-hidden">
-            <div className="absolute top-0 left-0 h-full bg-white/40 w-1/4" style={{ animation: "loading 1.4s ease-in-out infinite" }} />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // INTRO FASE 1: SECURE FIREWALL
-  if (isMounted && loadingStep === 1) {
-    return (
-      <div className="min-h-screen bg-black font-mono flex flex-col justify-center items-center px-6 select-none relative">
-        <div className="w-full max-w-sm p-6 space-y-5 text-left border border-white/10 bg-[#030303] shadow-2xl">
-          <div className="flex items-center gap-2.5 text-white/40">
-            <span className="w-1 h-1 bg-white/30 rounded-full animate-pulse" />
-            <span className="text-[9px] tracking-[0.3em] uppercase">CONTROL DE ACCESO VANTUM</span>
-          </div>
-          <div className="space-y-3">
-            <div className="space-y-0.5">
-              <div className="text-[8px] text-white/30 uppercase tracking-widest">NODO DE ENLACE:</div>
-              <div className="text-xs text-white/70">root@mendoza_node_02</div>
-            </div>
-            <div className="space-y-1">
-              <div className="text-[8px] text-white/30 uppercase tracking-widest">INGRESAR CREDENCIAL:</div>
-              <div className="h-7 w-full bg-white/[0.03] border border-white/10 px-2.5 flex items-center text-xs text-white/80 tracking-widest">
-                {fakePassword}
-                {!showFinalPhrase && <span className="w-1 h-3 bg-white/50 ml-0.5 animate-pulse" />}
-              </div>
-            </div>
-          </div>
-          <div className="h-4 font-mono">
-            {showFinalPhrase && (
-              <div className="text-white font-bold text-[9px] tracking-[0.2em] uppercase animate-[fadeIn_0.4s_ease-out_forwards]">
-                // SISTEMA DESBLOQUEADO. [ DROP_001 IS COMING. ]
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // FASE 2: ELEMENTOS DE IMPACTO CINEMÁTICA DOBLE TAMAÑO
-  if (isMounted && loadingStep === 2) {
-    return (
-      <div className={`min-h-screen transition-colors duration-75 flex flex-col justify-center items-center px-6 select-none animate-brand-out relative overflow-hidden ${flashActive ? "bg-white text-black" : "bg-black text-white"}`}>
-        <div className="cctv-noise" />
-        
-        {!flashActive && (
-          <div className="space-y-2 font-mono text-[10px] md:text-[11px] tracking-[0.32em] text-white/40 uppercase text-center animate-fade-in">
-            <p className="font-medium tracking-[0.35em] text-white/70">BUILD WITH PURPOSE</p>
-            <p className="font-light text-red-500/60 crimson-glow">NOT FOR EVERYONE</p>
-          </div>
-        )}
-
-        {flashActive && (
-          <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6 animate-[fadeIn_0.05s_ease-out_forwards]">
-            <img 
-              src="/logo-real.png" 
-              alt="VANTUM CORE MASTER FLASH" 
-              className="w-[450px] h-[450px] md:w-[600px] md:h-[600px] object-contain absolute opacity-100 filter invert select-none"
-            />
-            <h2 className="text-5xl md:text-8xl font-black tracking-[0.75em] text-black uppercase pl-[0.75em] relative z-10 mix-blend-difference select-none">
-              VANTUM
-            </h2>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  // FASE 3: TIENDA RUNNING DESBLOQUEADA
   return (
     <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden font-sans relative antialiased animate-fade-in">
       
@@ -342,33 +278,24 @@ export default function Home() {
               EDICIÓN DE BARRIO 001
             </div>
             <div className="inline-flex items-center border border-white/10 bg-white/[0.02] px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.2em] text-white/50 uppercase">
-              LOTE ÚNICO // 30 PIEZAS
+              LOTE ÚNICO // 2 MODELOS // 10 UNIDADES NUMERADAS
             </div>
           </div>
           
-          {/* CORRECCIÓN DE ESCALA ABSOLUTA A 3x MÁS GRANDE RETENIENDO LA POSICIÓN ESTÁTICA DE LOS CORCHETES */}
+          {/* CONCLAVE DE MOLDERÍA CENTRAL ESCALA 3x CON CORCHETES COMPLETAMENTE ESTÁTICOS */}
           <div className="flex items-center justify-center my-36 relative w-full gap-24 md:gap-40 select-none">
-            
-            {/* Corchete Izquierdo fijo en su posición original */}
             <span className="font-mono text-3xl md:text-5xl text-white/20 tracking-normal font-extralight select-none">[</span>
-
-            <div 
-              onClick={handleLogoClick}
-              className="cursor-crosshair flex items-center justify-center group relative z-10"
-            >
-              {/* V Central multiplicada por 3 mediante scale-300 manteniendo su caja estructural nativa */}
+            <div onClick={handleLogoClick} className="cursor-crosshair flex items-center justify-center group relative z-10">
               <img 
                 src="/logo-real.png" 
                 alt="Vantum Monolith 3x Scaled" 
                 className="w-48 h-48 md:w-56 md:h-56 object-contain opacity-[0.98] filter drop-shadow-[0_0_50px_rgba(255,255,255,0.12)] transform scale-[2.8] md:scale-[3.0] transition-transform duration-700 ease-out"
               />
             </div>
-
-            {/* Corchete Derecho fijo en su posición original */}
             <span className="font-mono text-3xl md:text-5xl text-white/20 tracking-normal font-extralight select-none">]</span>
           </div>
 
-          {/* FIRMA DE NOMBRE DE LA MARCA */}
+          {/* FIRMA DE NOMBRE */}
           <div className="flex flex-col items-center space-y-4 pt-4">
             <h2 className="text-2xl md:text-3xl font-extralight tracking-[0.75em] text-white uppercase pl-[0.75em] select-none relative z-10">
               VANTUM
@@ -380,9 +307,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* LA V GIGANTE PULSANTE POSICIONADA FIJA ATRÁS DEL PÁRRAFO DE PRESENTACIÓN */}
+          {/* LA V GIGANTE ATRÁS DE LA BIENVENIDA */}
           <div className="w-full max-w-2xl mx-auto relative py-12 px-4 group">
-            
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
               <img 
                 src="/logo-real.png" 
@@ -396,7 +322,7 @@ export default function Home() {
                 CONFECCIÓN URBANA PESADA DE ALTA DENSIDAD
               </h1>
               <p className="font-mono text-[11px] md:text-xs text-white/70 tracking-[0.22em] uppercase leading-relaxed text-center">
-                Armamos bloques de moldería rígida bajo un control estricto de simetría estructural. No hacemos ropa en masa; confinamos colecciones numeradas de <span className="text-white font-bold">30 gorras exclusivas por modelo</span> desarrolladas en gabardina de 8 onzas de máximo grosor. Estética de búnker ajustada a la calle.
+                Armamos bloques de moldería rígida bajo un control estricto de simetría estructural. No hacemos ropa en masa; confinamos colecciones numeradas de <span className="text-white font-bold">10 gorras exclusivas por modelo</span> desarrolladas en gabardina esmerilada de máximo grosor. Estética de búnker ajustada a la calle.
               </p>
             </div>
           </div>
@@ -405,19 +331,19 @@ export default function Home() {
           <div className="pt-4 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-2xl font-mono text-[9px] tracking-widest uppercase text-white/30 relative z-10 border-t border-b border-white/5 py-4 bg-black/20 backdrop-blur-[1px]">
             <div className="px-2">
               <span className="text-white/50 block mb-0.5">// TEXTIL REFORZADO</span>
-              GABARDINA 8OZ: 100%
+              GABARDINA ESMERILADA
             </div>
             <div className="px-2 border-l border-white/5">
               <span className="text-white/50 block mb-0.5">// INYECCIÓN BORDADO</span>
-              HILO PREMIUM: STOCK
+              HILO PUNTEADO: ALTA DEN
             </div>
             <div className="px-2 border-l border-white/5">
-              <span className="text-white/50 block mb-0.5">// CONTORNO INTERNO</span>
-              ENTRETELA ALTA DEN: OK
+              <span className="text-white/50 block mb-0.5">// CONTORNO TRASERO</span>
+              PIEZAS NUMERADAS: 01-10
             </div>
             <div className="px-2 border-l border-white/5">
               <span className="text-[#e12a2a] font-medium block mb-0.5 crimson-glow">// VOLUMEN DEL BATCH</span>
-              30 EJEMPLARES: LISTO
+              20 EJEMPLARES TOTALES
             </div>
           </div>
         </div>
@@ -442,17 +368,12 @@ export default function Home() {
               <div className="text-[8px] text-white/40 tracking-[0.2em] uppercase mt-1.5">Minutos</div>
             </div>
             <div>
-              <div 
-                className="text-3xl md:text-5xl font-normal tracking-tight text-[#e12a2a] tabular-nums relative crimson-glow"
-              >
-                {timeLeft.seconds}
-              </div>
+              <div className="text-3xl md:text-5xl font-normal tracking-tight text-[#e12a2a] tabular-nums relative crimson-glow">{timeLeft.seconds}</div>
               <div className="text-[8px] text-white/20 tracking-[0.2em] uppercase mt-1.5">Segundos</div>
             </div>
           </div>
         </div>
 
-        {/* REGISTRO OPERACIONAL */}
         <div className="mt-8 font-mono text-[9px] tracking-[0.15em] text-white/30 uppercase select-none z-10">
           ÚLTIMO REGISTRO DE CONEXIÓN: [{currentDateTime || "PROCESANDO..."}] vía Mendoza_Node_02
         </div>
@@ -477,80 +398,97 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS */}
-      <section id="modelos" className="py-32 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
+      {/* 4. SECCIÓN MODELOS: INTERACTIVO ENLAZADO CON LAS 4 VISTAS RENOMBRADAS */}
+      <section id="modelos" className="py-32 px-6 md:px-12 max-w-5xl mx-auto relative z-10">
         <div className="mb-24 flex flex-col md:flex-row md:items-end md:justify-between border-b border-white/5 pb-6">
           <div>
             <p className="text-[9px] text-white/40 font-mono tracking-[0.25em] uppercase mb-2">// TEXTILE ARCHITECTURE</p>
             <h2 className="text-3xl font-extralight tracking-widest uppercase text-white/90">Edición de Barrio</h2>
           </div>
           <div className="font-mono text-[10px] text-white/40 flex items-center gap-4 mt-4 md:mt-0">
-            <span>TAMAÑO DEL LOTE: 30 UNIDADES</span>
+            <span>VOLUMEN: 2 MODELOS // 10 UNIDADES POR PIEZA</span>
             <span className="text-white/10">|</span>
             <span>ESTADO: RESERVAS ABIERTAS</span>
           </div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 relative">
           
-          {/* MODELO 01: OLIVE KHAKI */}
-          <div className="relative border border-white/5 bg-[#040404]/60 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-white/10 rounded-sm md:-translate-y-4">
-            <div className="overflow-hidden bg-[#090909] relative aspect-square flex items-center justify-center border border-white/5 rounded-sm">
-              <img src="/gorra-oliva.png" alt="Vantum Olive Khaki" className="w-[80%] h-[80%] object-contain scale-95 transition-all duration-1000 select-none pointer-events-none blur-[4px] grayscale opacity-50 contrast-125" />
-            </div>
-            <div className="mt-8">
-              <div className="flex items-center justify-between font-mono text-[9px] text-white/40 tracking-wider">
-                <span>SPEC // 01.OLV-KHK</span>
-                <span className="text-green-500/50 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/10 tracking-widest text-[8px]">
-                  // FICHA ABIERTA
-                </span>
-              </div>
-              <h3 className="text-xl font-light tracking-widest uppercase mt-2.5 text-white/90">Olive Khaki</h3>
-              <div className="relative mt-4">
-                <p className="text-xs leading-relaxed font-light text-white/60 text-justify">
-                  Estructura rígida armada verde oliva profundo. Isotipo lineal frontal bordado en relieve desértico y vivo perimetral inferior a tono. Visera de alta memoria elástica.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* MODELO 02: CRIMSON STEALTH */}
+          {/* MODELO 01: ONYX WHITE BEIGE */}
           <div className="relative border border-white/5 bg-[#040404]/60 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-white/10 rounded-sm">
-            <div className="overflow-hidden bg-[#090909] relative aspect-square flex items-center justify-center border border-white/5 rounded-sm">
-              <img src="/gorra-roja.png" alt="Vantum Crimson Stealth" className="w-[80%] h-[80%] object-contain scale-95 transition-all duration-1000 select-none pointer-events-none blur-[4px] grayscale opacity-50 contrast-125" />
+            <div className="space-y-4">
+              <div className="overflow-hidden bg-[#090909] relative aspect-square flex items-center justify-center border border-white/5 rounded-sm">
+                <img 
+                  src={whiteCapImages[activeViewWhite]} 
+                  alt={`Vantum White Cap View ${activeViewWhite + 1}`} 
+                  className="w-full h-full object-cover transition-all duration-300 select-none pointer-events-none contrast-105" 
+                />
+              </div>
+
+              <div className="grid grid-cols-4 gap-2 font-mono text-[9px] tracking-widest">
+                {["01 FRONTAL", "02 LAT DER", "03 LAT IZQ", "04 TRASERA"].map((label, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setActiveViewWhite(index)}
+                    className={`border py-1.5 text-center transition-colors rounded-sm uppercase font-medium cursor-pointer ${activeViewWhite === index ? "border-[#e12a2a] bg-red-500/5 text-red-400 crimson-glow font-bold" : "border-white/5 bg-white/[0.01] text-white/40 hover:text-white/80 hover:border-white/10"}`}
+                  >
+                    {label.split(" ")[0]}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="mt-8">
+
+            <div className="mt-6">
               <div className="flex items-center justify-between font-mono text-[9px] text-white/40 tracking-wider">
-                <span>SPEC // 02.CRMS-STL</span>
+                <span>SPEC // 01.WHT-BGE</span>
                 <span className="text-green-500/50 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/10 tracking-widest text-[8px]">
-                  // FICHA ABIERTA
+                  // EDICIÓN NUMERADA [01-10]
                 </span>
               </div>
-              <h3 className="text-xl font-light tracking-widest uppercase mt-2.5 text-white/90">Crimson Stealth</h3>
+              <h3 className="text-xl font-light tracking-widest uppercase mt-2.5 text-white/90">Onyx White Beige</h3>
               <div className="relative mt-4">
                 <p className="text-xs leading-relaxed font-light text-white/60 text-justify">
-                  Cuerpo rígido de gabardina negra pura de máxima densidad. Bordado frontal y líneas perimetrales inyectadas en hilo carmesí premium. Contraste urbano severo.
+                  Cuerpo limpio confeccionado íntegramente en gabardina esmerilada blanca pura. Bloque tipográfico frontal y detalles de chasis bordados con hilo punteado de alta densidad en tonalidad beige orgánica.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* MODELO 03: ONYX GOLD */}
-          <div className="relative border border-white/5 bg-[#040404]/60 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-white/10 rounded-sm md:translate-y-4">
-            <div className="overflow-hidden bg-[#090909] relative aspect-square flex items-center justify-center border border-white/5 rounded-sm">
-              <img src="/gorra-oro.png" alt="Vantum Onyx Gold" className="w-[80%] h-[80%] object-contain scale-95 transition-all duration-1000 select-none pointer-events-none blur-[4px] grayscale opacity-50 contrast-125" />
+          {/* MODELO 02: CRIMSON ONYX STEALTH */}
+          <div className="relative border border-white/5 bg-[#040404]/60 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-white/10 rounded-sm">
+            <div className="space-y-4">
+              <div className="overflow-hidden bg-[#090909] relative aspect-square flex items-center justify-center border border-white/5 rounded-sm">
+                <img 
+                  src={blackCapImages[activeViewBlack]} 
+                  alt={`Vantum Black Cap View ${activeViewBlack + 1}`} 
+                  className="w-full h-full object-cover transition-all duration-300 select-none pointer-events-none contrast-105" 
+                />
+              </div>
+
+              <div className="grid grid-cols-4 gap-2 font-mono text-[9px] tracking-widest">
+                {["01 FRONTAL", "02 LAT DER", "03 LAT IZQ", "04 TRASERA"].map((label, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setActiveViewBlack(index)}
+                    className={`border py-1.5 text-center transition-colors rounded-sm uppercase font-medium cursor-pointer ${activeViewBlack === index ? "border-[#e12a2a] bg-red-500/5 text-red-400 crimson-glow font-bold" : "border-white/5 bg-white/[0.01] text-white/40 hover:text-white/80 hover:border-white/10"}`}
+                  >
+                    {label.split(" ")[0]}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="mt-8">
+
+            <div className="mt-6">
               <div className="flex items-center justify-between font-mono text-[9px] text-white/40 tracking-wider">
-                <span>SPEC // 03.ONX-GLD</span>
+                <span>SPEC // 02.BLK-SLV</span>
                 <span className="text-green-500/50 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/10 tracking-widest text-[8px]">
-                  // FICHA ABIERTA
+                  // EDICIÓN NUMERADA [01-10]
                 </span>
               </div>
-              <h3 className="text-xl font-light tracking-widest uppercase mt-2.5 text-white/90">Onyx Gold</h3>
+              <h3 className="text-xl font-light tracking-widest uppercase mt-2.5 text-white/90">Crimson Onyx Stealth</h3>
               <div className="relative mt-4">
                 <p className="text-xs leading-relaxed font-light text-white/60 text-justify">
-                  Base monocromática negra azabache estructurada. Isotipo frontal lineal bordado con hilo metálico de oro seleccionado. Sobriedad total y calce profundo.
+                  Estructura armada en gabardina esmerilada negra de alta torsión. Isotipo monumental de moldería concéntrica inyectado en el panel frontal con hilo punteado de alta densidad color gris plateado.
                 </p>
               </div>
             </div>
@@ -559,7 +497,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* II. PORTAL MONUMENTAL CENTRAL DE RESERVA */}
+      {/* II. PORTAL CENTRAL DE RESERVA */}
       <section id="bloque-captura" className="py-24 px-6 max-w-4xl mx-auto relative z-10 text-center">
         <div className="border border-red-500/30 bg-[#050505] p-10 md:p-16 space-y-6 rounded-sm shadow-2xl relative overflow-hidden group">
           <div className="absolute inset-0 bg-radial-gradient from-red-950/5 via-transparent to-transparent pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(139,30,30,0.05) 0%, transparent 80%)" }} />
@@ -569,7 +507,7 @@ export default function Home() {
           </div>
           
           <h2 className="text-xl md:text-2xl font-extralight tracking-widest text-white uppercase max-w-xl mx-auto leading-relaxed">
-            SOLICITÁ TU LUGAR PARA ASEGURAR UNA DE LAS 30 PIEZAS EXCLUSIVAS ANTES DE QUE EL ACCESO SE CIERRE POR COMPLETO
+            SOLICITÁ TU LUGAR PARA ASEGURAR UNA DE LAS 20 PIEZAS EXCLUSIVAS ANTES DE QUE EL ACCESO SE CIERRE POR COMPLETO
           </h2>
           
           <div className="pt-4 max-w-xl mx-auto">
@@ -599,7 +537,7 @@ export default function Home() {
             <div className="space-y-8">
               <div className="border-l border-white/20 pl-6 space-y-3">
                 <p className="text-white/80 font-medium tracking-wider">// DETALLES DE CONFECCIÓN</p>
-                <p>Gabardina de 8 onzas tejida a alta torsión de hilos. Ofrece la máxima resistencia al roce del uso diario y firmeza del color.</p>
+                <p>Gabardina de alta densidad con acabado esmerilado. Textura premium de tacto suave y alta durabilidad estructural.</p>
               </div>
               <div className="border-l border-white/20 pl-6 space-y-3">
                 <p className="text-white/80 font-medium tracking-wider">// PANEL INTERNO RÍGIDO</p>
