@@ -58,7 +58,6 @@ export default function Home() {
 
   const serialsList = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"];
 
-  // CÁLCULO DE STOCK DISPONIBLE
   const soldWhiteCount = soldSerials.filter(s => s.model === "white" && s.is_sold).length;
   const soldBlackCount = soldSerials.filter(s => s.model === "black" && s.is_sold).length;
   const isWhiteSoldOut = soldWhiteCount >= 10;
@@ -114,9 +113,18 @@ export default function Home() {
     }
   }, []);
 
+  // AUTO-REFRESCO PERIÓDICO (POLLING EN VIVO CADA 12 SEGUNDOS)
+  useEffect(() => {
+    fetchSoldSerials();
+    const liveInterval = setInterval(() => {
+      fetchSoldSerials();
+    }, 12000);
+
+    return () => clearInterval(liveInterval);
+  }, [fetchSoldSerials]);
+
   useEffect(() => {
     setIsMounted(true);
-    fetchSoldSerials();
 
     const firewallDuration = 2000;
     
@@ -160,7 +168,7 @@ export default function Home() {
     }, 800);
 
     return () => clearTimeout(loaderTimeout);
-  }, [fetchSoldSerials]);
+  }, []);
 
   useEffect(() => {
     if (loadingStep !== 3) return;
