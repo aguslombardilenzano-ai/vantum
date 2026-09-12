@@ -9,7 +9,7 @@ interface TimeLeft {
   seconds: string;
 }
 
-const SUPABASE_BASE_URL = "https://xmpzpsvatzciowecrtba.supabase.co/rest/v1/serials?select=model,serial_number,is_sold";
+const SUPABASE_REST_URL = "https://xmpzpsvatzciowecrtba.supabase.co/rest/v1/serials?select=model,serial_number,is_sold";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtcHpwc3ZhdHpjaW93ZWNydGJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMzUzMTIsImV4cCI6MjEwNDgxMTMxMn0.E3oUENJNGbDgHDgOEM4wTKWayK-kBirY4apHCDtJeWQ";
 
 interface SerialStatus {
@@ -95,16 +95,12 @@ export default function Home() {
     setter(index);
   };
 
-  // CONSULTA CON PARÁMETRO DINÁMICO QUE DESTRUYE EL CACHÉ DEL NAVEGADOR
   const fetchSoldSerials = useCallback(async () => {
     try {
-      const freshUrl = `${SUPABASE_BASE_URL}&_nocache=${Date.now()}`;
-      const res = await fetch(freshUrl, {
+      const res = await fetch(SUPABASE_REST_URL, {
         headers: {
           apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-          "Cache-Control": "no-cache, no-store, must-revalidate",
-          "Pragma": "no-cache"
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`
         },
         cache: "no-store"
       });
@@ -113,16 +109,15 @@ export default function Home() {
         setSoldSerials(data as SerialStatus[]);
       }
     } catch (err) {
-      console.error("Fetch bypass error:", err);
+      console.error("Fetch error:", err);
     }
   }, []);
 
-  // POLLING EN SEGUNDO PLANO CADA 6 SEGUNDOS
   useEffect(() => {
     fetchSoldSerials();
     const liveInterval = setInterval(() => {
       fetchSoldSerials();
-    }, 6000);
+    }, 8000);
 
     return () => clearInterval(liveInterval);
   }, [fetchSoldSerials]);
