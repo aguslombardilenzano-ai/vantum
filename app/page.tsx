@@ -10,10 +10,8 @@ interface TimeLeft {
   seconds: string;
 }
 
-// CONFIGURACIÓN CLAVE: CONEXIÓN A SUPABASE (REEMPLAZAR)
-const SUPABASE_URL = "TU_SUPABASE_URL"; 
-const SUPABASE_KEY = "TU_SUPABASE_ANON_KEY"; 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL = "https://xmpzpsvatzciowecrtba.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtcHpwc3ZhdHpjaW93ZWNydGJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMzUzMTIsImV4cCI6MjEwNDgxMTMxMn0.E3oUENJNGbDgHDgOEM4wTKWayK-kBirY4apHCDtJeWQ";
 
 interface SerialStatus {
   model: "white" | "black";
@@ -24,31 +22,26 @@ interface SerialStatus {
 export default function Home() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: "00", hours: "00", minutes: "00", seconds: "00" });
   
-  // LOGÍSTICA GENERAL DE INTERFAZ
   const [isMounted, setIsMounted] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState(7);
   const [currentDateTime, setCurrentDateTime] = useState("");
 
-  // INTRO POR CONTRASEÑA Y SECUENCIA DE DESTELLOS RESTAURADA
   const [loadingStep, setLoadingStep] = useState(0); 
   const [fakePassword, setFakePassword] = useState("");
   const [showFinalPhrase, setShowFinalPhrase] = useState(false);
   const [flashActive, setFlashActive] = useState(false);
 
-  // CONTROL DE GALERÍA INSTANTÁNEO POR OPACIDAD
   const [activeViewWhite, setActiveViewWhite] = useState(0);
   const [activeViewBlack, setActiveViewBlack] = useState(0);
 
-  // ESTADO DE SERIALES VENDIDOS (REPETIDOS POR SUPABASE)
   const [soldSerials, setSoldSerials] = useState<SerialStatus[]>([]);
 
-  // MECÁNICAS INTERACTIVAS
   const [cctvTime, setCctvTime] = useState("00:00:00");
   const [showTerminalConsole, setShowTerminalConsole] = useState(false);
   const [terminalInput, setTerminalInput] = useState("");
   const [terminalLogs, setTerminalLogs] = useState<string[]>(["VANTUM LABS CORE v2.01", "Nodo Mendoza operativo."]);
   const logoClickCount = useRef(0);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const whiteCapImages = [
     "/gorra-blanca-frontal.jpg",
@@ -66,45 +59,49 @@ export default function Home() {
 
   const serialsList = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"];
 
-  // FUNCIÓN DE FEEDBACK SONORO (FIRST INTERACTION ONLY POLICY)
   const playClick = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0; 
-      audioRef.current.play().catch(() => {}); // Catch por políticas de navegador
-    }
+    try {
+      if (!audioRef.current && typeof Audio !== "undefined") {
+        audioRef.current = new Audio("/vantum-click.mp3");
+        audioRef.current.volume = 0.5;
+      }
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play().catch(() => {});
+      }
+    } catch (e) {}
   }, []);
 
   const handleSerialClaim = (modelName: string, serialNumber: string, isSold: boolean) => {
-    if (isSold) return; // Protección si ya está vendido
+    if (isSold) return;
     playClick();
-    const modelTag = modelName === "Onyx White Beige" ? "white" : "black";
     const text = encodeURIComponent(`Quiero asegurar el Serial #${serialNumber} del modelo ${modelName} (Batch 001). ¿Está disponible?`);
     window.open(`https://wa.me/5492617616121?text=${text}`, "_blank");
   };
 
-  const handleViewChange = (setter: Function, index: number) => {
+  const handleViewChange = (setter: (val: number) => void, index: number) => {
     playClick();
     setter(index);
   };
 
-  // FETCH INICIAL DE SERIALES VENDIDOS (DESDE SUPABASE)
   const fetchSoldSerials = useCallback(async () => {
-    const { data, error } = await supabase
-      .from("serials")
-      .select("model, serial_number, is_sold");
+    try {
+      const client = createClient(SUPABASE_URL, SUPABASE_KEY);
+      const { data, error } = await client
+        .from("serials")
+        .select("model, serial_number, is_sold");
 
-    if (error) {
-      console.error("VANTUM CORE ERROR // Supabase Fetch:", error.message);
-      setTerminalLogs(prev => [...prev, `>> ERROR: Error al leer base de datos.`]);
-    } else {
-      setSoldSerials(data as SerialStatus[]);
+      if (!error && data) {
+        setSoldSerials(data as SerialStatus[]);
+      }
+    } catch (err) {
+      console.error("Supabase link error:", err);
     }
   }, []);
 
-  // CICLO INDEPENDIENTE PARA LA INTRO DE DESTELLOS
   useEffect(() => {
     setIsMounted(true);
-    fetchSoldSerials(); // Leer Supabase de entrada
+    fetchSoldSerials();
 
     const firewallDuration = 2000;
     
@@ -130,7 +127,6 @@ export default function Home() {
         clearInterval(passInterval);
         setLoadingStep(2);
         
-        // Cadena secuencial de parpadeos violentos
         setTimeout(() => setFlashActive(true), 400);
         setTimeout(() => setFlashActive(false), 650);
         setTimeout(() => setFlashActive(true), 800);
@@ -151,7 +147,6 @@ export default function Home() {
     return () => clearTimeout(loaderTimeout);
   }, [fetchSoldSerials]);
 
-  // LOGÍSTICA DE INTERFAZ (RESET COUNTER SÁBADO)
   useEffect(() => {
     if (loadingStep !== 3) return;
 
@@ -169,7 +164,6 @@ export default function Home() {
       setCctvTime(`${hrs}:${mins}:${secs}`);
     }, 1000);
 
-    // CONFIGURACIÓN SÁBADO 19 DE SEPTIEMBRE DE 2026
     const targetDate = new Date("2026-09-19T00:00:00").getTime();
 
     const updateTimer = () => {
@@ -209,7 +203,7 @@ export default function Home() {
       stylesheet.id = "vantum-core-styles";
       stylesheet.innerHTML = `
         @keyframes loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(300%); } }
-        @keyframesfadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+        @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
         @keyframes brandOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.99); filter: blur(4px); } }
         @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100vh); } }
         @keyframes vPulse { 0% { opacity: 0.03; transform: scale(1); } 50% { opacity: 0.08; transform: scale(1.005); } 100% { opacity: 0.03; transform: scale(1); } }
@@ -219,7 +213,7 @@ export default function Home() {
         .crimson-glow { filter: drop-shadow(0 0 8px rgba(225, 42, 42, 0.45)); }
         .cctv-scanline { position: fixed; top: 0; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.012); pointer-events: none; z-index: 99; animation: scanline 5s linear infinite; }
         .cctv-noise { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.90' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.012'/%3E%3C/svg%3E"); pointer-events: none; z-index: 98; }
-        .serial-button-tachado { text-decoration: line-through; opacity: 0.2; pointer-events: none; color: #a1a1a1; border-color: #333; background-color: rgba(255,255,255,0.01); }
+        .serial-sold { text-decoration: line-through; opacity: 0.25; pointer-events: none; color: #777; border-color: #222 !important; background-color: rgba(255,255,255,0.01) !important; cursor: not-allowed; }
       `;
       document.head.appendChild(stylesheet);
     }
@@ -239,11 +233,11 @@ export default function Home() {
     const cmd = terminalInput.trim().toLowerCase();
     if (!cmd) return;
     let response = `Comando inválido: '${cmd}'.`;
-    if (cmd === "help") response = "Registros: 'lote001' // 'status' // 'clear' // 'exit'";
+    if (cmd === "help") response = "Registros: 'lote001' // 'sync' // 'clear' // 'exit'";
     else if (cmd === "lote001") response = "20 unidades Mendoza Node.";
-    else if (cmd === "status") {
+    else if (cmd === "sync") {
       fetchSoldSerials();
-      response = "Sincronizando base de datos de seriales...";
+      response = "Sincronizando estado de seriales...";
     }
     else if (cmd === "clear") { setTerminalLogs([]); setTerminalInput(""); return; }
     else if (cmd === "exit") { setShowTerminalConsole(false); setTerminalInput(""); return; }
@@ -251,44 +245,100 @@ export default function Home() {
     setTerminalInput("");
   };
 
-  // INYECTOR DE AUDIO TÁCTIL
-  if (isMounted) {
-    if (!audioRef.current && typeof Audio !== "undefined") {
-      (audioRef as any).current = new Audio("/vantum-click.mp3");
-      audioRef.current!.volume = 0.6;
-    }
+  if (isMounted && loadingStep === 0) {
+    return (
+      <div className="min-h-screen bg-black text-white/50 font-mono flex flex-col justify-center items-center px-6 select-none">
+        <div className="w-full max-w-xs space-y-3">
+          <div className="text-[9px] tracking-[0.3em] uppercase opacity-50">// VANTUM NETWORK INTERFACE...</div>
+          <div className="w-full h-[1px] bg-white/10 relative overflow-hidden">
+            <div className="absolute top-0 left-0 h-full bg-white/40 w-1/4" style={{ animation: "loading 1.4s ease-in-out infinite" }} />
+          </div>
+        </div>
+      </div>
+    );
   }
 
-  // FASE 0-2 (Intro omitida en este bloque por brevedad, está intacta en tu archivo)
-  if (isMounted && loadingStep === 0) { /* Loader...*/ return <></>} 
-  if (isMounted && loadingStep === 1) { /* Firewall...*/ return <></>}
-  if (isMounted && loadingStep === 2) { /* Flash...*/ return <></>}
+  if (isMounted && loadingStep === 1) {
+    return (
+      <div className="min-h-screen bg-black font-mono flex flex-col justify-center items-center px-6 select-none relative">
+        <div className="w-full max-w-sm p-6 space-y-5 text-left border border-white/10 bg-[#030303] shadow-2xl">
+          <div className="flex items-center gap-2.5 text-white/40">
+            <span className="w-1 h-1 bg-white/30 rounded-full animate-pulse" />
+            <span className="text-[9px] tracking-[0.3em] uppercase">CONTROL DE ACCESO VANTUM</span>
+          </div>
+          <div className="space-y-3">
+            <div className="space-y-0.5">
+              <div className="text-[8px] text-white/30 uppercase tracking-widest">NODO DE ENLACE:</div>
+              <div className="text-xs text-white/70">root@mendoza_node_02</div>
+            </div>
+            <div className="space-y-1">
+              <div className="text-[8px] text-white/30 uppercase tracking-widest">INGRESAR CREDENCIAL:</div>
+              <div className="h-7 w-full bg-white/[0.03] border border-white/10 px-2.5 flex items-center text-xs text-white/80 tracking-widest">
+                {fakePassword}
+                {!showFinalPhrase && <span className="w-1 h-3 bg-white/50 ml-0.5 animate-pulse" />}
+              </div>
+            </div>
+          </div>
+          <div className="h-4 font-mono">
+            {showFinalPhrase && (
+              <div className="text-white font-bold text-[9px] tracking-[0.2em] uppercase">
+                // SISTEMA DESBLOQUEADO. [ DROP_001 IS COMING. ]
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-  // FASE 3: TIENDA PRINCIPAL UNLOCKED
+  if (isMounted && loadingStep === 2) {
+    return (
+      <div className={`min-h-screen transition-colors duration-[40ms] flex flex-col justify-center items-center px-6 select-none animate-brand-out relative overflow-hidden ${flashActive ? "bg-white text-black" : "bg-black text-white"}`}>
+        <div className="cctv-noise" />
+        
+        {!flashActive && (
+          <div className="space-y-2 font-mono text-[10px] md:text-[11px] tracking-[0.32em] text-white/40 uppercase text-center animate-fade-in">
+            <p className="font-medium tracking-[0.35em] text-white/70">BUILD WITH PURPOSE</p>
+            <p className="font-light text-red-500/60 crimson-glow">NOT FOR EVERYONE</p>
+          </div>
+        )}
+
+        {flashActive && (
+          <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6">
+            <img 
+              src="/logo-real.png" 
+              alt="VANTUM CORE MASTER FLASH" 
+              className="w-[450px] h-[450px] md:w-[600px] md:h-[600px] object-contain absolute opacity-100 filter invert select-none"
+            />
+            <h2 className="text-5xl md:text-8xl font-black tracking-[0.75em] text-black uppercase pl-[0.75em] relative z-10 mix-blend-difference select-none">
+              VANTUM
+            </h2>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden font-sans relative antialiased animate-fade-in">
       
       <div className="cctv-scanline" />
       <div className="cctv-noise" />
 
-      {/* RE-CALIBRACIÓN CROMÁTICA REC */}
       <div className="fixed top-6 right-6 font-mono text-[9px] tracking-[0.25em] text-white/30 flex items-center gap-2 z-50 select-none">
         <span className="w-1 h-1 bg-red-600 rounded-full animate-pulse" />
         <span>REC {cctvTime}</span>
       </div>
 
-      {/* METADATOS EN EL BORDE */}
       <div className="fixed bottom-6 left-6 font-mono text-[8px] tracking-[0.2em] text-white/20 flex flex-col gap-0.5 z-50 select-none uppercase hidden md:flex">
         <span>BÚNKER DE DISEÑO & DESARROLLO: MENDOZA, ARG</span>
         <span>LOGÍSTICA: NODO MENDOZA ACTIVO // SIN ENVÍOS</span>
       </div>
 
-      {/* HALO LUMÍNICO BASE DEL HERO */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden h-[100vh]">
         <div className="absolute w-[350px] h-[350px] md:w-[650px] md:h-[650px] rounded-full bg-gradient-to-r from-red-950/15 via-transparent to-transparent blur-[130px] opacity-60 animate-pulse" />
       </div>
 
-      {/* 1. NAV BAR */}
       <nav className="border-b border-white/5 backdrop-blur-md bg-black/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
           <a href="#" className="flex items-center gap-4 hover:opacity-75 transition-opacity select-none group">
@@ -309,7 +359,6 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* 2. HERO SECTOR */}
       <header className="relative min-h-[calc(100vh-20px)] flex flex-col justify-center items-center px-6 text-center z-10 pt-10 pb-20 overflow-hidden">
         <div className="space-y-12 max-w-4xl mx-auto flex flex-col items-center relative w-full z-10">
           
@@ -364,7 +413,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* FILETES TÉCNICOS */}
           <div className="pt-4 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-2xl font-mono text-[9px] tracking-widest uppercase text-white/30 relative z-10 border-t border-b border-white/5 py-4 bg-black/20 backdrop-blur-[1px]">
             <div className="px-2">
               <span className="text-white/50 block mb-0.5">// TEXTIL REFORZADO</span>
@@ -385,7 +433,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* TIME COUNTER */}
         <div id="reloj-drop" className="mt-16 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm z-10">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-black px-2.5 font-mono text-[8px] tracking-[0.25em] text-[#e12a2a] uppercase font-medium animate-pulse crimson-glow">
             // [ ADJUDICACIÓN DE SERIALES EN VIVO // NODO MENDOZA ]
@@ -411,7 +458,6 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 3. SECCIÓN MANIFIESTO */}
       <section id="manifiesto" className="py-36 border-y border-white/5 relative z-10 px-6 bg-[#020202]/30 backdrop-blur-[2px]">
         <div className="max-w-3xl mx-auto text-center space-y-6">
           <p className="font-mono text-[9px] text-white/40 tracking-[0.32em] uppercase tracking-widest">// PHILOSOPHY & IDENTITY</p>
@@ -421,7 +467,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. SECCIÓN MODELOS: CON SELECTOR DE SERIAL EN VIVO Y FEEDBACK SONORO */}
       <section id="modelos" className="py-32 px-6 md:px-12 max-w-5xl mx-auto relative z-10">
         <div className="mb-24 flex flex-col md:flex-row md:items-end md:justify-between border-b border-white/5 pb-6">
           <div>
@@ -437,11 +482,8 @@ export default function Home() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 relative">
           
-          {/* MODELO 01: ONYX WHITE BEIGE */}
           <div className="relative border border-white/5 bg-[#040404]/60 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-white/10 rounded-sm">
             <div className="space-y-5">
-              
-              {/* Contenedor Cuadrado Inflexible Anti-Blur */}
               <div className="overflow-hidden bg-[#090909] relative aspect-square w-full border border-white/5 rounded-sm">
                 {whiteCapImages.map((src, idx) => (
                   <img 
@@ -453,7 +495,6 @@ export default function Home() {
                 ))}
               </div>
 
-              {/* Botonera Hardware */}
               <div className="grid grid-cols-4 gap-2 font-mono text-[9px] tracking-widest">
                 {["01 FRONTAL", "02 DER", "03 IZQ", "04 TRAS"].map((label, index) => (
                   <button
@@ -479,17 +520,15 @@ export default function Home() {
                 Cuerpo confeccionado íntegramente en gabardina esmerilada blanca pura. Bloque tipográfico frontal y detalles bordados con hilo punteado en tonalidad beige orgánica.
               </p>
               
-              {/* FICHA TÉCNICA LOCAL MENDOZA */}
               <div className="mt-5 border-t border-b border-white/5 py-4 font-mono text-[8px] tracking-[0.2em] text-white/30 space-y-2 uppercase">
                 <p><span className="text-white/50 block mb-0.5">// LOGÍSTICA DE ADJUDICACIÓN</span> EXCLUSIVO NODO MENDOZA</p>
                 <p><span className="text-white/50 block mb-0.5">// PACKAGING</span> CAJA SELLADA VANTUM + CERTIFICADO SERIAL FÍSICO</p>
                 <p><span className="text-[#e12a2a] crimson-glow block mb-0.5">// DESPACHO</span> SIN ENVÍOS // RETIRO COORDINADO EN ZONA CENTRO</p>
               </div>
 
-              {/* GRILLA DE SERIALES INTEGRADA CON SUPABASE */}
               <div className="mt-6">
                 <div className="text-[8px] font-mono text-white/30 uppercase tracking-[0.2em] mb-2.5">
-                  // SELECCIONAR SERIAL PARA ADJUDICACIÓN (primero en llegar):
+                  // SELECCIONAR SERIAL PARA ADJUDICACIÓN:
                 </div>
                 <div className="grid grid-cols-5 gap-1.5 font-mono text-[10px]">
                   {serialsList.map((s) => {
@@ -498,7 +537,7 @@ export default function Home() {
                       <button
                         key={s}
                         onClick={() => handleSerialClaim("Onyx White Beige", s, isSold)}
-                        className={`border bg-white/[0.01] py-2 text-center transition-all rounded-sm tracking-wider ${isSold ? "serial-button-tachado" : "border-white/10 text-white/50 hover:border-red-500 hover:bg-red-500/10 hover:text-red-400 cursor-pointer"}`}
+                        className={`border bg-white/[0.01] py-2 text-center transition-all rounded-sm tracking-wider ${isSold ? "serial-sold" : "border-white/10 text-white/50 hover:border-red-500 hover:bg-red-500/10 hover:text-red-400 cursor-pointer"}`}
                         disabled={isSold}
                       >
                         #{s}
@@ -510,11 +549,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* MODELO 02: CRIMSON ONYX STEALTH */}
           <div className="relative border border-white/5 bg-[#040404]/60 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-white/10 rounded-sm">
             <div className="space-y-5">
-              
-              {/* Contenedor Cuadrado Inflexible Anti-Blur */}
               <div className="overflow-hidden bg-[#090909] relative aspect-square w-full border border-white/5 rounded-sm">
                 {blackCapImages.map((src, idx) => (
                   <img 
@@ -526,7 +562,6 @@ export default function Home() {
                 ))}
               </div>
 
-              {/* Botonera Hardware */}
               <div className="grid grid-cols-4 gap-2 font-mono text-[9px] tracking-widest">
                 {["01 FRONTAL", "02 DER", "03 IZQ", "04 TRAS"].map((label, index) => (
                   <button
@@ -552,17 +587,15 @@ export default function Home() {
                 Estructura armada en gabardina esmerilada negra de alta torsión. Isotipo monumental concéntrico inyectado en panel frontal con hilo color gris plateado.
               </p>
 
-              {/* FICHA TÉCNICA LOCAL MENDOZA */}
               <div className="mt-5 border-t border-b border-white/5 py-4 font-mono text-[8px] tracking-[0.2em] text-white/30 space-y-2 uppercase">
                 <p><span className="text-white/50 block mb-0.5">// LOGÍSTICA DE ADJUDICACIÓN</span> EXCLUSIVO NODO MENDOZA</p>
                 <p><span className="text-white/50 block mb-0.5">// PACKAGING</span> CAJA SELLADA VANTUM + CERTIFICADO SERIAL FÍSICO</p>
                 <p><span className="text-[#e12a2a] crimson-glow block mb-0.5">// DESPACHO</span> SIN ENVÍOS // RETIRO COORDINADO EN ZONA CENTRO</p>
               </div>
 
-              {/* GRILLA DE SERIALES INTEGRADA CON SUPABASE */}
               <div className="mt-6">
                 <div className="text-[8px] font-mono text-white/30 uppercase tracking-[0.2em] mb-2.5">
-                  // SELECCIONAR SERIAL PARA ADJUDICACIÓN (primero en llegar):
+                  // SELECCIONAR SERIAL PARA ADJUDICACIÓN:
                 </div>
                 <div className="grid grid-cols-5 gap-1.5 font-mono text-[10px]">
                   {serialsList.map((s) => {
@@ -571,7 +604,7 @@ export default function Home() {
                       <button
                         key={s}
                         onClick={() => handleSerialClaim("Crimson Onyx Stealth", s, isSold)}
-                        className={`border bg-white/[0.01] py-2 text-center transition-all rounded-sm tracking-wider ${isSold ? "serial-button-tachado" : "border-white/10 text-white/50 hover:border-red-500 hover:bg-red-500/10 hover:text-red-400 cursor-pointer"}`}
+                        className={`border bg-white/[0.01] py-2 text-center transition-all rounded-sm tracking-wider ${isSold ? "serial-sold" : "border-white/10 text-white/50 hover:border-red-500 hover:bg-red-500/10 hover:text-red-400 cursor-pointer"}`}
                         disabled={isSold}
                       >
                         #{s}
@@ -586,7 +619,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. SECCIÓN MEDIDAS */}
       <section id="especificaciones" className="py-32 bg-black relative z-10 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
@@ -618,7 +650,6 @@ export default function Home() {
                     <td className="py-2 text-right text-white/70">11.5 cm</td>
                   </tr>
                   <tr>
-                    <td className="py-2 text-white/40">Ancho de Visera</td>
                     <td className="py-2 text-right text-white/70">18.0 cm</td>
                   </tr>
                   <tr>
@@ -636,10 +667,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* EASTER EGG CONSOLA */}
       {showTerminalConsole && (
         <div className="fixed bottom-0 right-0 w-full md:w-[450px] h-[250px] bg-black border-t md:border-l border-white/10 text-white/60 font-mono text-[11px] flex flex-col p-4 z-50 shadow-2xl">
-          <div className="flex justify-between items-center border-b border-white/5 pb-1.5 mb-2 text-[9px]">
+          <div className="flex sign-out justify-between items-center border-b border-white/5 pb-1.5 mb-2 text-[9px]">
             <span>// CONSOLA DE ANULACIÓN DEL SISTEMA</span>
             <button onClick={() => setShowTerminalConsole(false)} className="text-white/30 hover:text-white uppercase">[ CERRAR ]</button>
           </div>
@@ -660,7 +690,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* 6. PIE DE PÁGINA */}
       <footer id="contacto" className="py-20 border-t border-white/5 bg-black relative z-10 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 font-mono text-[9px] tracking-widest text-white/20 uppercase text-center md:text-left">
           <div className="space-y-1">
