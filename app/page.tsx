@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { createClient } from "@supabase/supabase-js";
 
 interface TimeLeft {
   days: string;
@@ -10,8 +9,8 @@ interface TimeLeft {
   seconds: string;
 }
 
-const SUPABASE_URL = "https://xmpzpsvatzciowecrtba.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtcHpwc3ZhdHpjaW93ZWNydGJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMzUzMTIsImV4cCI6MjEwNDgxMTMxMn0.E3oUENJNGbDgHDgOEM4wTKWayK-kBirY4apHCDtJeWQ";
+const SUPABASE_REST_URL = "https://xmpzpsvatzciowecrtba.supabase.co/rest/v1/serials?select=model,serial_number,is_sold";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtcHpwc3ZhdHpjaW93ZWNydGJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMzUzMTIsImV4cCI6MjEwNDgxMTMxMn0.E3oUENJNGbDgHDgOEM4wTKWayK-kBirY4apHCDtJeWQ";
 
 interface SerialStatus {
   model: "white" | "black";
@@ -86,16 +85,19 @@ export default function Home() {
 
   const fetchSoldSerials = useCallback(async () => {
     try {
-      const client = createClient(SUPABASE_URL, SUPABASE_KEY);
-      const { data, error } = await client
-        .from("serials")
-        .select("model, serial_number, is_sold");
-
-      if (!error && data) {
+      const res = await fetch(SUPABASE_REST_URL, {
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+        },
+        cache: "no-store"
+      });
+      if (res.ok) {
+        const data = await res.json();
         setSoldSerials(data as SerialStatus[]);
       }
     } catch (err) {
-      console.error("Supabase link error:", err);
+      console.error("Link bypassed:", err);
     }
   }, []);
 
@@ -482,6 +484,7 @@ export default function Home() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 relative">
           
+          {/* MODELO 01: ONYX WHITE BEIGE */}
           <div className="relative border border-white/5 bg-[#040404]/60 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-white/10 rounded-sm">
             <div className="space-y-5">
               <div className="overflow-hidden bg-[#090909] relative aspect-square w-full border border-white/5 rounded-sm">
@@ -549,6 +552,7 @@ export default function Home() {
             </div>
           </div>
 
+          {/* MODELO 02: CRIMSON ONYX STEALTH */}
           <div className="relative border border-white/5 bg-[#040404]/60 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-500 hover:border-white/10 rounded-sm">
             <div className="space-y-5">
               <div className="overflow-hidden bg-[#090909] relative aspect-square w-full border border-white/5 rounded-sm">
@@ -650,6 +654,7 @@ export default function Home() {
                     <td className="py-2 text-right text-white/70">11.5 cm</td>
                   </tr>
                   <tr>
+                    <td className="py-2 text-white/40">Ancho de Visera</td>
                     <td className="py-2 text-right text-white/70">18.0 cm</td>
                   </tr>
                   <tr>
@@ -669,7 +674,7 @@ export default function Home() {
 
       {showTerminalConsole && (
         <div className="fixed bottom-0 right-0 w-full md:w-[450px] h-[250px] bg-black border-t md:border-l border-white/10 text-white/60 font-mono text-[11px] flex flex-col p-4 z-50 shadow-2xl">
-          <div className="flex sign-out justify-between items-center border-b border-white/5 pb-1.5 mb-2 text-[9px]">
+          <div className="flex justify-between items-center border-b border-white/5 pb-1.5 mb-2 text-[9px]">
             <span>// CONSOLA DE ANULACIÓN DEL SISTEMA</span>
             <button onClick={() => setShowTerminalConsole(false)} className="text-white/30 hover:text-white uppercase">[ CERRAR ]</button>
           </div>
