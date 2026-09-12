@@ -58,6 +58,13 @@ export default function Home() {
 
   const serialsList = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"];
 
+  // CÁLCULO DE STOCK DISPONIBLE
+  const soldWhiteCount = soldSerials.filter(s => s.model === "white" && s.is_sold).length;
+  const soldBlackCount = soldSerials.filter(s => s.model === "black" && s.is_sold).length;
+  const isWhiteSoldOut = soldWhiteCount >= 10;
+  const isBlackSoldOut = soldBlackCount >= 10;
+  const isGlobalSoldOut = (soldWhiteCount + soldBlackCount) >= 20;
+
   const playClick = useCallback(() => {
     try {
       if (!audioRef.current && typeof Audio !== "undefined") {
@@ -75,6 +82,12 @@ export default function Home() {
     if (isSold) return;
     playClick();
     const text = encodeURIComponent(`Quiero asegurar el Serial #${serialNumber} del modelo ${modelName} (Batch 001). ¿Está disponible?`);
+    window.open(`https://wa.me/5492617616121?text=${text}`, "_blank");
+  };
+
+  const handleWaitlistJoin = (modelName: string) => {
+    playClick();
+    const text = encodeURIComponent(`Me quedé afuera del Batch 001 de ${modelName}. Deseo registrarme en la lista prioritaria para el Batch 002.`);
     window.open(`https://wa.me/5492617616121?text=${text}`, "_blank");
   };
 
@@ -236,7 +249,7 @@ export default function Home() {
     if (!cmd) return;
     let response = `Comando inválido: '${cmd}'.`;
     if (cmd === "help") response = "Registros: 'lote001' // 'sync' // 'clear' // 'exit'";
-    else if (cmd === "lote001") response = "20 unidades Mendoza Node.";
+    else if (cmd === "lote001") response = `20 unidades Mendoza Node. (Vendidas: ${soldWhiteCount + soldBlackCount}/20)`;
     else if (cmd === "sync") {
       fetchSoldSerials();
       response = "Sincronizando estado de seriales...";
@@ -354,9 +367,13 @@ export default function Home() {
           </div>
           <button 
             onClick={() => document.getElementById("modelos")?.scrollIntoView({ behavior: "smooth" })}
-            className="border border-red-500/30 bg-red-500/5 px-4 py-2 text-[9px] font-mono tracking-[0.2em] uppercase text-red-400 rounded-sm hover:bg-red-500 hover:text-black transition-colors font-medium cursor-pointer"
+            className={`border px-4 py-2 text-[9px] font-mono tracking-[0.2em] uppercase rounded-sm transition-colors font-medium cursor-pointer ${
+              isGlobalSoldOut 
+                ? "border-red-500/50 bg-red-500/20 text-red-400 crimson-glow" 
+                : "border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500 hover:text-black"
+            }`}
           >
-            [ ADJUDICAR SERIAL ]
+            {isGlobalSoldOut ? "[ BATCH 001 // AGOTADO ]" : "[ ADJUDICAR SERIAL ]"}
           </button>
         </div>
       </nav>
@@ -367,10 +384,10 @@ export default function Home() {
           <div className="flex flex-wrap justify-center gap-2 relative z-10">
             <div className="inline-flex items-center gap-1.5 border border-red-500/20 bg-red-500/5 px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.2em] text-red-400 uppercase crimson-glow">
               <span className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
-              EDICIÓN DE BARRIO 001
+              {isGlobalSoldOut ? "LOTE 001 CONCLUIDO" : "EDICIÓN DE BARRIO 001"}
             </div>
             <div className="inline-flex items-center border border-white/10 bg-white/[0.02] px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.2em] text-white/50 uppercase">
-              LOTE ÚNICO // 2 MODELOS // NODO MENDOZA
+              {isGlobalSoldOut ? "SOLD OUT TOTAL" : `DISPONIBILIDAD: ${20 - (soldWhiteCount + soldBlackCount)} / 20 PIEZAS`}
             </div>
           </div>
           
@@ -429,8 +446,8 @@ export default function Home() {
               SERIALES: 01-10
             </div>
             <div className="px-2 border-l border-white/5">
-              <span className="text-[#e12a2a] font-medium block mb-0.5 crimson-glow">// VOLUMEN DEL BATCH</span>
-              20 EJEMPLARES MENDOZA
+              <span className="text-[#e12a2a] font-medium block mb-0.5 crimson-glow">// ESTADO DEL BATCH</span>
+              {isGlobalSoldOut ? "LOTE COMPLETADO" : `${20 - (soldWhiteCount + soldBlackCount)} DISPONIBLES`}
             </div>
           </div>
         </div>
@@ -514,8 +531,12 @@ export default function Home() {
             <div className="mt-6">
               <div className="flex items-center justify-between font-mono text-[9px] text-white/40 tracking-wider mb-3">
                 <span>SPEC // 01.WHT-BGE</span>
-                <span className="text-green-500/50 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/10 tracking-widest text-[8px]">
-                  // EDICIÓN NUMERADA
+                <span className={`font-medium px-2 py-0.5 border tracking-widest text-[8px] ${
+                  isWhiteSoldOut 
+                    ? "text-red-400 border-red-500/30 bg-red-500/10 crimson-glow" 
+                    : "text-green-500/50 bg-green-500/5 border-green-500/10"
+                }`}>
+                  {isWhiteSoldOut ? "// SOLD OUT TOTAL" : `// ${10 - soldWhiteCount} / 10 DISPONIBLES`}
                 </span>
               </div>
               <h3 className="text-xl font-light tracking-widest uppercase text-white/90">Onyx White Beige</h3>
@@ -530,24 +551,45 @@ export default function Home() {
               </div>
 
               <div className="mt-6">
-                <div className="text-[8px] font-mono text-white/30 uppercase tracking-[0.2em] mb-2.5">
-                  // SELECCIONAR SERIAL PARA ADJUDICACIÓN:
-                </div>
-                <div className="grid grid-cols-5 gap-1.5 font-mono text-[10px]">
-                  {serialsList.map((s) => {
-                    const isSold = soldSerials.some(ss => ss.model === "white" && ss.serial_number === s && ss.is_sold);
-                    return (
-                      <button
-                        key={s}
-                        onClick={() => handleSerialClaim("Onyx White Beige", s, isSold)}
-                        className={`border bg-white/[0.01] py-2 text-center transition-all rounded-sm tracking-wider ${isSold ? "serial-sold" : "border-white/10 text-white/50 hover:border-red-500 hover:bg-red-500/10 hover:text-red-400 cursor-pointer"}`}
-                        disabled={isSold}
-                      >
-                        #{s}
-                      </button>
-                    );
-                  })}
-                </div>
+                {isWhiteSoldOut ? (
+                  <div className="space-y-3 pt-2">
+                    <div className="border border-red-500/30 bg-red-500/5 p-4 text-center rounded-sm space-y-2">
+                      <p className="text-[10px] font-mono text-red-400 tracking-widest uppercase font-bold crimson-glow">
+                        // LOTE 001 AGOTADO
+                      </p>
+                      <p className="text-[9px] font-mono text-white/50 tracking-wider uppercase leading-relaxed">
+                        Las 10 unidades numeradas ya fueron adjudicadas. Sumate a la lista para el próximo lanzamiento.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleWaitlistJoin("Onyx White Beige")}
+                      className="w-full border border-white/20 bg-white/5 hover:bg-white hover:text-black py-3 text-center text-[10px] font-mono tracking-[0.25em] uppercase transition-all rounded-sm font-semibold cursor-pointer"
+                    >
+                      [ ACCESO PRIORITARIO: BATCH 002 ]
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <div className="text-[8px] font-mono text-white/30 uppercase tracking-[0.2em] mb-2.5">
+                      // SELECCIONAR SERIAL PARA ADJUDICACIÓN:
+                    </div>
+                    <div className="grid grid-cols-5 gap-1.5 font-mono text-[10px]">
+                      {serialsList.map((s) => {
+                        const isSold = soldSerials.some(ss => ss.model === "white" && ss.serial_number === s && ss.is_sold);
+                        return (
+                          <button
+                            key={s}
+                            onClick={() => handleSerialClaim("Onyx White Beige", s, isSold)}
+                            className={`border bg-white/[0.01] py-2 text-center transition-all rounded-sm tracking-wider ${isSold ? "serial-sold" : "border-white/10 text-white/50 hover:border-red-500 hover:bg-red-500/10 hover:text-red-400 cursor-pointer"}`}
+                            disabled={isSold}
+                          >
+                            #{s}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -582,8 +624,12 @@ export default function Home() {
             <div className="mt-6">
               <div className="flex items-center justify-between font-mono text-[9px] text-white/40 tracking-wider mb-3">
                 <span>SPEC // 02.BLK-SLV</span>
-                <span className="text-green-500/50 font-medium bg-green-500/5 px-2 py-0.5 border border-green-500/10 tracking-widest text-[8px]">
-                  // EDICIÓN NUMERADA
+                <span className={`font-medium px-2 py-0.5 border tracking-widest text-[8px] ${
+                  isBlackSoldOut 
+                    ? "text-red-400 border-red-500/30 bg-red-500/10 crimson-glow" 
+                    : "text-green-500/50 bg-green-500/5 border-green-500/10"
+                }`}>
+                  {isBlackSoldOut ? "// SOLD OUT TOTAL" : `// ${10 - soldBlackCount} / 10 DISPONIBLES`}
                 </span>
               </div>
               <h3 className="text-xl font-light tracking-widest uppercase text-white/90">Crimson Onyx Stealth</h3>
@@ -598,24 +644,45 @@ export default function Home() {
               </div>
 
               <div className="mt-6">
-                <div className="text-[8px] font-mono text-white/30 uppercase tracking-[0.2em] mb-2.5">
-                  // SELECCIONAR SERIAL PARA ADJUDICACIÓN:
-                </div>
-                <div className="grid grid-cols-5 gap-1.5 font-mono text-[10px]">
-                  {serialsList.map((s) => {
-                    const isSold = soldSerials.some(ss => ss.model === "black" && ss.serial_number === s && ss.is_sold);
-                    return (
-                      <button
-                        key={s}
-                        onClick={() => handleSerialClaim("Crimson Onyx Stealth", s, isSold)}
-                        className={`border bg-white/[0.01] py-2 text-center transition-all rounded-sm tracking-wider ${isSold ? "serial-sold" : "border-white/10 text-white/50 hover:border-red-500 hover:bg-red-500/10 hover:text-red-400 cursor-pointer"}`}
-                        disabled={isSold}
-                      >
-                        #{s}
-                      </button>
-                    );
-                  })}
-                </div>
+                {isBlackSoldOut ? (
+                  <div className="space-y-3 pt-2">
+                    <div className="border border-red-500/30 bg-red-500/5 p-4 text-center rounded-sm space-y-2">
+                      <p className="text-[10px] font-mono text-red-400 tracking-widest uppercase font-bold crimson-glow">
+                        // LOTE 001 AGOTADO
+                      </p>
+                      <p className="text-[9px] font-mono text-white/50 tracking-wider uppercase leading-relaxed">
+                        Las 10 unidades numeradas ya fueron adjudicadas. Sumate a la lista para el próximo lanzamiento.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleWaitlistJoin("Crimson Onyx Stealth")}
+                      className="w-full border border-white/20 bg-white/5 hover:bg-white hover:text-black py-3 text-center text-[10px] font-mono tracking-[0.25em] uppercase transition-all rounded-sm font-semibold cursor-pointer"
+                    >
+                      [ ACCESO PRIORITARIO: BATCH 002 ]
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <div className="text-[8px] font-mono text-white/30 uppercase tracking-[0.2em] mb-2.5">
+                      // SELECCIONAR SERIAL PARA ADJUDICACIÓN:
+                    </div>
+                    <div className="grid grid-cols-5 gap-1.5 font-mono text-[10px]">
+                      {serialsList.map((s) => {
+                        const isSold = soldSerials.some(ss => ss.model === "black" && ss.serial_number === s && ss.is_sold);
+                        return (
+                          <button
+                            key={s}
+                            onClick={() => handleSerialClaim("Crimson Onyx Stealth", s, isSold)}
+                            className={`border bg-white/[0.01] py-2 text-center transition-all rounded-sm tracking-wider ${isSold ? "serial-sold" : "border-white/10 text-white/50 hover:border-red-500 hover:bg-red-500/10 hover:text-red-400 cursor-pointer"}`}
+                            disabled={isSold}
+                          >
+                            #{s}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
