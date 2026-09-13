@@ -125,7 +125,7 @@ export default function Home() {
   useEffect(() => {
     setIsMounted(true);
 
-    const firewallDuration = 1000; // Reducido para mayor agilidad
+    const firewallDuration = 1000;
     
     const loaderTimeout = setTimeout(() => {
       setLoadingStep(1);
@@ -143,7 +143,7 @@ export default function Home() {
           clearInterval(passInterval);
           setShowFinalPhrase(true);
         }
-      }, 40); // Más rápido
+      }, 40);
 
       const gatewayTimeout = setTimeout(() => {
         clearInterval(passInterval);
@@ -354,7 +354,7 @@ export default function Home() {
 
       <div className="fixed bottom-6 left-6 font-mono text-[8px] tracking-[0.2em] text-white/20 flex flex-col gap-0.5 z-50 select-none uppercase hidden md:flex">
         <span>BÚNKER DE DISEÑO & DESARROLLO: MENDOZA, ARG</span>
-        <span>LOGÍSTICA: RETIRO EN CENTRO MENDOZA // SIN ENVÍOS</span>
+        <span>LOGÍSTICA: RETIRO EN PUNTOS CÉNTRICOS // SIN ENVÍOS</span>
       </div>
 
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden h-[100vh]">
@@ -453,14 +453,14 @@ export default function Home() {
             </div>
             <div className="space-y-1.5 md:pl-4">
               <span className="text-[#e12a2a] font-bold text-[10px] crimson-glow">03. RETIRÁ Y ABONÁ</span>
-              <p className="text-[10px] text-white/60 uppercase leading-normal">Pagás $29.999 ARS en mano al retirar en Mendoza Centro este sábado.</p>
+              <p className="text-[10px] text-white/60 uppercase leading-normal">Pagás $29.999 ARS en mano al retirar este sábado en puntos a coordinar.</p>
             </div>
           </div>
         </div>
 
         <div id="reloj-drop" className="mt-16 border border-white/5 bg-[#040404]/50 backdrop-blur-md p-8 md:p-12 w-full max-w-2xl mx-auto relative group hover:border-white/10 transition-colors rounded-sm z-10">
           <div className="absolute top-0 left-6 -translate-y-1/2 bg-black px-2.5 font-mono text-[8px] tracking-[0.25em] text-[#e12a2a] uppercase font-medium animate-pulse crimson-glow">
-            // [ ADJUDICACIÓN DE SERIALES EN VIVO // NODO MENDOZA ]
+            // [ ADJUDICACIÓN DE SERIALES EN VIVO // MENDOZA ]
           </div>
           <div className="grid grid-cols-4 gap-2 md:gap-6 font-mono select-none">
             <div>
@@ -553,7 +553,7 @@ export default function Home() {
               
               <div className="mt-5 border-t border-b border-white/5 py-4 font-mono text-[10px] tracking-[0.15em] text-white/70 space-y-2 uppercase bg-white/[0.01] px-3 rounded-sm">
                 <p className="text-white"><span className="text-[#e12a2a] font-bold crimson-glow">MODALIDAD DE PAGO:</span> $29.999 ARS EN MANO (EFECTIVO O TRANSFERENCIA) AL RETIRAR.</p>
-                <p className="text-white"><span className="text-[#e12a2a] font-bold crimson-glow">ENTREGA:</span> SÁBADO DE 17 A 19 HS EN PUNTO CÉNTRICO DE MENDOZA.</p>
+                <p className="text-white"><span className="text-[#e12a2a] font-bold crimson-glow">ENTREGA:</span> SÁBADO. PUNTO CÉNTRICO A COORDINAR (MAIPÚ, CENTRO, GODOY CRUZ, ETC.).</p>
                 <p className="text-white/50">// SIN ENVÍOS POSTALES EN ESTE BATCH.</p>
               </div>
 
@@ -647,7 +647,7 @@ export default function Home() {
 
               <div className="mt-5 border-t border-b border-white/5 py-4 font-mono text-[10px] tracking-[0.15em] text-white/70 space-y-2 uppercase bg-white/[0.01] px-3 rounded-sm">
                 <p className="text-white"><span className="text-[#e12a2a] font-bold crimson-glow">MODALIDAD DE PAGO:</span> $29.999 ARS EN MANO (EFECTIVO O TRANSFERENCIA) AL RETIRAR.</p>
-                <p className="text-white"><span className="text-[#e12a2a] font-bold crimson-glow">ENTREGA:</span> SÁBADO DE 17 A 19 HS EN PUNTO CÉNTRICO DE MENDOZA.</p>
+                <p className="text-white"><span className="text-[#e12a2a] font-bold crimson-glow">ENTREGA:</span> SÁBADO. PUNTO CÉNTRICO A COORDINAR (MAIPÚ, CENTRO, GODOY CRUZ, ETC.).</p>
                 <p className="text-white/50">// SIN ENVÍOS POSTALES EN ESTE BATCH.</p>
               </div>
 
@@ -711,8 +711,8 @@ export default function Home() {
               <p className="text-[11px] leading-relaxed">No pedimos señas ni pagos adelantados en internet. Inspeccionás la pieza en persona antes de entregar el dinero.</p>
             </div>
             <div className="space-y-2 border-l border-white/10 pl-4">
-              <p className="text-white font-bold uppercase tracking-wider">Punto Céntrico</p>
-              <p className="text-[11px] leading-relaxed">Las entregas se coordinan de forma segura y directa en una franja horaria estricta en Mendoza Centro.</p>
+              <p className="text-white font-bold uppercase tracking-wider">Puntos Céntricos</p>
+              <p className="text-[11px] leading-relaxed">Las entregas se coordinan de forma privada (Maipú, Centro, Godoy Cruz, etc.) en horarios flexibles del sábado.</p>
             </div>
             <div className="space-y-2 border-l border-white/10 pl-4">
               <p className="text-white font-bold uppercase tracking-wider">Seriales Únicos</p>
