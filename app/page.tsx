@@ -125,7 +125,7 @@ export default function Home() {
   useEffect(() => {
     setIsMounted(true);
 
-    const firewallDuration = 2000;
+    const firewallDuration = 1000; // Reducido para mayor agilidad
     
     const loaderTimeout = setTimeout(() => {
       setLoadingStep(1);
@@ -143,20 +143,20 @@ export default function Home() {
           clearInterval(passInterval);
           setShowFinalPhrase(true);
         }
-      }, 80);
+      }, 40); // Más rápido
 
       const gatewayTimeout = setTimeout(() => {
         clearInterval(passInterval);
         setLoadingStep(2);
         
-        setTimeout(() => setFlashActive(true), 400);
-        setTimeout(() => setFlashActive(false), 650);
-        setTimeout(() => setFlashActive(true), 800);
-        setTimeout(() => setFlashActive(false), 1050);
+        setTimeout(() => setFlashActive(true), 200);
+        setTimeout(() => setFlashActive(false), 350);
+        setTimeout(() => setFlashActive(true), 450);
+        setTimeout(() => setFlashActive(false), 600);
 
         setTimeout(() => {
           setLoadingStep(3);
-        }, 2200);
+        }, 1100);
 
       }, firewallDuration);
 
@@ -164,7 +164,7 @@ export default function Home() {
         clearInterval(passInterval);
         clearTimeout(gatewayTimeout);
       };
-    }, 800);
+    }, 400);
 
     return () => clearTimeout(loaderTimeout);
   }, []);
@@ -229,8 +229,8 @@ export default function Home() {
         @keyframes brandOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.99); filter: blur(4px); } }
         @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100vh); } }
         @keyframes vPulse { 0% { opacity: 0.03; transform: scale(1); } 50% { opacity: 0.08; transform: scale(1.005); } 100% { opacity: 0.03; transform: scale(1); } }
-        .animate-fade-in { opacity: 0; animation: fadeIn 1.2s ease-out forwards; }
-        .animate-brand-out { animation: brandOut 0.4s cubic-bezier(0.16, 1, 0.3, 1) 1.8s forwards; }
+        .animate-fade-in { opacity: 0; animation: fadeIn 0.8s ease-out forwards; }
+        .animate-brand-out { animation: brandOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) 1s forwards; }
         .animate-v-giant { animation: vPulse 10s ease-in-out infinite; }
         .crimson-glow { filter: drop-shadow(0 0 8px rgba(225, 42, 42, 0.45)); }
         .cctv-scanline { position: fixed; top: 0; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.012); pointer-events: none; z-index: 99; animation: scanline 5s linear infinite; }
@@ -273,7 +273,7 @@ export default function Home() {
         <div className="w-full max-w-xs space-y-3">
           <div className="text-[9px] tracking-[0.3em] uppercase opacity-50">// VANTUM NETWORK INTERFACE...</div>
           <div className="w-full h-[1px] bg-white/10 relative overflow-hidden">
-            <div className="absolute top-0 left-0 h-full bg-white/40 w-1/4" style={{ animation: "loading 1.4s ease-in-out infinite" }} />
+            <div className="absolute top-0 left-0 h-full bg-white/40 w-1/4" style={{ animation: "loading 1.0s ease-in-out infinite" }} />
           </div>
         </div>
       </div>
@@ -304,7 +304,7 @@ export default function Home() {
           <div className="h-4 font-mono">
             {showFinalPhrase && (
               <div className="text-white font-bold text-[9px] tracking-[0.2em] uppercase">
-                // SISTEMA DESBLOQUEADO. [ DROP_001 IS COMING. ]
+                // SISTEMA DESBLOQUEADO. [ DROP_001 ACTIVE ]
               </div>
             )}
           </div>
@@ -315,7 +315,7 @@ export default function Home() {
 
   if (isMounted && loadingStep === 2) {
     return (
-      <div className={`min-h-screen transition-colors duration-[40ms] flex flex-col justify-center items-center px-6 select-none animate-brand-out relative overflow-hidden ${flashActive ? "bg-white text-black" : "bg-black text-white"}`}>
+      <div className={`min-h-screen transition-colors duration-[30ms] flex flex-col justify-center items-center px-6 select-none animate-brand-out relative overflow-hidden ${flashActive ? "bg-white text-black" : "bg-black text-white"}`}>
         <div className="cctv-noise" />
         
         {!flashActive && (
@@ -354,7 +354,7 @@ export default function Home() {
 
       <div className="fixed bottom-6 left-6 font-mono text-[8px] tracking-[0.2em] text-white/20 flex flex-col gap-0.5 z-50 select-none uppercase hidden md:flex">
         <span>BÚNKER DE DISEÑO & DESARROLLO: MENDOZA, ARG</span>
-        <span>LOGÍSTICA: NODO MENDOZA ACTIVO // SIN ENVÍOS</span>
+        <span>LOGÍSTICA: RETIRO EN CENTRO MENDOZA // SIN ENVÍOS</span>
       </div>
 
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden h-[100vh]">
@@ -367,10 +367,12 @@ export default function Home() {
             <img src="/logo-real.png" alt="Vantum Isotipo" className="w-10 h-10 object-contain filter brightness-110" />
             <span className="text-sm font-light tracking-[0.45em] uppercase text-white/90 pl-0.5">VANTUM</span>
           </a>
-          <div className="hidden md:flex items-center gap-12 text-[9px] font-mono tracking-[0.25em] uppercase text-white/40">
-            <a href="#manifiesto" className="hover:text-white transition-colors">[ EL MANIFIESTO ]</a>
-            <a href="#modelos" className="hover:text-white transition-colors">[ GORRAS DISPONIBLES ]</a>
-            <a href="#especificaciones" className="hover:text-white transition-colors">[ PLANO DE MEDIDAS ]</a>
+          <div className="hidden md:flex items-center gap-8 text-[9px] font-mono tracking-[0.25em] uppercase text-white/40">
+            <a href="#manifiesto" className="hover:text-white transition-colors">[ MANIFIESTO ]</a>
+            <a href="#modelos" className="hover:text-white transition-colors">[ GORRAS ]</a>
+            <a href="#logistica" className="hover:text-white transition-colors">[ RETIRO & PAGO ]</a>
+            <a href="https://www.instagram.com/vantum.co" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors text-red-400">[ IG ]</a>
+            <a href="https://www.tiktok.com/@vantum.co" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors text-red-400">[ TK ]</a>
           </div>
           <button 
             onClick={() => document.getElementById("modelos")?.scrollIntoView({ behavior: "smooth" })}
@@ -394,7 +396,7 @@ export default function Home() {
               {isGlobalSoldOut ? "LOTE 001 CONCLUIDO" : "EDICIÓN DE BARRIO 001"}
             </div>
             <div className="inline-flex items-center border border-white/10 bg-white/[0.02] px-3 py-1 rounded-full font-mono text-[9px] tracking-[0.2em] text-white/50 uppercase">
-              {isGlobalSoldOut ? "SOLD OUT TOTAL" : `DISPONIBILIDAD: ${20 - (soldWhiteCount + soldBlackCount)} / 20 PIEZAS`}
+              {isGlobalSoldOut ? "SOLD OUT TOTAL" : `DISPONIBLES: ${20 - (soldWhiteCount + soldBlackCount)} / 20 PIEZAS`}
             </div>
           </div>
           
@@ -434,27 +436,24 @@ export default function Home() {
                 CONFECCIÓN URBANA PESADA DE ALTA DENSIDAD
               </h1>
               <p className="font-mono text-[11px] md:text-xs text-white/70 tracking-[0.22em] uppercase leading-relaxed text-center">
-                Armamos bloques de moldería rígida bajo un control estricto de simetría estructural. No hacemos ropa en masa; confinamos colecciones numeradas de <span className="text-white font-bold">10 gorras exclusivas por modelo</span> desarrolladas en gabardina esmerilada de máximo grosor.
+                Bloques de moldería rígida bajo simetría estructural. Colecciones numeradas de <span className="text-white font-bold">10 gorras exclusivas por modelo</span> en gabardina esmerilada de máximo grosor.
               </p>
             </div>
           </div>
 
-          <div className="pt-4 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-2xl font-mono text-[9px] tracking-widest uppercase text-white/30 relative z-10 border-t border-b border-white/5 py-4 bg-black/20 backdrop-blur-[1px]">
-            <div className="px-2">
-              <span className="text-white/50 block mb-0.5">// TEXTIL REFORZADO</span>
-              GABARDINA ESMERILADA
+          {/* GUÍA RÁPIDA DE COMPRA EN 3 PASOS */}
+          <div className="w-full max-w-3xl grid grid-cols-1 md:grid-cols-3 gap-4 text-left font-mono relative z-10 border border-white/10 bg-[#050505]/80 p-6 rounded-sm">
+            <div className="space-y-1.5 border-b md:border-b-0 md:border-r border-white/10 pb-4 md:pb-0 md:pr-4">
+              <span className="text-[#e12a2a] font-bold text-[10px] crimson-glow">01. ELEGÍ TU SERIAL</span>
+              <p className="text-[10px] text-white/60 uppercase leading-normal">Seleccioná tu número favorito del #01 al #10 en el modelo que prefieras.</p>
             </div>
-            <div className="px-2 border-l border-white/5">
-              <span className="text-white/50 block mb-0.5">// INYECCIÓN BORDADO</span>
-              HILO PUNTEADO: ALTA DEN
+            <div className="space-y-1.5 border-b md:border-b-0 md:border-r border-white/10 pb-4 md:pb-0 md:px-4">
+              <span className="text-[#e12a2a] font-bold text-[10px] crimson-glow">02. RESERVÁ POR WHATSAPP</span>
+              <p className="text-[10px] text-white/60 uppercase leading-normal">El botón te comunica directo para bloquear el serial sin seña previa.</p>
             </div>
-            <div className="px-2 border-l border-white/5">
-              <span className="text-white/50 block mb-0.5">// CONTORNO TRASERO</span>
-              SERIALES: 01-10
-            </div>
-            <div className="px-2 border-l border-white/5">
-              <span className="text-[#e12a2a] font-medium block mb-0.5 crimson-glow">// ESTADO DEL BATCH</span>
-              {isGlobalSoldOut ? "LOTE COMPLETADO" : `${20 - (soldWhiteCount + soldBlackCount)} DISPONIBLES`}
+            <div className="space-y-1.5 md:pl-4">
+              <span className="text-[#e12a2a] font-bold text-[10px] crimson-glow">03. RETIRÁ Y ABONÁ</span>
+              <p className="text-[10px] text-white/60 uppercase leading-normal">Pagás $29.999 ARS en mano al retirar en Mendoza Centro este sábado.</p>
             </div>
           </div>
         </div>
@@ -484,7 +483,7 @@ export default function Home() {
         </div>
       </header>
 
-      <section id="manifiesto" className="py-36 border-y border-white/5 relative z-10 px-6 bg-[#020202]/30 backdrop-blur-[2px]">
+      <section id="manifiesto" className="py-32 border-y border-white/5 relative z-10 px-6 bg-[#020202]/30 backdrop-blur-[2px]">
         <div className="max-w-3xl mx-auto text-center space-y-6">
           <p className="font-mono text-[9px] text-white/40 tracking-[0.32em] uppercase tracking-widest">// PHILOSOPHY & IDENTITY</p>
           <p className="text-base md:text-lg font-light tracking-[0.18em] leading-relaxed text-white/80 font-sans uppercase text-center px-4">
@@ -502,7 +501,7 @@ export default function Home() {
           <div className="font-mono text-[10px] text-white/40 flex items-center gap-4 mt-4 md:mt-0">
             <span>MODALIDAD: ADJUDICACIÓN EN VIVO</span>
             <span className="text-white/10">|</span>
-            <span className="text-red-400 font-medium crimson-glow">NODO MENDOZA</span>
+            <span className="text-red-400 font-medium crimson-glow">MENDOZA</span>
           </div>
         </div>
         
@@ -547,14 +546,15 @@ export default function Home() {
                 </span>
               </div>
               <h3 className="text-xl font-light tracking-widest uppercase text-white/90">Onyx White Beige</h3>
+              <p className="font-mono text-xl font-bold text-white tracking-widest mt-2">$29.999 ARS</p>
               <p className="text-xs leading-relaxed font-light text-white/60 text-justify mt-3">
                 Cuerpo confeccionado íntegramente en gabardina esmerilada blanca pura. Bloque tipográfico frontal y detalles bordados con hilo punteado en tonalidad beige orgánica.
               </p>
               
-              <div className="mt-5 border-t border-b border-white/5 py-4 font-mono text-[8px] tracking-[0.2em] text-white/30 space-y-2 uppercase">
-                <p><span className="text-white/50 block mb-0.5">// LOGÍSTICA DE ADJUDICACIÓN</span> EXCLUSIVO NODO MENDOZA</p>
-                <p><span className="text-white/50 block mb-0.5">// PACKAGING</span> CAJA SELLADA VANTUM + CERTIFICADO SERIAL FÍSICO</p>
-                <p><span className="text-[#e12a2a] crimson-glow block mb-0.5">// DESPACHO</span> SIN ENVÍOS // RETIRO COORDINADO EN ZONA CENTRO</p>
+              <div className="mt-5 border-t border-b border-white/5 py-4 font-mono text-[10px] tracking-[0.15em] text-white/70 space-y-2 uppercase bg-white/[0.01] px-3 rounded-sm">
+                <p className="text-white"><span className="text-[#e12a2a] font-bold crimson-glow">MODALIDAD DE PAGO:</span> $29.999 ARS EN MANO (EFECTIVO O TRANSFERENCIA) AL RETIRAR.</p>
+                <p className="text-white"><span className="text-[#e12a2a] font-bold crimson-glow">ENTREGA:</span> SÁBADO DE 17 A 19 HS EN PUNTO CÉNTRICO DE MENDOZA.</p>
+                <p className="text-white/50">// SIN ENVÍOS POSTALES EN ESTE BATCH.</p>
               </div>
 
               <div className="mt-6">
@@ -640,14 +640,15 @@ export default function Home() {
                 </span>
               </div>
               <h3 className="text-xl font-light tracking-widest uppercase text-white/90">Crimson Onyx Stealth</h3>
+              <p className="font-mono text-xl font-bold text-white tracking-widest mt-2">$29.999 ARS</p>
               <p className="text-xs leading-relaxed font-light text-white/60 text-justify mt-3">
                 Estructura armada en gabardina esmerilada negra de alta torsión. Isotipo monumental concéntrico inyectado en panel frontal con hilo color gris plateado.
               </p>
 
-              <div className="mt-5 border-t border-b border-white/5 py-4 font-mono text-[8px] tracking-[0.2em] text-white/30 space-y-2 uppercase">
-                <p><span className="text-white/50 block mb-0.5">// LOGÍSTICA DE ADJUDICACIÓN</span> EXCLUSIVO NODO MENDOZA</p>
-                <p><span className="text-white/50 block mb-0.5">// PACKAGING</span> CAJA SELLADA VANTUM + CERTIFICADO SERIAL FÍSICO</p>
-                <p><span className="text-[#e12a2a] crimson-glow block mb-0.5">// DESPACHO</span> SIN ENVÍOS // RETIRO COORDINADO EN ZONA CENTRO</p>
+              <div className="mt-5 border-t border-b border-white/5 py-4 font-mono text-[10px] tracking-[0.15em] text-white/70 space-y-2 uppercase bg-white/[0.01] px-3 rounded-sm">
+                <p className="text-white"><span className="text-[#e12a2a] font-bold crimson-glow">MODALIDAD DE PAGO:</span> $29.999 ARS EN MANO (EFECTIVO O TRANSFERENCIA) AL RETIRAR.</p>
+                <p className="text-white"><span className="text-[#e12a2a] font-bold crimson-glow">ENTREGA:</span> SÁBADO DE 17 A 19 HS EN PUNTO CÉNTRICO DE MENDOZA.</p>
+                <p className="text-white/50">// SIN ENVÍOS POSTALES EN ESTE BATCH.</p>
               </div>
 
               <div className="mt-6">
@@ -697,7 +698,31 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="especificaciones" className="py-32 bg-black relative z-10 px-6 border-t border-white/5">
+      {/* BLOQUE DE LOGÍSTICA DETALLADO */}
+      <section id="logistica" className="py-24 bg-black relative z-10 px-6 border-t border-white/5">
+        <div className="max-w-4xl mx-auto border border-white/10 bg-[#030303] p-8 md:p-12 rounded-sm space-y-8">
+          <div>
+            <p className="text-[9px] text-[#e12a2a] font-mono tracking-[0.3em] uppercase mb-2 crimson-glow">// PROTOCOLO DE ENTREGA Y PAGO</p>
+            <h2 className="text-2xl md:text-3xl font-light tracking-widest uppercase text-white">Transparencia Total</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 font-mono text-xs text-white/70">
+            <div className="space-y-2 border-l border-white/10 pl-4">
+              <p className="text-white font-bold uppercase tracking-wider">Cero Riesgo</p>
+              <p className="text-[11px] leading-relaxed">No pedimos señas ni pagos adelantados en internet. Inspeccionás la pieza en persona antes de entregar el dinero.</p>
+            </div>
+            <div className="space-y-2 border-l border-white/10 pl-4">
+              <p className="text-white font-bold uppercase tracking-wider">Punto Céntrico</p>
+              <p className="text-[11px] leading-relaxed">Las entregas se coordinan de forma segura y directa en una franja horaria estricta en Mendoza Centro.</p>
+            </div>
+            <div className="space-y-2 border-l border-white/10 pl-4">
+              <p className="text-white font-bold uppercase tracking-wider">Seriales Únicos</p>
+              <p className="text-[11px] leading-relaxed">Cada gorra viene en caja rígida sellada con su certificado numérico correspondiente del 01 al 10.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="especificaciones" className="py-32 bg-[#020202] relative z-10 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
             <p className="text-[9px] text-white/40 font-mono tracking-[0.25em] uppercase mb-2">// TECHNICAL CORE</p>
@@ -769,11 +794,20 @@ export default function Home() {
         </div>
       )}
 
-      <footer id="contacto" className="py-20 border-t border-white/5 bg-black relative z-10 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 font-mono text-[9px] tracking-widest text-white/20 uppercase text-center md:text-left">
-          <div className="space-y-1">
-            <p className="text-white/40 font-medium">SOPORTE CENTRAL: VANTUM553@GMAIL.COM</p>
-            <p className="text-[#e12a2a]/60 font-medium crimson-glow">SISTEMA DE PRODUCCIÓN CONFINADO. BATCH 001.</p>
+      <footer id="contacto" className="py-20 border-t border-white/5 bg-black relative z-10 px-6 md:px-12">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 font-mono text-[9px] tracking-widest text-white/40 uppercase text-center md:text-left">
+          <div className="space-y-2">
+            <p className="text-white/70 font-medium">SOPORTE CENTRAL: VANTUM553@GMAIL.COM</p>
+            <p className="text-[#e12a2a] font-medium crimson-glow">SISTEMA DE PRODUCCIÓN CONFINADO. BATCH 001 MENDOZA.</p>
+          </div>
+          <div className="flex items-center gap-6">
+            <a href="https://www.instagram.com/vantum.co" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors text-red-400">
+              [ INSTAGRAM: @VANTUM.CO ]
+            </a>
+            <span className="text-white/10">|</span>
+            <a href="https://www.tiktok.com/@vantum.co" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors text-red-400">
+              [ TIKTOK: @VANTUM.CO ]
+            </a>
           </div>
         </div>
       </footer>
